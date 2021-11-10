@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("ALL")
 public class DAOUSUARIO extends Conexion {
 
     public usuario identificar(usuario user) throws Exception {
@@ -65,13 +64,58 @@ public class DAOUSUARIO extends Conexion {
         return usuarios;
     }
 
-    public void registrarUsuarios(usuario usu) throws Exception{
+    public void registrarUsuarios(usuario usu) throws Exception {
         String sql;
         sql = "INSERT INTO Usuario (NOMBREUSUARIO, CLAVE, ESTADO, IDCARGO) "
                 + "VALUES ('" + usu.getNombreUsuario() + "', '"
                 + usu.getClave() + "', "
-                + (usu.isEstado() == true ? "1": "0")
+                + (usu.isEstado() == true ? "1" : "0")
                 + ", " + usu.getCargo().getCodigo() + ")";
+        try {
+            this.conectar(false);
+            this.ejecutarOrden(sql);
+            this.cerrar(true);
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        }
+    }
+
+    public usuario leerUsuario(usuario usu) throws Exception {
+        usuario usus = null;
+        ResultSet rs = null;
+        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CLAVE, U.ESTADO, U.IDCARGO "
+                + "FROM usuario U WHERE U.IDUSUARIO = " + usu.getId_usuario();
+
+        try {
+            this.conectar(false);
+            rs = this.ejecutarOrdenDatos(sql);
+            if (rs.next() == true) {
+                usus = new usuario();
+                usus.setId_usuario(rs.getInt("IDUSUARIO"));
+                usus.setNombreUsuario(rs.getString("NOMBREUSUARIO"));
+                usus.setClave(rs.getString("CLAVE"));
+                usus.setEstado(rs.getBoolean("ESTADO"));
+                usus.setCargo(new cargo());
+                usus.getCargo().setCodigo(rs.getInt("IDCARGO"));
+            }
+            this.cerrar(true);
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        } finally {
+        }
+        return usus;
+    }
+
+    public void actualizarUsuarios(usuario usu) throws Exception{
+        String sql = "UPDATE usuario SET NOMBREUSUARIO = '"
+                + usu.getNombreUsuario() + "', CLAVE = '"
+                + usu.getClave() + "', ESTADO = "
+                + (usu.isEstado() == true ? "1": "0")
+                + ", IDCARGO = "
+                + usu.getCargo().getCodigo()
+                + " WHERE IDUSUARIO = " + usu.getId_usuario();
         try{
             this.conectar(false);
             this.ejecutarOrden(sql);
@@ -81,4 +125,18 @@ public class DAOUSUARIO extends Conexion {
             throw e;
         }
     }
+
+    public void eliminarUsuario(usuario usu) throws Exception{
+        String sql = "DELETE FROM USUARIO"
+                + " WHERE IDUSUARIO = " + usu.getId_usuario();
+        try{
+            this.conectar(false);
+            this.ejecutarOrden(sql);
+            this.cerrar(true);
+        }catch(Exception e){
+            this.cerrar(false);
+            throw e;
+        }
+    }
+
 }

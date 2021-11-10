@@ -4,8 +4,8 @@ import sena.docx.docxproy.modelo.DAOCARGO;
 import sena.docx.docxproy.modelo.DAOUSUARIO;
 import sena.docx.docxproy.modelo.cargo;
 import sena.docx.docxproy.modelo.usuario;
-
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@SuppressWarnings("ALL")
 @WebServlet(name = "srvUsuario", urlPatterns = {"/srvUsuario"})
 public class srvUsuario extends HttpServlet {
 
@@ -39,6 +38,15 @@ public class srvUsuario extends HttpServlet {
                     case "registrar":
                         registrarUsuario(request, response);
                         break;
+                    case "leerUsuario":
+                        presentarUsuario(request, response);
+                        break;
+                    case "actualizarUsuario":
+                        actualizarUsuario(request, response);
+                        break;
+                    case "eliminarUsuario":
+                        eliminarUsuario(request, response);
+                        break;
                     default:
                         response.sendRedirect("identificar.jsp");
                 }
@@ -57,14 +65,13 @@ public class srvUsuario extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -75,10 +82,10 @@ public class srvUsuario extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -208,6 +215,96 @@ public class srvUsuario extends HttpServlet {
                 request.setAttribute("usuario", usu);
                 this.presentarFormulario(request, response);
             }
+        }
+    }
+
+    private void presentarUsuario(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO dao;
+        usuario usus;
+        if (request.getParameter("cod") != null) {
+            usus = new usuario();
+            usus.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+
+            dao = new DAOUSUARIO();
+            try {
+                usus = dao.leerUsuario(usus);
+                if (usus != null) {
+                    request.setAttribute("usuario", usus);
+                } else {
+                    request.setAttribute("msje", "No se encontró el usuario");
+                }
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se tiene el parámetro necesario");
+        }
+        try {
+            this.cargarCargos(request);
+            this.getServletConfig().getServletContext().
+                    getRequestDispatcher("/vistas/actualizarUsuario.jsp"
+                    ).forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
+        }
+    }
+
+    private void actualizarUsuario(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO daoUsu;
+        usuario usus = null;
+        cargo car;
+
+        if (request.getParameter("hCodigo") != null
+                && request.getParameter("txtNombre") != null
+                && request.getParameter("txtClave") != null
+                && request.getParameter("cboCargo") != null) {
+
+            usus = new usuario();
+            usus.setId_usuario(Integer.parseInt(request.getParameter("hCodigo")));
+            usus.setNombreUsuario(request.getParameter("txtNombre"));
+            usus.setClave(request.getParameter("txtClave"));
+            car = new cargo();
+            car.setCodigo(Integer.parseInt(request.getParameter("cboCargo")));
+            usus.setCargo(car);
+            if (request.getParameter("chkEstado") != null) {
+                usus.setEstado(true);
+            } else {
+                usus.setEstado(false);
+            }
+            daoUsu = new DAOUSUARIO();
+            try {
+                daoUsu.actualizarUsuarios(usus);
+                response.sendRedirect("srvUsuario?accion=listarUsuarios");
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo actualizar el usuario" + e.getMessage());
+                request.setAttribute("usuario", usus);
+
+            }
+            try {
+                this.cargarCargos(request);
+                this.getServletConfig().getServletContext().
+                        getRequestDispatcher("/vistas/actualizarUsuario.jsp"
+                        ).forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
+            }
+        }
+    }
+
+    private void eliminarUsuario(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO dao = new DAOUSUARIO();
+        usuario usus = new usuario();
+        if (request.getParameter("cod")!=null){
+            usus.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+            try{
+                dao.eliminarUsuario(usus);
+                response.sendRedirect("srvUsuario?accion=listarUsuarios");
+            }catch(Exception e){
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        }else{
+            request.setAttribute("msje", "No se encontro el usuario");
         }
     }
 

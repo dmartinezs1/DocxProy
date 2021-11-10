@@ -7,7 +7,6 @@ import java.util.List;
 @SuppressWarnings("ALL")
 public class DAOCARGO extends Conexion{
 
-
     public List<cargo> listarCargos() throws Exception {
         List<cargo> cargos;
         cargo car;
