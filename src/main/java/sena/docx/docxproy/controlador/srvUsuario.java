@@ -1,10 +1,11 @@
 package sena.docx.docxproy.controlador;
 
+import sena.docx.docxproy.modelo.DAOCARGO;
 import sena.docx.docxproy.modelo.DAOUSUARIO;
+import sena.docx.docxproy.modelo.cargo;
 import sena.docx.docxproy.modelo.usuario;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@SuppressWarnings("ALL")
 @WebServlet(name = "srvUsuario", urlPatterns = {"/srvUsuario"})
 public class srvUsuario extends HttpServlet {
 
@@ -30,6 +32,12 @@ public class srvUsuario extends HttpServlet {
                         cerrarsession(request, response);
                     case "listarUsuarios":
                         listarUsuarios(request, response);
+                        break;
+                    case "nuevo":
+                        presentarFormulario(request, response);
+                        break;
+                    case "registrar":
+                        registrarUsuario(request, response);
                         break;
                     default:
                         response.sendRedirect("identificar.jsp");
@@ -133,6 +141,7 @@ public class srvUsuario extends HttpServlet {
         try {
             usus = dao.listarUsuarios();
             request.setAttribute("usuarios", usus);
+
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo listar los usuarios" + e.getMessage());
         } finally {
@@ -143,6 +152,62 @@ public class srvUsuario extends HttpServlet {
                     .getRequestDispatcher("/vistas/usuarios.jsp").forward(request, response);
         } catch (Exception ex) {
             request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+        }
+    }
+
+    private void presentarFormulario(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            this.cargarCargos(request);
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/nuevoUsuario.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
+    private void cargarCargos(HttpServletRequest request) {
+        DAOCARGO dao = new DAOCARGO();
+        List<cargo> car = null;
+        try {
+            car = dao.listarCargos();
+            request.setAttribute("cargos", car);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar los cargos :( " + e.getMessage());
+        } finally {
+            car = null;
+            dao = null;
+        }
+    }
+
+    private void registrarUsuario(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO daoUsu;
+        usuario usu = null;
+        cargo carg;
+        if (request.getParameter("txtNombre") != null
+                && request.getParameter("txtClave") != null
+                && request.getParameter("cboCargo") != null) {
+
+            usu = new usuario();
+            usu.setNombreUsuario(request.getParameter("txtNombre"));
+            usu.setClave(request.getParameter("txtClave"));
+            carg = new cargo();
+            carg.setCodigo(Integer.parseInt(request.getParameter("cboCargo")));
+            usu.setCargo(carg);
+            if (request.getParameter("chkEstado") != null) {
+                usu.setEstado(true);
+            } else {
+                usu.setEstado(false);
+            }
+            daoUsu = new DAOUSUARIO();
+            try {
+                daoUsu.registrarUsuarios(usu);
+                response.sendRedirect("srvUsuario?accion=listarUsuarios");
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo registrar el usuario" + e.getMessage());
+                request.setAttribute("usuario", usu);
+                this.presentarFormulario(request, response);
+            }
         }
     }
 
