@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
     if (session.getAttribute("usuario") != null) {
@@ -70,7 +70,8 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-right">
-                                    <a href="srvUsuario?accion=cerrar" class="btn btn-default btn-flat">Cerrar Session</a>
+                                    <a href="srvUsuario?accion=cerrar" class="btn btn-default btn-flat">Cerrar
+                                        Session</a>
                                 </div>
                             </li>
                         </ul>
@@ -91,7 +92,7 @@
                     <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido,  ${usuario.nombreUsuario} </p>
+                    <p>Bienvenido, ${usuario.nombreUsuario} </p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -102,7 +103,8 @@
                 <div class="input-group">
                     <input type="text" name="q" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
-                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i
+                                        class="fa fa-search"></i>
                                 </button>
                             </span>
                 </div>
@@ -127,7 +129,8 @@
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>
                         <li><a href=""><i class="fa fa-user-plus"></i>Empleados</a></li>
-                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a></li>
+                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -180,8 +183,9 @@
                     <h3 class="box-title">Listado de Usuarios</h3>
                 </div>
                 <div class="box-body">
-                    <div class="table-responsive" >
-                        <table class="table table-bordered table-striped dataTable table-hover" id="tablaUsuarios" class="display">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped dataTable table-hover" id="tablaUsuarios"
+                               class="display">
                             <thead>
                             <tr>
                                 <th>IDUsuario</th>
@@ -207,18 +211,27 @@
                                     <td><a href="<c:url value="srvUsuario">
                                                        <c:param name="accion" value="leerUsuario" />
                                                        <c:param name="cod" value="${user.id_usuario}" />
-                                                   </c:url>"><button type="button" class="btn btn-warning" data-toggle="tooltip"  title="Editar" data-original-title="Editar">
-                                        <i class="fa fa-pencil"></i></button></a>
+                                                   </c:url>">
+                                        <button type="button" class="btn btn-warning" data-toggle="tooltip"
+                                                title="Editar" data-original-title="Editar">
+                                            <i class="fa fa-pencil"></i></button>
+                                    </a>
                                         <!-- DESACTIVAR / ACTIVAR USUARIOS -->
                                         <c:choose>
                                             <c:when test="${user.estado == true}">
                                                 <input type="hidden" id="item" value="${user.id_usuario}">
-                                                <a id="desactivarUsuario" href="srvUsuario?cambiar=desactivar&cod=${user.id_usuario}" class="btn btn-danger"  data-toggle="tooltip" title="Desactivar" data-original-title="Desactivar">
+                                                <a id="desactivarUsuario"
+                                                   href="srvUsuario?cambiar=desactivar&cod=${user.id_usuario}"
+                                                   class="btn btn-danger" data-toggle="tooltip" title="Desactivar"
+                                                   data-original-title="Desactivar">
                                                     <i class="fa fa-remove"></i></a>
                                             </c:when>
                                             <c:otherwise>
                                                 <input type="hidden" id="item" value="${user.id_usuario}">
-                                                <a id="activarUsuario" href="srvUsuario?cambiar=activar&cod=${user.id_usuario}" class="btn btn-primary" data-toggle="tooltip" title="Activar" data-original-title="Activar">
+                                                <a id="activarUsuario"
+                                                   href="srvUsuario?cambiar=activar&cod=${user.id_usuario}"
+                                                   class="btn btn-primary" data-toggle="tooltip" title="Activar"
+                                                   data-original-title="Activar">
                                                     <i class="glyphicon glyphicon-eye-open"></i></a>
                                             </c:otherwise>
                                         </c:choose>
@@ -227,8 +240,11 @@
                                         <a id="deleteUser" href="<c:url value="srvUsuario">
                                                        <c:param name="accion" value="eliminarUsuario" />
                                                        <c:param name="cod" value="${user.id_usuario}" />
-                                                   </c:url>"><button type="button" class="btn btn-danger" data-toggle="tooltip"  title="Eliminar" data-original-title="Eliminar">
-                                            <i class="fa fa-trash"></i></button></a>
+                                                   </c:url>">
+                                            <button type="button" class="btn btn-danger" data-toggle="tooltip"
+                                                    title="Eliminar" data-original-title="Eliminar">
+                                                <i class="fa fa-trash"></i></button>
+                                        </a>
 
                                     </td>
                                 </tr>

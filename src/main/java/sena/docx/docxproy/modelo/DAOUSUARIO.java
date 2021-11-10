@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class DAOUSUARIO extends Conexion {
 
     public usuario identificar(usuario user) throws Exception {
@@ -108,32 +109,46 @@ public class DAOUSUARIO extends Conexion {
         return usus;
     }
 
-    public void actualizarUsuarios(usuario usu) throws Exception{
+    public void actualizarUsuarios(usuario usu) throws Exception {
         String sql = "UPDATE usuario SET NOMBREUSUARIO = '"
                 + usu.getNombreUsuario() + "', CLAVE = '"
                 + usu.getClave() + "', ESTADO = "
-                + (usu.isEstado() == true ? "1": "0")
+                + (usu.isEstado() == true ? "1" : "0")
                 + ", IDCARGO = "
                 + usu.getCargo().getCodigo()
                 + " WHERE IDUSUARIO = " + usu.getId_usuario();
-        try{
+        try {
             this.conectar(false);
             this.ejecutarOrden(sql);
             this.cerrar(true);
-        }catch(Exception e){
+        } catch (Exception e) {
             this.cerrar(false);
             throw e;
         }
     }
 
-    public void eliminarUsuario(usuario usu) throws Exception{
+    public void eliminarUsuario(usuario usu) throws Exception {
         String sql = "DELETE FROM USUARIO"
                 + " WHERE IDUSUARIO = " + usu.getId_usuario();
-        try{
+        try {
             this.conectar(false);
             this.ejecutarOrden(sql);
             this.cerrar(true);
-        }catch(Exception e){
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        }
+    }
+
+    public void cambiarVigencia(usuario usus) throws Exception {
+        String sql = "UPDATE usuario SET estado = "
+                + (usus.isEstado() == true ? "1" : "0")
+                + " WHERE idusuario = " + usus.getId_usuario();
+        try {
+            this.conectar(false);
+            this.ejecutarOrden(sql);
+            this.cerrar(true);
+        } catch (Exception e) {
             this.cerrar(false);
             throw e;
         }

@@ -5,7 +5,6 @@ import sena.docx.docxproy.modelo.DAOUSUARIO;
 import sena.docx.docxproy.modelo.cargo;
 import sena.docx.docxproy.modelo.usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@SuppressWarnings("ALL")
 @WebServlet(name = "srvUsuario", urlPatterns = {"/srvUsuario"})
 public class srvUsuario extends HttpServlet {
 
@@ -50,6 +50,8 @@ public class srvUsuario extends HttpServlet {
                     default:
                         response.sendRedirect("identificar.jsp");
                 }
+            } else if (request.getParameter("cambiar") != null) {
+                cambiarEstado(request, response);
             } else {
                 response.sendRedirect("identificar.jsp");
             }
@@ -295,17 +297,42 @@ public class srvUsuario extends HttpServlet {
     private void eliminarUsuario(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO dao = new DAOUSUARIO();
         usuario usus = new usuario();
-        if (request.getParameter("cod")!=null){
+        if (request.getParameter("cod") != null) {
             usus.setId_usuario(Integer.parseInt(request.getParameter("cod")));
-            try{
+            try {
                 dao.eliminarUsuario(usus);
                 response.sendRedirect("srvUsuario?accion=listarUsuarios");
-            }catch(Exception e){
+            } catch (Exception e) {
                 request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
             }
-        }else{
+        } else {
             request.setAttribute("msje", "No se encontro el usuario");
         }
     }
 
+    private void cambiarEstado(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO dao;
+        usuario usu;
+        try {
+            dao = new DAOUSUARIO();
+            usu = new usuario();
+
+            if (request.getParameter("cambiar").equals("activar")) {
+                usu.setEstado(true);
+            } else {
+                usu.setEstado(false);
+            }
+
+            if (request.getParameter("cod") != null) {
+                usu.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+                dao.cambiarVigencia(usu);
+            } else {
+                request.setAttribute("msje", "No se obtuvo el id del usuario");
+            }
+
+        } catch (Exception e) {
+            request.setAttribute("msje", e.getMessage());
+        }
+        this.listarUsuarios(request, response);
+    }
 }
