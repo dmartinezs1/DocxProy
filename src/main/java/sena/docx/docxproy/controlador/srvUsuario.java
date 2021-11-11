@@ -118,9 +118,9 @@ public class srvUsuario extends HttpServlet {
             sesion.setAttribute("usuario", usuario);
             request.setAttribute("msje", "Bienvenido al sistema");
             this.getServletConfig().getServletContext().getRequestDispatcher("/vistas/index.jsp").forward(request, response);
-        } else if (usuario != null && usuario.getCargo().getNombreCargo().equals("VENDEDOR")) {
+        } else if (usuario != null && usuario.getCargo().getNombreCargo().equals("EMPLEADO")) {
             sesion = request.getSession();
-            sesion.setAttribute("vendedor", usuario);
+            sesion.setAttribute("empleado", usuario);
             this.getServletConfig().getServletContext().getRequestDispatcher("/vistas/formVendedor.jsp").forward(request, response);
         } else {
             request.setAttribute("msje", "Credenciales Incorrectas");

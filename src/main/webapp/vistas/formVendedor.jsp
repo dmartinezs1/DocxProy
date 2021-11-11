@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("vendedor") != null) {
+    if (session.getAttribute("empleado") != null) {
 %>
 <html>
 <head>
@@ -21,12 +21,12 @@
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
-    <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+    <link rel="stylesheet" href="dist/css/skins/skin-yellow-light.min.css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-yellow-light sidebar-mini">
 <div class="wrapper">
 
     <!-- Main Header -->
@@ -54,7 +54,7 @@
                             <!-- The user image in the navbar-->
                             <img src="dist/img/logodocx1.png" class="user-image" alt="User Image" style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">${vendedor.nombreUsuario}</span>
+                            <span class="hidden-xs">${empleado.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -62,8 +62,8 @@
                                 <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
-                                    Bienvenido - ${vendedor.nombreUsuario}
-                                    <small>${vendedor.cargo.nombreCargo} </small>
+                                    Bienvenido - ${empleado.nombreUsuario}
+                                    <small>${empleado.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -90,7 +90,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido, ${vendedor.nombreUsuario}</p>
+                    <p>Bienvenido, ${empleado.nombreUsuario}</p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>

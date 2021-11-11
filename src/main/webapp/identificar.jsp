@@ -21,9 +21,11 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="background: #edae4a">
 <div class="login-box">
     <div class="login-logo">
+        <img src="dist/img/logodocx1.png" class="user-image" alt="User Image" style="border-radius: 0%; height: 140px">
+        <br>
         <a href="#"><b>Sistema </b>Docx</a>
     </div>
     <!-- /.login-logo -->
@@ -49,7 +51,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
-                    <input type="submit" name="verificar" value="Verificar" class="btn btn-primary btn-block"/>
+                    <input type="submit" name="verificar" value="Verificar" class="btn btn-primary btn-block" style="background: #edae4a; border-color: #444444"/>
                 </div>
                 <!-- /.col -->
             </div>
@@ -57,7 +59,7 @@
 
         <div class="social-auth-links text-center">
             <p>- Verificación Credenciales -</p>
-            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-info"></i> Mensaje:
+            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat" style="background-color:#e32c28"><i class="fa fa-info"></i> Mensaje:
                 ${msje}</a>
         </div>
         <!-- /.social-auth-links -->
