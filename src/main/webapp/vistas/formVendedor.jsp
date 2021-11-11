@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Sistema Bodega| Inicio</title>
+    <title>Sistema Docx | Inicio</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -33,9 +33,9 @@
     <header class="main-header">
         <a href="#" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>S</b>BL</span>
+            <span class="logo-mini"><b>D</b>ocx</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Sistema </b>Bodega</span>
+            <span class="logo-lg"><b>Sistema </b>Docx</span>
         </a>
 
         <!-- Header Navbar -->
@@ -52,18 +52,18 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <img src="dist/img/logodocx1.png" class="user-image" alt="User Image" style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
                             <span class="hidden-xs">${vendedor.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
-                                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
                                     Bienvenido - ${vendedor.nombreUsuario}
-                                    <small>Usted es, ${vendedor.cargo.nombreCargo} </small>
+                                    <small>${vendedor.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -87,7 +87,7 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
                     <p>Bienvenido, ${vendedor.nombreUsuario}</p>
@@ -113,7 +113,7 @@
                 <li class="header">INICIO</li>
                 <!-- Optionally, you can add icons to the links -->
                 <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span></a></li>
-                <li class="treeview">
+                <%--<li class="treeview">
                     <a href="#"><i class="fa fa-cart-arrow-down"></i> <span>Ventas</span>
                         <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
@@ -123,7 +123,7 @@
                         <li><a href="#"><i class="fa fa-cart-arrow-down"></i>Nueva Venta</a></li>
                         <li><a href="#"><i class="fa fa-tags"></i>Administrar Ventas</a></li>
                     </ul>
-                </li>
+                </li>--%>
             </ul>
             <!-- /.sidebar-menu -->
         </section>
@@ -144,7 +144,7 @@
             </ol>
         </section>
 
-        <section class="content">
+        <%--<section class="content">
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 <div class="col-lg-3 col-xs-6">
@@ -208,7 +208,7 @@
                 </div>
                 <!-- ./col -->
             </div>
-        </section>
+        </section>--%>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
@@ -220,7 +220,7 @@
             Anything you want
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2020 <a href="#">IDAT</a>.</strong> Todos los derechos reservados.
+        <strong>Copyright &copy; 2021 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
     </footer>
 
     <div class="control-sidebar-bg"></div>
