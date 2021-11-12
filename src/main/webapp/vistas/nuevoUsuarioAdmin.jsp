@@ -183,7 +183,7 @@
                     <i class="fa fa-edit"></i>
                     <h3 class="box-title">Registrar Nuevo Usuario</h3>
                 </div>
-                <form class="form-horizontal" action="srvUsuario?accion=registrar" method="post">
+                <form class="form-horizontal" action="srvUsuario?accion=registrarUsuario" method="post">
                     <div class="box-body">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Nombre Usuario</label>

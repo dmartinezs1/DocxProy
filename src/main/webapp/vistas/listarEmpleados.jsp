@@ -165,23 +165,23 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Página Usuarios</h1>
+            <h1>Página Empleados</h1>
         </section>
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <a href="srvUsuario?accion=nuevo" class="btn btn-success">
-                <i class="fa fa-plus"></i> Nuevo Usuario </a>
+            <a href="srvUsuario?accion=nuevoEmpleado" class="btn btn-success">
+                <i class="fa fa-plus"></i> Nuevo Empleado </a>
 
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Usuarios</li>
+                <li class="active">Empleados</li>
             </ol>
         </section>
 
         <section class="content">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Listado de Usuarios</h3>
+                    <h3 class="box-title">Listado de Empleados</h3>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">
@@ -189,8 +189,8 @@
                                class="display">
                             <thead>
                             <tr>
-                                <th>IDUsuario</th>
-                                <th>Usuario</th>
+                                <th>ID</th>
+                                <th>Empleado</th>
                                 <th>Estado</th>
                                 <th>Cargo</th>
                                 <th>Acciones</th>
@@ -201,10 +201,10 @@
                                     <td>${iteracion.index + 1}</td>
                                     <td>${empleado.nombreUsuario}</td>
                                     <c:if test="${empleado.estado == true}">
-                                        <td><span class="badge bg-green active">Usuario Activo</span></td>
+                                        <td><span class="badge bg-green active">Empleado Activo</span></td>
                                     </c:if>
                                     <c:if test="${empleado.estado == false}">
-                                        <td><span class="badge bg-red active">Usuario Inactivo</span></td>
+                                        <td><span class="badge bg-red active">Empleado Inactivo</span></td>
                                     </c:if>
                                     <td>${empleado.cargo.nombreCargo}</td>
                                     <td><a href="<c:url value="srvUsuario">

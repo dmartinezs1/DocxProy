@@ -35,11 +35,16 @@ public class srvUsuario extends HttpServlet {
                     case "listarEmpleados":
                         listarEmpleados(request, response);
                         break;
-                    case "nuevo":
+                    case "nuevoUsuario":
                         presentarFormulario(request, response);
                         break;
-                    case "registrar":
+                    case "nuevoEmpleado":
+                        presentarFormularioSup(request, response);
+                    case "registrarUsuario":
                         registrarUsuario(request, response);
+                        break;
+                    case "registrarEmpleado":
+                        registrarEmpleado(request, response);
                         break;
                     case "leerUsuario":
                         presentarUsuario(request, response);
@@ -201,6 +206,15 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void presentarFormularioSup(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/nuevoEmpleado.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
     private void cargarCargos(HttpServletRequest request) {
         DAOCARGO dao = new DAOCARGO();
         List<cargo> car = null;
@@ -250,7 +264,6 @@ public class srvUsuario extends HttpServlet {
     private void registrarEmpleado(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO daoUsu;
         usuario usu = null;
-        cargo carg;
         if (request.getParameter("txtNombre") != null
                 && request.getParameter("txtClave") != null) {
             usu = new usuario();
@@ -264,13 +277,12 @@ public class srvUsuario extends HttpServlet {
             daoUsu = new DAOUSUARIO();
             try {
                 daoUsu.registrarEmpleado(usu);
-                //todo cambiar redirect
-                response.sendRedirect("srvUsuario?accion=listarUsuarios");
+                response.sendRedirect("srvUsuario?accion=listarEmpleados");
             } catch (Exception e) {
                 request.setAttribute("msje",
                         "No se pudo registrar el usuario" + e.getMessage());
                 request.setAttribute("usuario", usu);
-                this.presentarFormulario(request, response);
+                this.presentarFormularioSup(request, response);
             }
         }
     }

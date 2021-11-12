@@ -169,7 +169,7 @@
         </section>
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <a href="srvUsuario?accion=nuevo" class="btn btn-success">
+            <a href="srvUsuario?accion=nuevoUsuario" class="btn btn-success">
                 <i class="fa fa-plus"></i> Nuevo Usuario </a>
 
             <ol class="breadcrumb">
