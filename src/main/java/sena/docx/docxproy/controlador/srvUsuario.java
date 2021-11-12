@@ -32,6 +32,9 @@ public class srvUsuario extends HttpServlet {
                     case "listarUsuarios":
                         listarUsuarios(request, response);
                         break;
+                    case "listarEmpleados":
+                        listarEmpleados(request, response);
+                        break;
                     case "nuevo":
                         presentarFormulario(request, response);
                         break;
@@ -168,6 +171,26 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void listarEmpleados(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO dao = new DAOUSUARIO();
+        List<usuario> usus = null;
+        try {
+            usus = dao.listarEmpleados();
+            request.setAttribute("empleados", usus);
+
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo listar los usuarios" + e.getMessage());
+        } finally {
+            dao = null;
+        }
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/listarEmpleados.jsp").forward(request, response);
+        } catch (Exception ex) {
+            request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+        }
+    }
+
     private void presentarFormulario(HttpServletRequest request, HttpServletResponse response) {
         try {
             this.cargarCargos(request);
@@ -214,6 +237,34 @@ public class srvUsuario extends HttpServlet {
             daoUsu = new DAOUSUARIO();
             try {
                 daoUsu.registrarUsuarios(usu);
+                response.sendRedirect("srvUsuario?accion=listarUsuarios");
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo registrar el usuario" + e.getMessage());
+                request.setAttribute("usuario", usu);
+                this.presentarFormulario(request, response);
+            }
+        }
+    }
+
+    private void registrarEmpleado(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO daoUsu;
+        usuario usu = null;
+        cargo carg;
+        if (request.getParameter("txtNombre") != null
+                && request.getParameter("txtClave") != null) {
+            usu = new usuario();
+            usu.setNombreUsuario(request.getParameter("txtNombre"));
+            usu.setClave(request.getParameter("txtClave"));
+            if (request.getParameter("chkEstado") != null) {
+                usu.setEstado(true);
+            } else {
+                usu.setEstado(false);
+            }
+            daoUsu = new DAOUSUARIO();
+            try {
+                daoUsu.registrarEmpleado(usu);
+                //todo cambiar redirect
                 response.sendRedirect("srvUsuario?accion=listarUsuarios");
             } catch (Exception e) {
                 request.setAttribute("msje",

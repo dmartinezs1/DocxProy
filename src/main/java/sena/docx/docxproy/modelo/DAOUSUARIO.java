@@ -64,6 +64,37 @@ public class DAOUSUARIO extends Conexion {
         return usuarios;
     }
 
+    public List<usuario> listarEmpleados() throws Exception {
+        List<usuario> empleados;
+        usuario usu;
+        ResultSet rs = null;
+        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CLAVE, U.ESTADO, C.NOMBRECARGO "
+                + "FROM usuario U INNER JOIN cargo C "
+                + "ON C.IDCARGO = U.IDCARGO "
+                + "WHERE C.IDCARGO = 2 "
+                + "ORDER BY U.IDUSUARIO";
+
+        try {
+            this.conectar(false);
+            rs = this.ejecutarOrdenDatos(sql);
+            empleados = new ArrayList<>();
+            while (rs.next() == true) {
+                usu = new usuario();
+                usu.setId_usuario(rs.getInt("IDUSUARIO"));
+                usu.setNombreUsuario(rs.getString("NOMBREUSUARIO"));
+                usu.setEstado(rs.getBoolean("ESTADO"));
+                usu.setCargo(new cargo());
+                usu.getCargo().setNombreCargo(rs.getString("NOMBRECARGO"));
+                empleados.add(usu);
+            }
+            this.cerrar(true);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+        }
+        return empleados;
+    }
+
     public void registrarUsuarios(usuario usu) throws Exception {
         String sql;
         sql = "INSERT INTO Usuario (NOMBREUSUARIO, CLAVE, ESTADO, IDCARGO) "
@@ -71,6 +102,23 @@ public class DAOUSUARIO extends Conexion {
                 + usu.getClave() + "', "
                 + (usu.isEstado() == true ? "1" : "0")
                 + ", " + usu.getCargo().getCodigo() + ")";
+        try {
+            this.conectar(false);
+            this.ejecutarOrden(sql);
+            this.cerrar(true);
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        }
+    }
+
+    public void registrarEmpleado(usuario usu) throws Exception {
+        String sql;
+        sql = "INSERT INTO Usuario (NOMBREUSUARIO, CLAVE, ESTADO, IDCARGO) "
+                + "VALUES ('" + usu.getNombreUsuario() + "', '"
+                + usu.getClave() + "', "
+                + (usu.isEstado() == true ? "1" : "0")
+                + ", 2)";
         try {
             this.conectar(false);
             this.ejecutarOrden(sql);
