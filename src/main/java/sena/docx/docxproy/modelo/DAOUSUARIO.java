@@ -51,7 +51,6 @@ public class DAOUSUARIO extends Conexion {
                 usu = new usuario();
                 usu.setId_usuario(rs.getInt("IDUSUARIO"));
                 usu.setNombreUsuario(rs.getString("NOMBREUSUARIO"));
-                usu.setClave(rs.getString("CLAVE"));
                 usu.setEstado(rs.getBoolean("ESTADO"));
                 usu.setCargo(new cargo());
                 usu.getCargo().setNombreCargo(rs.getString("NOMBRECARGO"));

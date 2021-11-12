@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("usuario") != null) {
+    if (session.getAttribute("administrador") != null) {
 %>
 <html>
 <head>
@@ -53,25 +53,26 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="dist/img/logodocx1.png" class="user-image" alt="User Image" style="border-radius: 0%;">
+                            <img src="dist/img/logodocx1.png" class="user-image" alt="User Image"
+                                 style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs"> ${usuario.nombreUsuario}</span>
+                            <span class="hidden-xs"> ${administrador.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
-                                <img src="dist/img/logodocx1.png" class="img-circle" alt="User Image">
+                                <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
-                                    Bienvenido - ${usuario.nombreUsuario}
-                                    <small>${usuario.cargo.nombreCargo} </small>
+                                    Bienvenido - ${administrador.nombreUsuario}
+                                    <small>${administrador.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-right">
                                     <a href="srvUsuario?accion=cerrar" class="btn btn-default btn-flat">Cerrar
-                                        Session</a>
+                                        Sesión</a>
                                 </div>
                             </li>
                         </ul>
@@ -92,7 +93,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido, ${usuario.nombreUsuario} </p>
+                    <p>Bienvenido, ${administrador.nombreUsuario} </p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -190,7 +191,6 @@
                             <tr>
                                 <th>IDUsuario</th>
                                 <th>Usuario</th>
-                                <th>Clave</th>
                                 <th>Estado</th>
                                 <th>Cargo</th>
                                 <th>Acciones</th>
@@ -200,7 +200,6 @@
                                 <tr>
                                     <td>${iteracion.index + 1}</td>
                                     <td>${user.nombreUsuario}</td>
-                                    <td>${user.clave}</td>
                                     <c:if test="${user.estado == true}">
                                         <td><span class="badge bg-green active">Usuario Activo</span></td>
                                     </c:if>

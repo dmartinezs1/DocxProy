@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -19,7 +19,8 @@
     <!-- iCheck -->
     <link rel="stylesheet" href="plugins/iCheck/square/blue.css">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition login-page" style="background: #edae4a">
 <div class="login-box">
@@ -34,7 +35,7 @@
 
         <form action="srvUsuario?accion=verificar" method="POST">
             <div class="form-group has-feedback">
-                <input type="text" name="txtUsu" id="txtUsu" value="" class="form-control"  placeholder="Usuario">
+                <input type="text" name="txtUsu" id="txtUsu" value="" class="form-control" placeholder="Usuario">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
@@ -51,7 +52,8 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
-                    <input type="submit" name="verificar" value="Verificar" class="btn btn-primary btn-block" style="background: #edae4a; border-color: #444444"/>
+                    <input type="submit" name="verificar" value="Verificar" class="btn btn-primary btn-block"
+                           style="background: #edae4a; border-color: #444444"/>
                 </div>
                 <!-- /.col -->
             </div>
@@ -59,7 +61,8 @@
 
         <div class="social-auth-links text-center">
             <p>- Verificación Credenciales -</p>
-            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat" style="background-color:#e32c28"><i class="fa fa-info"></i> Mensaje:
+            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat" style="background-color:#e32c28"><i
+                    class="fa fa-info"></i> Mensaje:
                 ${msje}</a>
         </div>
         <!-- /.social-auth-links -->

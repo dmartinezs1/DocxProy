@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("administrador") != null) {
+    if (session.getAttribute("supervisor") != null) {
 %>
 <html>
 <head>
@@ -55,7 +55,7 @@
                             <img src="dist/img/logodocx1.png" class="user-image" alt="User Image"
                                  style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs"> ${administrador.nombreUsuario}</span>
+                            <span class="hidden-xs">${supervisor.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -63,8 +63,8 @@
                                 <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
-                                    Bienvenido - ${administrador.nombreUsuario}
-                                    <small>${administrador.cargo.nombreCargo} </small>
+                                    Bienvenido - ${supervisor.nombreUsuario}
+                                    <small>${supervisor.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -92,7 +92,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido, ${administrador.nombreUsuario} </p>
+                    <p>Bienvenido, ${supervisor.nombreUsuario}</p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -115,24 +115,7 @@
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">INICIO</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li><a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span></a></li>
-                <li class="treeview active">
-                    <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Registros</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <%--<li><a href="#"><i class="fa fa-archive"></i>Categorias</a></li>
-                        <li><a href="#"><i class="fa fa-tags"></i>Marcas</a></li>
-                        <li><a href="#"><i class="fa fa-cube"></i>Productos</a></li>
-                        <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
-                        <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>
-                        <li><a href=""><i class="fa fa-user-plus"></i>Empleados</a></li>--%>
-                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
-                        </li>
-                    </ul>
-                </li>
+                <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span></a></li>
                 <%--<li class="treeview">
                     <a href="#"><i class="fa fa-cart-arrow-down"></i> <span>Ventas</span>
                         <span class="pull-right-container">
@@ -144,16 +127,6 @@
                         <li><a href="#"><i class="fa fa-tags"></i>Administrar Ventas</a></li>
                     </ul>
                 </li>--%>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-area-chart"></i> <span>Reportes</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
-                    </ul>
-                </li>
             </ul>
             <!-- /.sidebar-menu -->
         </section>
@@ -162,91 +135,84 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
         <section class="content-header">
+            <h1>
+                Page Header
+                <small>Optional description</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+                <li class="active">Panel Administrativo</li>
+            </ol>
+        </section>
+
+        <%--<section class="content">
+            <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-xs-12 col-md-3">
-                </div>
-                <div class="col-md-3 hidden-xs"></div>
-                <div class="col-xs-2 col-md-1">
-                </div>
-                <div class="col-xs-10 col-md-5 ">
-                    <div class="btn-group pull-right">
-                        <a href="srvUsuario?accion=listarUsuarios" class="btn btn-default">
-                            <i class="fa fa-align-justify"></i> Ver listado</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="content">
-            <div class="box">
-                <div class="box-header with-border">
-                    <i class="fa fa-edit"></i>
-                    <h3 class="box-title">Actualizar Datos Usuario</h3>
-                </div>
-                <form class="form-horizontal" action="srvUsuario?accion=actualizarUsuario" method="post">
-                    <input type="hidden" name="hCodigo" value="${usuario.id_usuario}">
-                    <div class="box-body">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Nombre Usuario</label>
-                            <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input id="nombre" type="text" class="form-control" placeholder="Ejem: Alexander"
-                                       name="txtNombre" maxlength="10"
-                                       value="${usuario.nombreUsuario}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Clave</label>
-                            <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input id="clave" type="password" class="form-control" placeholder="Ejem: $%Ale!**"
-                                       name="txtClave" maxlength="10"
-                                       value="${usuario.clave}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Cargo</label>
-                            <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-tags"></i></span>
-                                <select class="form-control" name="cboCargo" autofocus="" required="">
-                                    <option value="0">Seleccione un cargo</option>
-                                    <c:forEach items="${cargos}" var="car">
-                                        <option value="${car.codigo}"
-                                                <c:if test="${car.codigo ==
-                                                                      usuario.cargo.codigo}">
-                                                    selected
-                                                </c:if>
-                                        >${car.nombreCargo}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="chkEstado"
-                                        <c:out value="${usuario.estado == false ?
-                                                                       'unchecked' : 'checked'}"
-                                               default=""/>>Activo
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="reset" class="btn btn-danger"><i class="fa fa-close red"></i> Cancelar</button>
-                        <button type="submit" id="" name="btnRegistrar" value="Registrar" class="btn btn-success"><i
-                                class="fa fa-refresh"></i> Actualizar Usuario
-                        </button>
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3>150</h3>
 
+                            <p>Nuevos Clientes</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
-                    <!-- /.box-footer -->
-                </form>
-            </div>
-        </section>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3>53<sup style="font-size: 20px">%</sup></h3>
 
+                            <p>Bounce Rate</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3>44</h3>
+
+                            <p>User Registrations</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3>65</h3>
+
+                            <p>Unique Visitors</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+        </section>--%>
+        <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
 
@@ -283,4 +249,3 @@
         response.sendRedirect("identificar.jsp");
     }
 %>
-

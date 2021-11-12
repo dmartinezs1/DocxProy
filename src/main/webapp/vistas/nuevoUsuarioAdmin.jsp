@@ -1,7 +1,7 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("usuario") != null) {
+    if (session.getAttribute("administrador") != null) {
 %>
 <html>
 <head>
@@ -52,9 +52,10 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="dist/img/logodocx1.png" class="user-image" alt="User Image" style="border-radius: 0%;">
+                            <img src="dist/img/logodocx1.png" class="user-image" alt="User Image"
+                                 style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs"> ${usuario.nombreUsuario}</span>
+                            <span class="hidden-xs"> ${administrador.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -62,14 +63,15 @@
                                 <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
-                                    Bienvenido - ${usuario.nombreUsuario}
-                                    <small>${usuario.cargo.nombreCargo} </small>
+                                    Bienvenido - ${administrador.nombreUsuario}
+                                    <small>${administrador.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-right">
-                                    <a href="srvUsuario?accion=cerrar" class="btn btn-default btn-flat">Cerrar Session</a>
+                                    <a href="srvUsuario?accion=cerrar" class="btn btn-default btn-flat">Cerrar
+                                        Sesión</a>
                                 </div>
                             </li>
                         </ul>
@@ -90,7 +92,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido,  ${usuario.nombreUsuario} </p>
+                    <p>Bienvenido, ${administrador.nombreUsuario} </p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -101,7 +103,8 @@
                 <div class="input-group">
                     <input type="text" name="q" class="form-control" placeholder="Search...">
                     <span class="input-group-btn">
-                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i
+                                        class="fa fa-search"></i>
                                 </button>
                             </span>
                 </div>
@@ -126,7 +129,8 @@
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>
                         <li><a href=""><i class="fa fa-user-plus"></i>Empleados</a></li>--%>
-                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a></li>
+                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        </li>
                     </ul>
                 </li>
                 <%--<li class="treeview">
@@ -176,7 +180,8 @@
         <section class="content">
             <div class="box">
                 <div class="box-header with-border">
-                    <i class="fa fa-edit"></i> <h3 class="box-title">Registrar Nuevo Usuario</h3>
+                    <i class="fa fa-edit"></i>
+                    <h3 class="box-title">Registrar Nuevo Usuario</h3>
                 </div>
                 <form class="form-horizontal" action="srvUsuario?accion=registrar" method="post">
                     <div class="box-body">
@@ -184,7 +189,8 @@
                             <label class="col-sm-2 control-label">Nombre Usuario</label>
                             <div class="col-sm-4 input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input id="nombre" type="text" class="form-control" placeholder="Ejem: Alexander" name="txtNombre" maxlength="10"
+                                <input id="nombre" type="text" class="form-control" placeholder="Ejem: Alexander"
+                                       name="txtNombre" maxlength="10"
                                        value="">
                             </div>
                         </div>
@@ -192,7 +198,8 @@
                             <label class="col-sm-2 control-label">Clave</label>
                             <div class="col-sm-4 input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input id="clave" type="password" class="form-control" placeholder="Ejem: $%Ale!**" name="txtClave" maxlength="10"
+                                <input id="clave" type="password" class="form-control" placeholder="Ejem: $%Ale!**"
+                                       name="txtClave" maxlength="10"
                                        value="">
                             </div>
                         </div>
@@ -200,7 +207,7 @@
                             <label class="col-sm-2 control-label">Cargo</label>
                             <div class="col-sm-4 input-group">
                                 <span class="input-group-addon"><i class="fa fa-tags"></i></span>
-                                <select class="form-control"  name="cboCargo" autofocus=""  required="">
+                                <select class="form-control" name="cboCargo" autofocus="" required="">
                                     <option value="0">Seleccione un cargo</option>
                                     <c:forEach items="${cargos}" var="car">
                                         <option value="${car.codigo}"
@@ -226,7 +233,9 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="reset" class="btn btn-danger"><i class="fa fa-close red"></i> Cancelar</button>
-                        <button type="submit" id="" name="btnRegistrar" value="Registrar" class="btn btn-success"><i class="fa fa-floppy-o"></i> Registrar</button>
+                        <button type="submit" id="" name="btnRegistrar" value="Registrar" class="btn btn-success"><i
+                                class="fa fa-floppy-o"></i> Registrar
+                        </button>
 
                     </div>
                     <!-- /.box-footer -->
