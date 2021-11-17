@@ -59,12 +59,16 @@ public class srvUsuario extends HttpServlet {
                         actualizarEmpleado(request, response);
                     case "eliminarUsuario":
                         eliminarUsuario(request, response);
+                    case "eliminarEmpleado":
+                        eliminarEmpleado(request, response);
                         break;
                     default:
                         response.sendRedirect("identificar.jsp");
                 }
             } else if (request.getParameter("cambiar") != null) {
                 cambiarEstado(request, response);
+            } else if (request.getParameter("cambiarEmp") != null) {
+                cambiarEstadoEmp(request, response);
             } else {
                 response.sendRedirect("identificar.jsp");
             }
@@ -449,6 +453,22 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void eliminarEmpleado(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO dao = new DAOUSUARIO();
+        usuario usus = new usuario();
+        if (request.getParameter("cod") != null) {
+            usus.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+            try {
+                dao.eliminarEmpleado(usus);
+                response.sendRedirect("srvUsuario?accion=listarEmpleados");
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se encontro el usuario");
+        }
+    }
+
     private void cambiarEstado(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO dao;
         usuario usu;
@@ -473,5 +493,31 @@ public class srvUsuario extends HttpServlet {
             request.setAttribute("msje", e.getMessage());
         }
         this.listarUsuarios(request, response);
+    }
+
+    private void cambiarEstadoEmp(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO dao;
+        usuario usu;
+        try {
+            dao = new DAOUSUARIO();
+            usu = new usuario();
+
+            if (request.getParameter("cambiarEmp").equals("activar")) {
+                usu.setEstado(true);
+            } else {
+                usu.setEstado(false);
+            }
+
+            if (request.getParameter("cod") != null) {
+                usu.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+                dao.cambiarVigencia(usu);
+            } else {
+                request.setAttribute("msje", "No se obtuvo el id del usuario");
+            }
+
+        } catch (Exception e) {
+            request.setAttribute("msje", e.getMessage());
+        }
+        this.listarEmpleados(request, response);
     }
 }

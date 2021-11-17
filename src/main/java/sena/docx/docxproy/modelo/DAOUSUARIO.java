@@ -228,6 +228,19 @@ public class DAOUSUARIO extends Conexion {
         }
     }
 
+    public void eliminarEmpleado(usuario usu) throws Exception {
+        String sql = "DELETE FROM USUARIO"
+                + " WHERE IDUSUARIO = " + usu.getId_usuario();
+        try {
+            this.conectar(false);
+            this.ejecutarOrden(sql);
+            this.cerrar(true);
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        }
+    }
+
     public void cambiarVigencia(usuario usus) throws Exception {
         String sql = "UPDATE usuario SET estado = "
                 + (usus.isEstado() == true ? "1" : "0")

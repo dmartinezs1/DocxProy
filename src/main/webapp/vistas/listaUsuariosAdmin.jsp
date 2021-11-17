@@ -198,7 +198,7 @@
                             </thead>
                             <c:forEach var="user" items="${usuarios}" varStatus="iteracion">
                                 <tr>
-                                    <td>${iteracion.index + 1}</td>
+                                    <td>${user.id_usuario}</td>
                                     <td>${user.nombreUsuario}</td>
                                     <c:if test="${user.estado == true}">
                                         <td><span class="badge bg-green active">Usuario Activo</span></td>

@@ -220,7 +220,7 @@
                                             <c:when test="${empleado.estado == true}">
                                                 <input type="hidden" id="item" value="${empleado.id_usuario}">
                                                 <a id="desactivarUsuario"
-                                                   href="srvUsuario?cambiar=desactivar&cod=${empleado.id_usuario}"
+                                                   href="srvUsuario?cambiarEmp=desactivar&cod=${empleado.id_usuario}"
                                                    class="btn btn-danger" data-toggle="tooltip" title="Desactivar"
                                                    data-original-title="Desactivar">
                                                     <i class="fa fa-remove"></i></a>
@@ -228,7 +228,7 @@
                                             <c:otherwise>
                                                 <input type="hidden" id="item" value="${empleado.id_usuario}">
                                                 <a id="activarUsuario"
-                                                   href="srvUsuario?cambiar=activar&cod=${empleado.id_usuario}"
+                                                   href="srvUsuario?cambiarEmp=activar&cod=${empleado.id_usuario}"
                                                    class="btn btn-primary" data-toggle="tooltip" title="Activar"
                                                    data-original-title="Activar">
                                                     <i class="glyphicon glyphicon-eye-open"></i></a>
@@ -237,7 +237,7 @@
                                         <!-- ELIMINAR USUARIOS -->
                                         <input type="hidden" id="codigo" value="${empleado.id_usuario}">
                                         <a id="deleteUser" href="<c:url value="srvUsuario">
-                                                       <c:param name="accion" value="eliminarUsuario" />
+                                                       <c:param name="accion" value="eliminarEmpleado" />
                                                        <c:param name="cod" value="${empleado.id_usuario}" />
                                                    </c:url>">
                                             <button type="button" class="btn btn-danger" data-toggle="tooltip"
@@ -288,7 +288,7 @@
 <script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script src="swetalert/sweetalert.js" type="text/javascript"></script>
-<script src="js/funcionesUsuario.js" type="text/javascript"></script>
+<script src="js/funcionesSupervisor.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         $('#tablaEmpleados').DataTable();
