@@ -1,9 +1,7 @@
 package sena.docx.docxproy.controlador;
 
-import sena.docx.docxproy.modelo.DAOCARGO;
-import sena.docx.docxproy.modelo.DAOUSUARIO;
-import sena.docx.docxproy.modelo.cargo;
-import sena.docx.docxproy.modelo.usuario;
+import sena.docx.docxproy.modelo.*;
+
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -34,6 +32,9 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "listarEmpleados":
                         listarEmpleados(request, response);
+                        break;
+                    case "listarEmpresas":
+                        listarEmpresas(request, response);
                         break;
                     case "nuevoUsuario":
                         presentarFormulario(request, response);
@@ -200,6 +201,26 @@ public class srvUsuario extends HttpServlet {
         try {
             this.getServletConfig().getServletContext()
                     .getRequestDispatcher("/vistas/listarEmpleados.jsp").forward(request, response);
+        } catch (Exception ex) {
+            request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+        }
+    }
+
+    private void listarEmpresas(HttpServletRequest request, HttpServletResponse response) {
+        DAOEMPRESA dao = new DAOEMPRESA();
+        List<empresa> emp = null;
+        try {
+            emp = dao.listarEmpresas();
+            request.setAttribute("empresas", emp);
+
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudieron listar las empresas" + e.getMessage());
+        } finally {
+            dao = null;
+        }
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/listarEmpresas.jsp").forward(request, response);
         } catch (Exception ex) {
             request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
         }

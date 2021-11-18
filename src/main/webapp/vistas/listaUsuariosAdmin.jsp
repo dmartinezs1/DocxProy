@@ -128,8 +128,8 @@
                         <li><a href="#"><i class="fa fa-tags"></i>Marcas</a></li>
                         <li><a href="#"><i class="fa fa-cube"></i>Productos</a></li>
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
-                        <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>
-                        <li><a href=""><i class="fa fa-user-plus"></i>Empleados</a></li>--%>
+                        <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
+                        <li><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a></li>
                         <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
                         </li>
                     </ul>
@@ -234,17 +234,16 @@
                                                     <i class="glyphicon glyphicon-eye-open"></i></a>
                                             </c:otherwise>
                                         </c:choose>
-                                        <!-- ELIMINAR USUARIOS -->
-                                        <input type="hidden" id="codigo" value="${user.id_usuario}">
-                                        <a id="deleteUser" href="<c:url value="srvUsuario">
-                                                       <c:param name="accion" value="eliminarUsuario" />
-                                                       <c:param name="cod" value="${user.id_usuario}" />
-                                                   </c:url>">
-                                            <button type="button" class="btn btn-danger" data-toggle="tooltip"
-                                                    title="Eliminar" data-original-title="Eliminar">
-                                                <i class="fa fa-trash"></i></button>
-                                        </a>
-
+                                            <!-- ELIMINAR USUARIOS -->
+                                            <input type="hidden" id="codigo" value="${user.id_usuario}">
+                                            <a id="deleteUser" href="<c:url value="srvUsuario">
+                                                           <c:param name="accion" value="eliminarUsuario" />
+                                                           <c:param name="cod" value="${user.id_usuario}" />
+                                                       </c:url>">
+                                                <button type="button" class="btn btn-danger" data-toggle="tooltip"
+                                                        title="Eliminar" data-original-title="Eliminar">
+                                                    <i class="fa fa-trash"></i></button>
+                                            </a>
                                     </td>
                                 </tr>
                             </c:forEach>

@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("supervisor") != null) {
+    if (session.getAttribute("administrador") != null) {
 %>
 <html>
 <head>
@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style -->
     <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
-
+    <link href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="swetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
@@ -55,7 +56,7 @@
                             <img src="dist/img/logodocx1.png" class="user-image" alt="User Image"
                                  style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">${supervisor.nombreUsuario}</span>
+                            <span class="hidden-xs"> ${administrador.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -63,8 +64,8 @@
                                 <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
-                                    Bienvenido - ${supervisor.nombreUsuario}
-                                    <small>${supervisor.cargo.nombreCargo} </small>
+                                    Bienvenido - ${administrador.nombreUsuario}
+                                    <small>${administrador.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -92,7 +93,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido, ${supervisor.nombreUsuario}</p>
+                    <p>Bienvenido, ${administrador.nombreUsuario} </p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -115,8 +116,8 @@
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">INICIO</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span></a></li>
-                <li class="treeview">
+                <li><a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span></a></li>
+                <li class="treeview active">
                     <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Registros</span>
                         <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
@@ -127,12 +128,24 @@
                         <li><a href="#"><i class="fa fa-tags"></i>Marcas</a></li>
                         <li><a href="#"><i class="fa fa-cube"></i>Productos</a></li>
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
-                        <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>
-                        <li><a href=""><i class="fa fa-user-plus"></i>Empleados</a></li>--%>
-                        <li><a href="srvUsuario?accion=listarEmpleados"><i class="fa fa-address-card"></i>Empleados</a>
+                        <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
+                        <li class="active"><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a>
+                        </li>
+                        <li><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
                         </li>
                     </ul>
                 </li>
+                <%--<li class="treeview">
+                    <a href="#"><i class="fa fa-cart-arrow-down"></i> <span>Ventas</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-cart-arrow-down"></i>Nueva Venta</a></li>
+                        <li><a href="#"><i class="fa fa-tags"></i>Administrar Ventas</a></li>
+                    </ul>
+                </li>--%>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-area-chart"></i> <span>Reportes</span>
                         <span class="pull-right-container">
@@ -150,84 +163,93 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
+    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Página Empresas</h1>
+        </section>
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Page Header
-                <small>Optional description</small>
-            </h1>
+            <a href="#" class="btn btn-success">
+                <i class="fa fa-plus"></i> Nueva Empresa </a>
+
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Panel Administrativo</li>
+                <li class="active">Empresas</li>
             </ol>
         </section>
 
-        <%--<section class="content">
-            <!-- Small boxes (Stat box) -->
-            <div class="row">
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3>150</h3>
-
-                            <p>Nuevos Clientes</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
+        <section class="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Listado de Empresas</h3>
+                </div>
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped dataTable table-hover" id="tablaEmpresas"
+                               class="display">
+                            <thead>
+                            <tr>
+                                <th>IDEmpresa</th>
+                                <th>Empresa</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <c:forEach var="user" items="${empresas}" varStatus="iteracion">
+                                <tr>
+                                    <td>${user.id_empresa}</td>
+                                    <td>${user.nombreEmpresa}</td>
+                                    <c:if test="${user.estado == true}">
+                                        <td><span class="badge bg-green active">Empresa Activa</span></td>
+                                    </c:if>
+                                    <c:if test="${user.estado == false}">
+                                        <td><span class="badge bg-red active">Empresa Inactiva</span></td>
+                                    </c:if>
+                                    <td><a href="#">
+                                        <button type="button" class="btn btn-warning" data-toggle="tooltip"
+                                                title="Editar" data-original-title="Editar">
+                                            <i class="fa fa-pencil"></i></button>
+                                    </a>
+                                        <!-- DESACTIVAR / ACTIVAR USUARIOS -->
+                                        <c:choose>
+                                            <c:when test="${user.estado == true}">
+                                                <input type="hidden" id="item" value="${user.id_empresa}">
+                                                <a id="desactivarUsuario"
+                                                   href="#"
+                                                   class="btn btn-danger" data-toggle="tooltip" title="Desactivar"
+                                                   data-original-title="Desactivar">
+                                                    <i class="fa fa-remove"></i></a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input type="hidden" id="item" value="${user.id_usuario}">
+                                                <a id="activarUsuario"
+                                                   href="#"
+                                                   class="btn btn-primary" data-toggle="tooltip" title="Activar"
+                                                   data-original-title="Activar">
+                                                    <i class="glyphicon glyphicon-eye-open"></i></a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <!-- ELIMINAR USUARIOS -->
+                                        <input type="hidden" id="codigo" value="${user.id_empresa}">
+                                        <a id="deleteUser" href="#">
+                                            <button type="button" class="btn btn-danger" data-toggle="tooltip"
+                                                    title="Eliminar" data-original-title="Eliminar">
+                                                <i class="fa fa-trash"></i></button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                            <p>Bounce Rate</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <!--Pie de página-->
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3>44</h3>
-
-                            <p>User Registrations</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-red">
-                        <div class="inner">
-                            <h3>65</h3>
-
-                            <p>Unique Visitors</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
+                <!-- /.box-footer-->
             </div>
-        </section>--%>
+        </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
@@ -252,9 +274,18 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-
+<script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
+<script src="swetalert/sweetalert.js" type="text/javascript"></script>
+<script src="js/funcionesUsuario.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function () {
+        $('#tablaEmpresas').DataTable();
+    });
+</script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
@@ -265,3 +296,4 @@
         response.sendRedirect("identificar.jsp");
     }
 %>
+
