@@ -33,4 +33,20 @@ public class DAOEMPRESA extends Conexion{
         }
         return empresas;
     }
+
+    public void registrarEmpresa(empresa emp) throws Exception {
+        String sql;
+        sql = "INSERT INTO empresa (nombreEmpresa, estado) "
+                + "VALUES ('" + emp.getNombreEmpresa() + "', "
+                + (emp.isEstado() == true ? "1" : "0")
+                + ")";
+        try {
+            this.conectar(false);
+            this.ejecutarOrden(sql);
+            this.cerrar(true);
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        }
+    }
 }

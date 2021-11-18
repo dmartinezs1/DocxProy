@@ -17,8 +17,7 @@
     <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style -->
     <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
-    <link href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="swetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
+
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
@@ -129,9 +128,8 @@
                         <li><a href="#"><i class="fa fa-cube"></i>Productos</a></li>
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
-                        <li class="active"><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a>
-                        </li>
-                        <li><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        <li><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a></li>
+                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
                         </li>
                     </ul>
                 </li>
@@ -163,94 +161,62 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Página Empresas</h1>
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                </div>
+                <div class="col-md-3 hidden-xs"></div>
+                <div class="col-xs-2 col-md-1">
+                </div>
+                <div class="col-xs-10 col-md-5 ">
+                    <div class="btn-group pull-right">
+                        <a href="srvUsuario?accion=listarEmpresas" class="btn btn-default">
+                            <i class="fa fa-align-justify"></i> Ver listado</a>
+                    </div>
+                </div>
+            </div>
         </section>
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <a href="srvUsuario?accion=nuevaEmpresa" class="btn btn-success">
-                <i class="fa fa-plus"></i> Nueva Empresa </a>
-
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Empresas</li>
-            </ol>
-        </section>
-
         <section class="content">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Listado de Empresas</h3>
+                    <i class="fa fa-edit"></i>
+                    <h3 class="box-title">Registrar Nueva Empresa</h3>
                 </div>
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped dataTable table-hover" id="tablaEmpresas"
-                               class="display">
-                            <thead>
-                            <tr>
-                                <th>IDEmpresa</th>
-                                <th>Empresa</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <c:forEach var="user" items="${empresas}" varStatus="iteracion">
-                                <tr>
-                                    <td>${user.id_empresa}</td>
-                                    <td>${user.nombreEmpresa}</td>
-                                    <c:if test="${user.estado == true}">
-                                        <td><span class="badge bg-green active">Empresa Activa</span></td>
-                                    </c:if>
-                                    <c:if test="${user.estado == false}">
-                                        <td><span class="badge bg-red active">Empresa Inactiva</span></td>
-                                    </c:if>
-                                    <td><a href="#">
-                                        <button type="button" class="btn btn-warning" data-toggle="tooltip"
-                                                title="Editar" data-original-title="Editar">
-                                            <i class="fa fa-pencil"></i></button>
-                                    </a>
-                                        <!-- DESACTIVAR / ACTIVAR USUARIOS -->
-                                        <c:choose>
-                                            <c:when test="${user.estado == true}">
-                                                <input type="hidden" id="item" value="${user.id_empresa}">
-                                                <a id="desactivarUsuario"
-                                                   href="#"
-                                                   class="btn btn-danger" data-toggle="tooltip" title="Desactivar"
-                                                   data-original-title="Desactivar">
-                                                    <i class="fa fa-remove"></i></a>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <input type="hidden" id="item" value="${user.id_empresa}">
-                                                <a id="activarUsuario"
-                                                   href="#"
-                                                   class="btn btn-primary" data-toggle="tooltip" title="Activar"
-                                                   data-original-title="Activar">
-                                                    <i class="glyphicon glyphicon-eye-open"></i></a>
-                                            </c:otherwise>
-                                        </c:choose>
-                                        <!-- ELIMINAR USUARIOS -->
-                                        <input type="hidden" id="codigo" value="${user.id_empresa}">
-                                        <a id="deleteUser" href="#">
-                                            <button type="button" class="btn btn-danger" data-toggle="tooltip"
-                                                    title="Eliminar" data-original-title="Eliminar">
-                                                <i class="fa fa-trash"></i></button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
+                <form class="form-horizontal" action="srvUsuario?accion=registrarEmpresa" method="post">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Nombre Empresa</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="nombre" type="text" class="form-control" placeholder="Ejem: Alexander"
+                                       name="txtNombre" maxlength="10"
+                                       value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="chkEstado" checked=""> Activo
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <!--Pie de página-->
-                </div>
-                <!-- /.box-footer-->
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="reset" class="btn btn-danger"><i class="fa fa-close red"></i> Cancelar</button>
+                        <button type="submit" id="" name="btnRegistrar" value="Registrar" class="btn btn-success"><i
+                                class="fa fa-floppy-o"></i> Registrar
+                        </button>
+
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
             </div>
         </section>
-        <!-- /.content -->
+
     </div>
     <!-- /.content-wrapper -->
 
@@ -274,18 +240,9 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-<script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-<script src="swetalert/sweetalert.js" type="text/javascript"></script>
-<script src="js/funcionesUsuario.js" type="text/javascript"></script>
-<script>
-    $(document).ready(function () {
-        $('#tablaEmpresas').DataTable();
-    });
-</script>
+
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
@@ -296,4 +253,3 @@
         response.sendRedirect("identificar.jsp");
     }
 %>
-

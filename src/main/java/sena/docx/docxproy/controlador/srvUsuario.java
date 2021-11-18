@@ -41,11 +41,16 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "nuevoEmpleado":
                         presentarFormularioSup(request, response);
+                    case "nuevaEmpresa":
+                        presentarFormularioEmp(request, response);
                     case "registrarUsuario":
                         registrarUsuario(request, response);
                         break;
                     case "registrarEmpleado":
                         registrarEmpleado(request, response);
+                        break;
+                    case "registrarEmpresa":
+                        registrarEmpresa(request, response);
                         break;
                     case "leerUsuario":
                         presentarUsuario(request, response);
@@ -236,6 +241,15 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void presentarFormularioEmp(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/nuevaEmpresa.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
     private void presentarFormularioSup(HttpServletRequest request, HttpServletResponse response) {
         try {
             this.getServletConfig().getServletContext()
@@ -313,6 +327,30 @@ public class srvUsuario extends HttpServlet {
                         "No se pudo registrar el usuario" + e.getMessage());
                 request.setAttribute("usuario", usu);
                 this.presentarFormularioSup(request, response);
+            }
+        }
+    }
+
+    private void registrarEmpresa(HttpServletRequest request, HttpServletResponse response) {
+        DAOEMPRESA daoempresa;
+        empresa emp = null;
+        if (request.getParameter("txtNombre") != null) {
+            emp = new empresa();
+            emp.setNombreEmpresa(request.getParameter("txtNombre"));
+            if (request.getParameter("chkEstado") != null) {
+                emp.setEstado(true);
+            } else {
+                emp.setEstado(false);
+            }
+            daoempresa = new DAOEMPRESA();
+            try {
+                daoempresa.registrarEmpresa(emp);
+                response.sendRedirect("srvUsuario?accion=listarEmpresas");
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo registrar el usuario" + e.getMessage());
+                request.setAttribute("empresa", emp);
+                this.presentarFormularioEmp(request, response);
             }
         }
     }
