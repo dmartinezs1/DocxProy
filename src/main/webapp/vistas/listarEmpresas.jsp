@@ -219,7 +219,7 @@
                                             <c:when test="${user.estado == true}">
                                                 <input type="hidden" id="item" value="${user.id_empresa}">
                                                 <a id="desactivarUsuario"
-                                                   href="#"
+                                                   href="srvUsuario?cambiarEmpresa=desactivar&cod=${user.id_empresa}"
                                                    class="btn btn-danger" data-toggle="tooltip" title="Desactivar"
                                                    data-original-title="Desactivar">
                                                     <i class="fa fa-remove"></i></a>
@@ -227,7 +227,7 @@
                                             <c:otherwise>
                                                 <input type="hidden" id="item" value="${user.id_empresa}">
                                                 <a id="activarUsuario"
-                                                   href="#"
+                                                   href="srvUsuario?cambiarEmpresa=activar&cod=${user.id_empresa}"
                                                    class="btn btn-primary" data-toggle="tooltip" title="Activar"
                                                    data-original-title="Activar">
                                                     <i class="glyphicon glyphicon-eye-open"></i></a>

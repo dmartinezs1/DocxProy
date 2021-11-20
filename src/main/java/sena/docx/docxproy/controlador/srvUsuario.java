@@ -80,6 +80,8 @@ public class srvUsuario extends HttpServlet {
                 cambiarEstado(request, response);
             } else if (request.getParameter("cambiarEmp") != null) {
                 cambiarEstadoEmp(request, response);
+            } else if (request.getParameter("cambiarEmpresa") != null) {
+                cambiarEstadoEmpresa(request, response);
             } else {
                 response.sendRedirect("identificar.jsp");
             }
@@ -646,5 +648,31 @@ public class srvUsuario extends HttpServlet {
             request.setAttribute("msje", e.getMessage());
         }
         this.listarEmpleados(request, response);
+    }
+
+    private void cambiarEstadoEmpresa(HttpServletRequest request, HttpServletResponse response) {
+        DAOEMPRESA dao;
+        empresa emps;
+        try {
+            dao = new DAOEMPRESA();
+            emps = new empresa();
+
+            if (request.getParameter("cambiarEmpresa").equals("activar")) {
+                emps.setEstado(true);
+            } else {
+                emps.setEstado(false);
+            }
+
+            if (request.getParameter("cod") != null) {
+                emps.setId_empresa(Integer.parseInt(request.getParameter("cod")));
+                dao.cambiarVigenciaEmp(emps);
+            } else {
+                request.setAttribute("msje", "No se obtuvo el id del usuario");
+            }
+
+        } catch (Exception e) {
+            request.setAttribute("msje", e.getMessage());
+        }
+        this.listarEmpresas(request, response);
     }
 }
