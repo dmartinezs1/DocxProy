@@ -283,7 +283,7 @@
 <script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script src="swetalert/sweetalert.js" type="text/javascript"></script>
-<script src="js/funcionesUsuario.js" type="text/javascript"></script>
+<script src="js/funcionesEmpresa.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         $('#tablaEmpresas').DataTable();

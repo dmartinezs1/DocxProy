@@ -73,6 +73,9 @@ public class srvUsuario extends HttpServlet {
                     case "eliminarEmpleado":
                         eliminarEmpleado(request, response);
                         break;
+                    case "eliminarEmpresa":
+                        eliminarEmpresa(request, response);
+                        break;
                     default:
                         response.sendRedirect("identificar.jsp");
                 }
@@ -590,6 +593,22 @@ public class srvUsuario extends HttpServlet {
             try {
                 dao.eliminarEmpleado(usus);
                 response.sendRedirect("srvUsuario?accion=listarEmpleados");
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se encontro el usuario");
+        }
+    }
+
+    private void eliminarEmpresa(HttpServletRequest request, HttpServletResponse response) {
+        DAOEMPRESA dao = new DAOEMPRESA();
+        empresa emps = new empresa();
+        if (request.getParameter("cod") != null) {
+            emps.setId_empresa(Integer.parseInt(request.getParameter("cod")));
+            try {
+                dao.eliminarEmpresa(emps);
+                response.sendRedirect("srvUsuario?accion=listarEmpresa");
             } catch (Exception e) {
                 request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
             }

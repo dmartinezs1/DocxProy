@@ -102,4 +102,17 @@ public class DAOEMPRESA extends Conexion{
             throw e;
         }
     }
+
+    public void eliminarEmpresa(empresa emp) throws Exception {
+        String sql = "DELETE FROM empresa"
+                + " WHERE id_empresa = " + emp.getId_empresa();
+        try {
+            this.conectar(false);
+            this.ejecutarOrden(sql);
+            this.cerrar(true);
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        }
+    }
 }
