@@ -58,11 +58,16 @@ public class srvUsuario extends HttpServlet {
                     case "leerEmpleado":
                         presentarEmpleado(request, response);
                         break;
+                    case "leerEmpresa":
+                        presentarEmpresa(request, response);
+                        break;
                     case "actualizarUsuario":
                         actualizarUsuario(request, response);
                         break;
                     case "actualizarEmpleado":
                         actualizarEmpleado(request, response);
+                    case "actualizarEmpresa":
+                        actualizarEmpresa(request, response);
                     case "eliminarUsuario":
                         eliminarUsuario(request, response);
                     case "eliminarEmpleado":
@@ -416,6 +421,36 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void presentarEmpresa(HttpServletRequest request, HttpServletResponse response) {
+        DAOEMPRESA daoempresa;
+        empresa emps;
+        if (request.getParameter("cod") != null) {
+            emps = new empresa();
+            emps.setId_empresa(Integer.parseInt(request.getParameter("cod")));
+
+            daoempresa = new DAOEMPRESA();
+            try {
+                emps = daoempresa.leerEmpresa(emps);
+                if (emps != null) {
+                    request.setAttribute("empresa", emps);
+                } else {
+                    request.setAttribute("msje", "No se encontró el empleado");
+                }
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se tiene el parámetro necesario");
+        }
+        try {
+            this.getServletConfig().getServletContext().
+                    getRequestDispatcher("/vistas/actualizarEmpresa.jsp"
+                    ).forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
+        }
+    }
+
     private void actualizarUsuario(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO daoUsu;
         usuario usus = null;
@@ -489,6 +524,39 @@ public class srvUsuario extends HttpServlet {
             try {
                 this.getServletConfig().getServletContext().
                         getRequestDispatcher("/vistas/actualizarEmpleado.jsp"
+                        ).forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
+            }
+        }
+    }
+
+    private void actualizarEmpresa(HttpServletRequest request, HttpServletResponse response) {
+        DAOEMPRESA daoEmp;
+        empresa emps = null;
+
+        if (request.getParameter("hCodigo") != null
+                && request.getParameter("txtNombre") != null){
+            emps = new empresa();
+            emps.setId_empresa(Integer.parseInt(request.getParameter("hCodigo")));
+            emps.setNombreEmpresa(request.getParameter("txtNombre"));
+            if (request.getParameter("chkEstado") != null) {
+                emps.setEstado(true);
+            } else {
+                emps.setEstado(false);
+            }
+            daoEmp = new DAOEMPRESA();
+            try {
+                daoEmp.actualizarEmpresa(emps);
+                response.sendRedirect("srvUsuario?accion=listarEmpresas");
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo actualizar el usuario" + e.getMessage());
+                request.setAttribute("empresa", emps);
+            }
+            try {
+                this.getServletConfig().getServletContext().
+                        getRequestDispatcher("/vistas/actualizarEmpresa.jsp"
                         ).forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());

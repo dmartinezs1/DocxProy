@@ -49,4 +49,43 @@ public class DAOEMPRESA extends Conexion{
             throw e;
         }
     }
+
+    public void actualizarEmpresa(empresa emps) throws Exception {
+        String sql = "UPDATE empresa SET nombreEmpresa = '"
+                + emps.getNombreEmpresa() + "', estado = "
+                + (emps.isEstado() == true ? "1" : "0")
+                + " WHERE id_empresa = " + emps.getId_empresa();
+        try {
+            this.conectar(false);
+            this.ejecutarOrden(sql);
+            this.cerrar(true);
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        }
+    }
+
+    public empresa leerEmpresa(empresa emp) throws Exception {
+        empresa emps = null;
+        ResultSet rs = null;
+        String sql = "SELECT U.id_empresa, U.nombreEmpresa, U.ESTADO "
+                + "FROM empresa U WHERE U.id_empresa = " + emp.getId_empresa();
+
+        try {
+            this.conectar(false);
+            rs = this.ejecutarOrdenDatos(sql);
+            if (rs.next() == true) {
+                emps = new empresa();
+                emps.setId_empresa(rs.getInt("id_empresa"));
+                emps.setNombreEmpresa(rs.getString("nombreEmpresa"));
+                emps.setEstado(rs.getBoolean("estado"));
+            }
+            this.cerrar(true);
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        } finally {
+        }
+        return emps;
+    }
 }
