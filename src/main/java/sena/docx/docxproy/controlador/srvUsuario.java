@@ -68,6 +68,8 @@ public class srvUsuario extends HttpServlet {
                         actualizarEmpleado(request, response);
                     case "actualizarEmpresa":
                         actualizarEmpresa(request, response);
+                    /*case "actualizarContraseña":
+                        actualizarContraseña(request, response);*/
                     case "eliminarUsuario":
                         eliminarUsuario(request, response);
                     case "eliminarEmpleado":
@@ -222,6 +224,7 @@ public class srvUsuario extends HttpServlet {
     }
 
     private void listarEmpresas(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("listó empresas");
         DAOEMPRESA dao = new DAOEMPRESA();
         List<empresa> emp = null;
         try {
@@ -344,7 +347,13 @@ public class srvUsuario extends HttpServlet {
     private void registrarEmpresa(HttpServletRequest request, HttpServletResponse response) {
         DAOEMPRESA daoempresa;
         empresa emp = null;
-        if (request.getParameter("txtNombre") != null) {
+        System.out.println("llegó al servlet");
+        if (request.getParameter("txtNombre") != null
+                && request.getParameter("txtTelefono") != null
+                && request.getParameter("txtDireccion") != null
+                && request.getParameter("txtCorreo") != null
+                && request.getParameter("txtNombreContacto") != null
+                && request.getParameter("txtTelefonoContacto") != null) {
             emp = new empresa();
             emp.setNombreEmpresa(request.getParameter("txtNombre"));
             if (request.getParameter("chkEstado") != null) {
@@ -352,6 +361,12 @@ public class srvUsuario extends HttpServlet {
             } else {
                 emp.setEstado(false);
             }
+            emp.setTelefono(Integer.parseInt(request.getParameter("txtTelefono")));
+            emp.setDireccion(request.getParameter("txtDireccion"));
+            emp.setCorreoEmpresarial(request.getParameter("txtCorreo"));
+            emp.setNombreContacto(request.getParameter("txtNombreContacto"));
+            emp.setTelefonoContacto(Integer.parseInt(request.getParameter("txtTelefonoContacto")));
+
             daoempresa = new DAOEMPRESA();
             try {
                 daoempresa.registrarEmpresa(emp);
@@ -361,6 +376,7 @@ public class srvUsuario extends HttpServlet {
                         "No se pudo registrar el usuario" + e.getMessage());
                 request.setAttribute("empresa", emp);
                 this.presentarFormularioEmp(request, response);
+                System.out.println(e);
             }
         }
     }

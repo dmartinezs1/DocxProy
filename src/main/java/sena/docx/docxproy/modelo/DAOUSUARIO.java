@@ -255,4 +255,18 @@ public class DAOUSUARIO extends Conexion {
         }
     }
 
+    public void changePassword(usuario usu) throws Exception {
+        String sql = "UPDATE usuario SET CLAVE = '"
+                + usu.getClave()
+                + " WHERE IDUSUARIO = " + usu.getId_usuario();
+        try {
+            this.conectar(false);
+            this.ejecutarOrden(sql);
+            this.cerrar(true);
+        } catch (Exception e) {
+            this.cerrar(false);
+            throw e;
+        }
+    }
+
 }

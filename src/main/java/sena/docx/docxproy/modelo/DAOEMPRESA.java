@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("ALL")
-public class DAOEMPRESA extends Conexion{
+public class DAOEMPRESA extends Conexion {
 
     public List<empresa> listarEmpresas() throws Exception {
         List<empresa> empresas;
@@ -36,9 +36,14 @@ public class DAOEMPRESA extends Conexion{
 
     public void registrarEmpresa(empresa emp) throws Exception {
         String sql;
-        sql = "INSERT INTO empresa (nombreEmpresa, estado) "
+        sql = "INSERT INTO empresa (nombreEmpresa, estado, telefono, direccion, correoEmpresarial, nombreContacto, telefonoContacto) "
                 + "VALUES ('" + emp.getNombreEmpresa() + "', "
-                + (emp.isEstado() == true ? "1" : "0")
+                + (emp.isEstado() == true ? "1" : "0") + ", "
+                + emp.getTelefono() + ", '"
+                + emp.getDireccion() + "', '"
+                + emp.getCorreoEmpresarial() + "', '"
+                + emp.getNombreContacto() + "', "
+                + emp.getTelefonoContacto()
                 + ")";
         try {
             this.conectar(false);

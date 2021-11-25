@@ -20,7 +20,7 @@ public class Conexion {
         MysqlConnectionPoolDataSource ds = new MysqlConnectionPoolDataSource();
         ds.setServerName("localhost");
         ds.setPort(3306);
-        ds.setDatabaseName("dbsys");
+        ds.setDatabaseName("docx");
         conexion = ds.getConnection("root", "1234");
 
         if (wTransaccion == true) {
