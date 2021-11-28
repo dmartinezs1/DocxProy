@@ -10,7 +10,7 @@ public class DAOUSUARIO extends Conexion {
     public usuario identificar(usuario user) throws Exception {
         usuario usu = null;
         ResultSet rs = null;
-        String sql = "SELECT U.IDUSUARIO, C.NOMBRECARGO FROM USUARIO U "
+        String sql = "SELECT U.IDUSUARIO, U.CLAVE, C.NOMBRECARGO FROM USUARIO U "
                 + "INNER JOIN CARGO C ON U.IDCARGO = C.IDCARGO "
                 + "WHERE U.ESTADO = 1 AND U.NOMBREUSUARIO = '" + user.getNombreUsuario() + "' "
                 + "AND U.CLAVE = '" + user.getClave() + "'";
@@ -24,6 +24,7 @@ public class DAOUSUARIO extends Conexion {
                 usu.setCargo(new cargo());
                 usu.getCargo().setNombreCargo(rs.getString("NOMBRECARGO"));
                 usu.setEstado(true);
+                usu.setClave(rs.getString("CLAVE"));
             }
             rs.close();
         } catch (Exception e) {
@@ -258,7 +259,7 @@ public class DAOUSUARIO extends Conexion {
     public void changePassword(usuario usu) throws Exception {
         String sql = "UPDATE usuario SET CLAVE = '"
                 + usu.getClave()
-                + " WHERE IDUSUARIO = " + usu.getId_usuario();
+                + "' WHERE IDUSUARIO = " + usu.getId_usuario();
         try {
             this.conectar(false);
             this.ejecutarOrden(sql);

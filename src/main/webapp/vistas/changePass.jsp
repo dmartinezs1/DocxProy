@@ -112,8 +112,18 @@
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">INICIO</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li><a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span></a></li>
                 <li class="treeview active">
+                    <a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="active"><a href="srvUsuario?accion=abrirPassword"><i class="fa fa-user-plus"></i>Cambiar
+                            contraseña</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
                     <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Registros</span>
                         <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
@@ -125,8 +135,8 @@
                         <li><a href="#"><i class="fa fa-cube"></i>Productos</a></li>
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
-                        <li><a href="srvUsuario?accion=openPass"><i class="fa fa-user-plus"></i>Cambiar Contraseña</a></li>
-                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        <li><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a></li>
+                        <li><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
                         </li>
                     </ul>
                 </li>
@@ -167,10 +177,10 @@
                 <div class="col-xs-2 col-md-1">
                 </div>
                 <div class="col-xs-10 col-md-5 ">
-                   <!-- <div class="btn-group pull-right">
-                        <a href="srvUsuario?accion=listarEmpresas" class="btn btn-default">
-                            <i class="fa fa-align-justify"></i> Ver listado</a>
-                    </div>-->
+                    <!-- <div class="btn-group pull-right">
+                         <a href="srvUsuario?accion=listarEmpresas" class="btn btn-default">
+                             <i class="fa fa-align-justify"></i> Ver listado</a>
+                     </div>-->
                 </div>
             </div>
         </section>
@@ -180,36 +190,30 @@
                     <i class="fa fa-edit"></i>
                     <h3 class="box-title">Cambiar Contraseña</h3>
                 </div>
-                <form class="form-horizontal" action="srvUsuario?accion=changePassword" method="post">
+                <form class="form-horizontal" action="srvUsuario?accion=actualizarPassword" method="post">
+                    <input type="hidden" name="id" id="id" value="${administrador.id_usuario}">
+                    <input type="hidden" name="passu" id="passu" value="${administrador.clave}">
                     <div class="box-body">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Id</label>
-                            <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input id="cod" type="number" class="form-control"
-                                       name="cod" maxlength="10"
-                                       value="${usu.Id_usuario}">
-                                <input id="txtClave" type="password" class="form-control"
-                                       name="txtClave" maxlength="10"
-                                       value="${usu.clave}">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-
-                                    <label class="col-sm-2 control-label">Clave actual</label>
-                                    <input onchange="verifyPass()" id="ClaveAnt" type="password" class="form-control"
-                                           name="ClaveAnt" maxlength="10"
+                                <label class="col-sm-2 control-label">Clave actual</label>
+                                <div class="col-sm-4 input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input onchange="verifyPass()" id="passant" type="password" class="form-control"
+                                           name="passant" maxlength="10" placeholder="Ingrese la clave actual"
                                            value="">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-
                                 <label class="col-sm-2 control-label">Clave nueva</label>
-                                <input id="ClaveN" type="password" class="form-control"
-                                       name="ClaveN" maxlength="10"
-                                       value="">
+                                <div class="col-sm-4 input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input id="passnew" type="password" class="form-control"
+                                           name="passnew" maxlength="10"
+                                           value="">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -228,17 +232,16 @@
 
     </div>
     <script>
-        function verifyPass(){
-            const txtClave=usu.getElementById("txtClave");
-            const ClaveAnt=usu.getElementById("ClaveAnt");
+        function verifyPass() {
+            const txtClave = document.getElementById("passu");
+            const ClaveAnt = document.getElementById("passant");
 
-            if (txtClave.value==ClaveAnt.value){
+            if (txtClave.value === ClaveAnt.value) {
                 alert("La contraseña se ha verificado")
-            }
-            else {
+            } else {
                 alert("La contraseña no coincide")
                 ClaveAnt.focus();
-                ClaveAnt.value="";
+                ClaveAnt.value = "";
             }
 
         }

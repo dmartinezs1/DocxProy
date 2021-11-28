@@ -43,6 +43,8 @@ public class srvUsuario extends HttpServlet {
                         presentarFormularioSup(request, response);
                     case "nuevaEmpresa":
                         presentarFormularioEmp(request, response);
+                    case "abrirPassword":
+                        presentarPassword(request, response);
                     case "registrarUsuario":
                         registrarUsuario(request, response);
                         break;
@@ -68,8 +70,8 @@ public class srvUsuario extends HttpServlet {
                         actualizarEmpleado(request, response);
                     case "actualizarEmpresa":
                         actualizarEmpresa(request, response);
-                    /*case "actualizarContraseña":
-                        actualizarContraseña(request, response);*/
+                    case "actualizarPassword":
+                        actPassword(request, response);
                     case "eliminarUsuario":
                         eliminarUsuario(request, response);
                     case "eliminarEmpleado":
@@ -183,6 +185,12 @@ public class srvUsuario extends HttpServlet {
         return u;
     }
 
+    private usuario obtenerPass(HttpServletRequest request) {
+        usuario u = new usuario();
+        u.setClave(request.getParameter("txtPass"));
+        return u;
+    }
+
     private void listarUsuarios(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO dao = new DAOUSUARIO();
         List<usuario> usus = null;
@@ -267,6 +275,15 @@ public class srvUsuario extends HttpServlet {
         try {
             this.getServletConfig().getServletContext()
                     .getRequestDispatcher("/vistas/nuevoEmpleado.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
+    private void presentarPassword(HttpServletRequest request, HttpServletResponse response){
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/changePass.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo cargar la vista");
         }
@@ -584,6 +601,27 @@ public class srvUsuario extends HttpServlet {
             }
         }
     }
+
+    private void actPassword (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        DAOUSUARIO dao;
+        usuario usus = null;
+
+        if(request.getParameter("id")!=null
+            && request.getParameter("passnew")!=null) {
+            usus = new usuario();
+            usus.setId_usuario(Integer.parseInt(request.getParameter("id")));
+            usus.setClave(request.getParameter("passnew"));
+        }
+        dao = new DAOUSUARIO();
+        try {
+            dao.changePassword(usus);
+            request.getRequestDispatcher("srvUsuario?accion=cerrar").forward(request, response);
+        }catch(Exception e) {
+            System.out.println("error al cambiar password "+e.getMessage());
+        }
+
+    }
+
 
     private void eliminarUsuario(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO dao = new DAOUSUARIO();
