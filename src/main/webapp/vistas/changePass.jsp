@@ -62,7 +62,10 @@
                             <li class="user-header">
                                 <img src="dist/img/logodocx1.png" alt="User Image">
 
-
+                                <p>
+                                    Bienvenido - ${administrador.nombreUsuario}
+                                    <small>${administrador.cargo.nombreCargo} </small>
+                                </p>
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
@@ -89,7 +92,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-
+                    <p>Bienvenido, ${administrador.nombreUsuario} </p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
