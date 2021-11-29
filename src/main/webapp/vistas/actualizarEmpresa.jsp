@@ -196,6 +196,51 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">Número de teléfono</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="telefono" type="number" class="form-control" placeholder="321 1231 231"
+                                       name="txtTelefono" maxlength="12"
+                                       value="${empresa.telefono}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Dirección</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="direccion" type="text" class="form-control" placeholder="Cra 1#1A 11"
+                                       name="txtDireccion" maxlength="10"
+                                       value="${empresa.direccion}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Correo Empresarial</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="correoEmpresarial" type="email" class="form-control" placeholder="Empresa@mail.com"
+                                       name="txtCorreoEmpresarial" maxlength="10"
+                                       value="${empresa.correoEmpresarial}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Nombre Contacto</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="nombreContacto" type="text" class="form-control" placeholder="Ejemplo: Andrés A."
+                                       name="txtNombreContacto" maxlength="10"
+                                       value="${empresa.nombreContacto}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Teléfono Contacto</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="telefonoContacto" type="number" class="form-control" placeholder="321 1231 231"
+                                       name="txtTelefonoContacto" maxlength="10"
+                                       value="${empresa.telefonoContacto}">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <div class="checkbox">
                                     <label>

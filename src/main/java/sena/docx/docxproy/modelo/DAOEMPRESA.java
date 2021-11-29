@@ -59,12 +59,19 @@ public class DAOEMPRESA extends Conexion {
         String sql = "UPDATE empresa SET nombreEmpresa = '"
                 + emps.getNombreEmpresa() + "', estado = "
                 + (emps.isEstado() == true ? "1" : "0")
+                + ", telefono = " + emps.getTelefono() + ", "
+                + "direccion = '" + emps.getDireccion() + "', "
+                + "correoEmpresarial = '" + emps.getCorreoEmpresarial() + "', "
+                + "nombreContacto = '" + emps.getNombreContacto() + "', "
+                + "telefonoContacto = "+ emps.getTelefonoContacto()
                 + " WHERE id_empresa = " + emps.getId_empresa();
+
         try {
             this.conectar(false);
             this.ejecutarOrden(sql);
             this.cerrar(true);
         } catch (Exception e) {
+            System.out.println(e);
             this.cerrar(false);
             throw e;
         }
@@ -73,7 +80,7 @@ public class DAOEMPRESA extends Conexion {
     public empresa leerEmpresa(empresa emp) throws Exception {
         empresa emps = null;
         ResultSet rs = null;
-        String sql = "SELECT U.id_empresa, U.nombreEmpresa, U.ESTADO "
+        String sql = "SELECT U.id_empresa, U.nombreEmpresa, U.telefono, U.direccion, U.correoEmpresarial, U.nombreContacto, U.telefonoContacto, U.ESTADO "
                 + "FROM empresa U WHERE U.id_empresa = " + emp.getId_empresa();
 
         try {
@@ -84,11 +91,18 @@ public class DAOEMPRESA extends Conexion {
                 emps.setId_empresa(rs.getInt("id_empresa"));
                 emps.setNombreEmpresa(rs.getString("nombreEmpresa"));
                 emps.setEstado(rs.getBoolean("estado"));
+                emps.setTelefono(rs.getInt("telefono"));
+                emps.setDireccion(rs.getString("direccion"));
+                emps.setCorreoEmpresarial(rs.getString("correoEmpresarial"));
+                emps.setNombreContacto(rs.getString("nombreContacto"));
+                emps.setTelefonoContacto(rs.getInt("telefonoContacto"));
             }
             this.cerrar(true);
         } catch (Exception e) {
+            System.out.println(e);
             this.cerrar(false);
             throw e;
+
         } finally {
         }
         return emps;

@@ -27,6 +27,7 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "cerrar":
                         cerrarsession(request, response);
+                        break;
                     case "listarUsuarios":
                         listarUsuarios(request, response);
                         break;
@@ -41,10 +42,13 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "nuevoEmpleado":
                         presentarFormularioSup(request, response);
+                        break;
                     case "nuevaEmpresa":
                         presentarFormularioEmp(request, response);
+                        break;
                     case "abrirPassword":
                         presentarPassword(request, response);
+                        break;
                     case "registrarUsuario":
                         registrarUsuario(request, response);
                         break;
@@ -68,12 +72,16 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "actualizarEmpleado":
                         actualizarEmpleado(request, response);
+                        break;
                     case "actualizarEmpresa":
                         actualizarEmpresa(request, response);
+                        break;
                     case "actualizarPassword":
                         actPassword(request, response);
+                        break;
                     case "eliminarUsuario":
                         eliminarUsuario(request, response);
+                        break;
                     case "eliminarEmpleado":
                         eliminarEmpleado(request, response);
                         break;
@@ -473,9 +481,11 @@ public class srvUsuario extends HttpServlet {
                     request.setAttribute("empresa", emps);
                 } else {
                     request.setAttribute("msje", "No se encontró el empleado");
+                    System.out.println("msje");
                 }
             } catch (Exception e) {
                 request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+                System.out.println(e);
             }
         } else {
             request.setAttribute("msje", "No se tiene el parámetro necesario");
@@ -486,6 +496,7 @@ public class srvUsuario extends HttpServlet {
                     ).forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
+            System.out.println(e);
         }
     }
 
@@ -519,7 +530,7 @@ public class srvUsuario extends HttpServlet {
                 request.setAttribute("msje",
                         "No se pudo actualizar el usuario" + e.getMessage());
                 request.setAttribute("usuario", usus);
-
+                System.out.println(e);
             }
             try {
                 this.cargarCargos(request);
@@ -528,6 +539,7 @@ public class srvUsuario extends HttpServlet {
                         ).forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
+                System.out.println(ex);
             }
         }
     }
@@ -569,39 +581,6 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
-    private void actualizarEmpresa(HttpServletRequest request, HttpServletResponse response) {
-        DAOEMPRESA daoEmp;
-        empresa emps = null;
-
-        if (request.getParameter("hCodigo") != null
-                && request.getParameter("txtNombre") != null){
-            emps = new empresa();
-            emps.setId_empresa(Integer.parseInt(request.getParameter("hCodigo")));
-            emps.setNombreEmpresa(request.getParameter("txtNombre"));
-            if (request.getParameter("chkEstado") != null) {
-                emps.setEstado(true);
-            } else {
-                emps.setEstado(false);
-            }
-            daoEmp = new DAOEMPRESA();
-            try {
-                daoEmp.actualizarEmpresa(emps);
-                response.sendRedirect("srvUsuario?accion=listarEmpresas");
-            } catch (Exception e) {
-                request.setAttribute("msje",
-                        "No se pudo actualizar el usuario" + e.getMessage());
-                request.setAttribute("empresa", emps);
-            }
-            try {
-                this.getServletConfig().getServletContext().
-                        getRequestDispatcher("/vistas/actualizarEmpresa.jsp"
-                        ).forward(request, response);
-            } catch (Exception ex) {
-                request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
-            }
-        }
-    }
-
     private void actPassword (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DAOUSUARIO dao;
         usuario usus = null;
@@ -621,7 +600,6 @@ public class srvUsuario extends HttpServlet {
         }
 
     }
-
 
     private void eliminarUsuario(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO dao = new DAOUSUARIO();
@@ -747,5 +725,48 @@ public class srvUsuario extends HttpServlet {
             request.setAttribute("msje", e.getMessage());
         }
         this.listarEmpresas(request, response);
+    }
+
+    private void actualizarEmpresa(HttpServletRequest request, HttpServletResponse response) {
+        DAOEMPRESA daoEmp;
+        empresa emps = null;
+
+        if (request.getParameter("hCodigo") != null
+                && request.getParameter("txtNombre") != null
+                && request.getParameter("txtTelefono") != null
+                && request.getParameter("txtDireccion") != null
+                && request.getParameter("txtCorreoEmpresarial") != null
+                && request.getParameter("txtNombreContacto") != null
+                && request.getParameter("txtTelefonoContacto") != null){
+            emps = new empresa();
+            emps.setId_empresa(Integer.parseInt(request.getParameter("hCodigo")));
+            emps.setNombreEmpresa(request.getParameter("txtNombre"));
+            emps.setTelefono(Integer.parseInt(request.getParameter("txtTelefono")));
+            emps.setDireccion(request.getParameter("txtDireccion"));
+            emps.setCorreoEmpresarial(request.getParameter("txtCorreoEmpresarial"));
+            emps.setNombreContacto(request.getParameter("txtNombreContacto"));
+            emps.setTelefonoContacto(Integer.parseInt(request.getParameter("txtTelefonoContacto")));
+            if (request.getParameter("chkEstado") != null) {
+                emps.setEstado(true);
+            } else {
+                emps.setEstado(false);
+            }
+            daoEmp = new DAOEMPRESA();
+            try {
+                daoEmp.actualizarEmpresa(emps);
+                response.sendRedirect("srvUsuario?accion=listarEmpresas");
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo actualizar el usuario" + e.getMessage());
+                request.setAttribute("empresa", emps);
+            }
+            try {
+                this.getServletConfig().getServletContext().
+                        getRequestDispatcher("/vistas/actualizarEmpresa.jsp"
+                        ).forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
+            }
+        }
     }
 }
