@@ -162,15 +162,15 @@ public class srvUsuario extends HttpServlet {
             sesion = request.getSession();
             sesion.setAttribute("administrador", usuario);
             request.setAttribute("msje", "Bienvenido al sistema");
-            this.getServletConfig().getServletContext().getRequestDispatcher("/vistas/formAdministrador.jsp").forward(request, response);
+            this.getServletConfig().getServletContext().getRequestDispatcher("/vistas/Administrador/formAdministrador.jsp").forward(request, response);
         } else if (usuario != null && usuario.getCargo().getNombreCargo().equals("EMPLEADO")) {
             sesion = request.getSession();
             sesion.setAttribute("empleado", usuario);
-            this.getServletConfig().getServletContext().getRequestDispatcher("/vistas/formEmpleado.jsp").forward(request, response);
+            this.getServletConfig().getServletContext().getRequestDispatcher("/vistas/Empleado/formEmpleado.jsp").forward(request, response);
         } else if (usuario != null && usuario.getCargo().getNombreCargo().equals("SUPERVISOR")) {
             sesion = request.getSession();
             sesion.setAttribute("supervisor", usuario);
-            this.getServletConfig().getServletContext().getRequestDispatcher("/vistas/formSupervisor.jsp").forward(request, response);
+            this.getServletConfig().getServletContext().getRequestDispatcher("/vistas/Supervisor/formSupervisor.jsp").forward(request, response);
         }
         else {request.setAttribute("msje", "Credenciales Incorrectas");
             request.getRequestDispatcher("identificar.jsp").forward(request, response);
@@ -213,7 +213,7 @@ public class srvUsuario extends HttpServlet {
         }
         try {
             this.getServletConfig().getServletContext()
-                    .getRequestDispatcher("/vistas/listaUsuariosAdmin.jsp").forward(request, response);
+                    .getRequestDispatcher("/vistas/Administrador/listaUsuariosAdmin.jsp").forward(request, response);
         } catch (Exception ex) {
             request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
         }
@@ -233,7 +233,7 @@ public class srvUsuario extends HttpServlet {
         }
         try {
             this.getServletConfig().getServletContext()
-                    .getRequestDispatcher("/vistas/listarEmpleados.jsp").forward(request, response);
+                    .getRequestDispatcher("/vistas/Supervisor/listarEmpleados.jsp").forward(request, response);
         } catch (Exception ex) {
             request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
         }
@@ -254,7 +254,7 @@ public class srvUsuario extends HttpServlet {
         }
         try {
             this.getServletConfig().getServletContext()
-                    .getRequestDispatcher("/vistas/listarEmpresas.jsp").forward(request, response);
+                    .getRequestDispatcher("/vistas/Administrador/listarEmpresas.jsp").forward(request, response);
         } catch (Exception ex) {
             request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
         }
@@ -264,7 +264,7 @@ public class srvUsuario extends HttpServlet {
         try {
             this.cargarCargos(request);
             this.getServletConfig().getServletContext()
-                    .getRequestDispatcher("/vistas/nuevoUsuarioAdmin.jsp").forward(request, response);
+                    .getRequestDispatcher("/vistas/Administrador/nuevoUsuarioAdmin.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo cargar la vista");
         }
@@ -273,7 +273,7 @@ public class srvUsuario extends HttpServlet {
     private void presentarFormularioEmp(HttpServletRequest request, HttpServletResponse response) {
         try {
             this.getServletConfig().getServletContext()
-                    .getRequestDispatcher("/vistas/nuevaEmpresa.jsp").forward(request, response);
+                    .getRequestDispatcher("/vistas/Administrador/nuevaEmpresa.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo cargar la vista");
         }
@@ -282,7 +282,7 @@ public class srvUsuario extends HttpServlet {
     private void presentarFormularioSup(HttpServletRequest request, HttpServletResponse response) {
         try {
             this.getServletConfig().getServletContext()
-                    .getRequestDispatcher("/vistas/nuevoEmpleado.jsp").forward(request, response);
+                    .getRequestDispatcher("/vistas/Supervisor/nuevoEmpleado.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo cargar la vista");
         }
@@ -291,7 +291,7 @@ public class srvUsuario extends HttpServlet {
     private void presentarPassword(HttpServletRequest request, HttpServletResponse response){
         try {
             this.getServletConfig().getServletContext()
-                    .getRequestDispatcher("/vistas/changePass.jsp").forward(request, response);
+                    .getRequestDispatcher("/vistas/Administrador/changePass.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo cargar la vista");
         }
@@ -430,7 +430,7 @@ public class srvUsuario extends HttpServlet {
         try {
             this.cargarCargos(request);
             this.getServletConfig().getServletContext().
-                    getRequestDispatcher("/vistas/actualizarUsuario.jsp"
+                    getRequestDispatcher("/vistas/Administrador/actualizarUsuario.jsp"
                     ).forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
@@ -460,7 +460,7 @@ public class srvUsuario extends HttpServlet {
         }
         try {
             this.getServletConfig().getServletContext().
-                    getRequestDispatcher("/vistas/actualizarEmpleado.jsp"
+                    getRequestDispatcher("/vistas/Supervisor/actualizarEmpleado.jsp"
                     ).forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
@@ -492,7 +492,7 @@ public class srvUsuario extends HttpServlet {
         }
         try {
             this.getServletConfig().getServletContext().
-                    getRequestDispatcher("/vistas/actualizarEmpresa.jsp"
+                    getRequestDispatcher("/vistas/Administrador/actualizarEmpresa.jsp"
                     ).forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
@@ -535,7 +535,7 @@ public class srvUsuario extends HttpServlet {
             try {
                 this.cargarCargos(request);
                 this.getServletConfig().getServletContext().
-                        getRequestDispatcher("/vistas/actualizarUsuario.jsp"
+                        getRequestDispatcher("/vistas/Administrador/actualizarUsuario.jsp"
                         ).forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
@@ -573,7 +573,7 @@ public class srvUsuario extends HttpServlet {
             }
             try {
                 this.getServletConfig().getServletContext().
-                        getRequestDispatcher("/vistas/actualizarEmpleado.jsp"
+                        getRequestDispatcher("/vistas/Supervisor/actualizarEmpleado.jsp"
                         ).forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
@@ -762,7 +762,7 @@ public class srvUsuario extends HttpServlet {
             }
             try {
                 this.getServletConfig().getServletContext().
-                        getRequestDispatcher("/vistas/actualizarEmpresa.jsp"
+                        getRequestDispatcher("/vistas/Administrador/actualizarEmpresa.jsp"
                         ).forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
