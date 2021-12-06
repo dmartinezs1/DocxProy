@@ -3,6 +3,7 @@ package sena.docx.docxproy.modelo;
 public class usuario {
     private int id_usuario;
     private String nombreUsuario;
+    private String correoUsuario;
     private String clave;
     private boolean estado;
     private cargo cargo;
@@ -23,6 +24,14 @@ public class usuario {
         this.nombreUsuario = nombreUsuario;
     }
 
+    public String getCorreoUsuario() {
+        return correoUsuario;
+    }
+
+    public void setCorreoUsuario(String correoUsuario) {
+        this.correoUsuario = correoUsuario;
+    }
+
     public String getClave() {
         return clave;
     }
@@ -39,13 +48,11 @@ public class usuario {
         this.estado = estado;
     }
 
-    public cargo getCargo() {
+    public sena.docx.docxproy.modelo.cargo getCargo() {
         return cargo;
     }
 
-    public void setCargo(cargo cargo) {
+    public void setCargo(sena.docx.docxproy.modelo.cargo cargo) {
         this.cargo = cargo;
     }
-
-
 }

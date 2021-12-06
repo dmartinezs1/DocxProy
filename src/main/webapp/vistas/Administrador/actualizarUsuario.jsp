@@ -206,6 +206,15 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">Correo Usuario</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="correo" type="text" class="form-control" placeholder="Ejem: correo@correo.com"
+                                       name="txtCorreo" maxlength="40"
+                                       value="${usuario.correoUsuario}">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">Clave</label>
                             <div class="col-sm-4 input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>

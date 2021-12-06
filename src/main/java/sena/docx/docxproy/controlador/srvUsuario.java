@@ -3,7 +3,9 @@ package sena.docx.docxproy.controlador;
 import sena.docx.docxproy.modelo.*;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,19 @@ import javax.servlet.http.HttpSession;
 @SuppressWarnings("ALL")
 @WebServlet(name = "srvUsuario", urlPatterns = {"/srvUsuario"})
 public class srvUsuario extends HttpServlet {
+
+    private String host;
+    private String puerto;
+    private String remitente;
+    private String password;
+
+    public void init() {
+        ServletContext contexto=getServletContext();
+        host=contexto.getInitParameter("host");
+        puerto=contexto.getInitParameter("puerto");
+        remitente=contexto.getInitParameter("remitente");
+        password=contexto.getInitParameter("password");
+    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -87,6 +102,9 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "eliminarEmpresa":
                         eliminarEmpresa(request, response);
+                        break;
+                    case "validarCorreo":
+                        validarCorreo(request, response);
                         break;
                     default:
                         response.sendRedirect("identificar.jsp");
@@ -312,15 +330,17 @@ public class srvUsuario extends HttpServlet {
     }
 
     private void registrarUsuario(HttpServletRequest request, HttpServletResponse response) {
-        DAOUSUARIO daoUsu;
+        DAOUSPS daoUsu;
         usuario usu = null;
         cargo carg;
         if (request.getParameter("txtNombre") != null
+                && request.getParameter("txtCorreo") != null
                 && request.getParameter("txtClave") != null
                 && request.getParameter("cboCargo") != null) {
 
             usu = new usuario();
             usu.setNombreUsuario(request.getParameter("txtNombre"));
+            usu.setCorreoUsuario(request.getParameter("txtCorreo"));
             usu.setClave(request.getParameter("txtClave"));
             carg = new cargo();
             carg.setCodigo(Integer.parseInt(request.getParameter("cboCargo")));
@@ -330,9 +350,24 @@ public class srvUsuario extends HttpServlet {
             } else {
                 usu.setEstado(false);
             }
-            daoUsu = new DAOUSUARIO();
+
+            String destinatario=request.getParameter("txtCorreo");
+            String asunto="Bienvenido a Docx";
+            String cuerpo="<h1> Gracias por registrarse en Docx </h1>"
+                    + " <img src ='https://lideresmexicanos.com/wp-content/uploads/2021/08/ISP3.jpg'/>"
+                    + " <h4> Para iniciar sesión </h4>"
+                    +" <a href='http://localhost:8080/DocxProy_war_exploded/identificar.jsp'>Haga click aquí para iniciar sesión</a>";
+
             try {
-                daoUsu.registrarUsuarios(usu);
+                Configmail.enviarCorreo(host, puerto, remitente, password, destinatario, asunto, cuerpo);
+                System.out.println("El mensaje fue enviado correctamente");
+            }catch(Exception e) {
+                System.out.println("El mensaje NO fue enviado correctamente "+e.getMessage());
+            }
+
+            daoUsu = new DAOUSPS();
+            try {
+                daoUsu.registrar(usu);
                 response.sendRedirect("srvUsuario?accion=listarUsuarios");
             } catch (Exception e) {
                 request.setAttribute("msje",
@@ -507,12 +542,14 @@ public class srvUsuario extends HttpServlet {
 
         if (request.getParameter("hCodigo") != null
                 && request.getParameter("txtNombre") != null
+                && request.getParameter("txtCorreo") != null
                 && request.getParameter("txtClave") != null
                 && request.getParameter("cboCargo") != null) {
 
             usus = new usuario();
             usus.setId_usuario(Integer.parseInt(request.getParameter("hCodigo")));
             usus.setNombreUsuario(request.getParameter("txtNombre"));
+            usus.setCorreoUsuario(request.getParameter("txtCorreo"));
             usus.setClave(request.getParameter("txtClave"));
             car = new cargo();
             car.setCodigo(Integer.parseInt(request.getParameter("cboCargo")));
@@ -768,5 +805,32 @@ public class srvUsuario extends HttpServlet {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
             }
         }
+    }
+
+    private void validarCorreo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        DAOUSPS vdao = new DAOUSPS();
+        response.setContentType("text/html; charset=iso-8859-1");
+        PrintWriter out=response.getWriter();
+        try {
+            int cant=vdao.validarCorreo(request.getParameter("txtNombre"));
+            System.out.println("Usuarios encontrados "+cant);
+
+            if(cant!=0) {
+                System.out.println("El correo ya se encuentra registrado");
+                out.println("El correo ya se encuentra registrado");
+            }else {
+                System.out.println("El nombre no se encuentra registrado");
+                out.println("El correo no se encuentra registrado puede continuar su registro");
+            }
+
+
+        }catch(Exception e) {
+            System.out.println("Correo no encontrado "+e.getMessage());
+        }
+        finally {
+            //rdao=null;
+        }
+
     }
 }

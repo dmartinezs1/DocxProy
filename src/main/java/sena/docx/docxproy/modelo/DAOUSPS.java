@@ -1,0 +1,68 @@
+package sena.docx.docxproy.modelo;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+@SuppressWarnings("ALL")
+public class DAOUSPS {
+
+    String sql;
+    Connection con;
+    PreparedStatement ps;
+    ResultSet rs;
+    int row;
+    conexion1 c=new conexion1();
+
+    public int validarCorreo(String nombreUsuario) throws Exception {
+
+        usuario u = new usuario();
+        int total=0;
+
+        sql ="SELECT COUNT(*) AS cantidad from usuario WHERE NOMBREUSUARIO=?";
+        try {
+            con= c.conectar1();
+            ps=con.prepareStatement(sql);
+            ps.setString(1, nombreUsuario);
+            rs=ps.executeQuery();
+            while (rs.next()){
+                total=rs.getInt("cantidad");
+            }
+            System.out.println(ps);
+            ps.close();
+            System.out.println("El total de registros que coinciden es "+ total);
+        }catch(Exception e) {
+            System.out.println("Error en la consulta "+e.getMessage());
+        }finally {
+            con.close();
+        }
+        return total;
+    }
+
+    public int registrar(usuario u) throws SQLException {
+        sql = "INSERT INTO usuario (NOMBREUSUARIO, CORREOUS, CLAVE, ESTADO, IDCARGO) "
+                + "VALUES (?,?,?,?,?)";
+        try {
+            con=c.conectar1();
+            ps=con.prepareStatement(sql);
+            ps.setString(1, u.getNombreUsuario());
+            ps.setString(2, u.getCorreoUsuario());
+            ps.setString(3, u.getClave());
+            ps.setBoolean(4, u.isEstado());
+            ps.setInt(5, u.getCargo().getCodigo());
+
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se registró un usuario");
+
+        }catch(Exception e) {
+            System.out.println("Error al registrar el usuario" +e.getMessage());
+        }
+        finally {
+            con.close();
+        }
+        return row;//Retorna cantidad de filas afectadas
+    }
+}

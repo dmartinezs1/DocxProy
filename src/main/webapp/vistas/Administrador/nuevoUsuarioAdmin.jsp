@@ -201,6 +201,16 @@
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
                                 <input id="nombre" type="text" class="form-control" placeholder="Ejem: Alexander"
                                        name="txtNombre" maxlength="10"
+                                       value="" onchange="verifyCorreo()">
+                                <div id="validarC" class="text-danger"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Correo Usuario</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="correo" type="email" class="form-control" placeholder="Ejem: correo@correo.com"
+                                       name="txtCorreo" maxlength="40"
                                        value="">
                             </div>
                         </div>
@@ -278,6 +288,22 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    function verifyCorreo(){
+        const nombreUsuario=document.getElementById("nombre").value;
+        $.ajax({
+            url:"srvUsuario?accion=validarCorreo",
+            data:{
+                nombreUsuario:nombreUsuario
+            },
+            success: function(result){
+                $("#validarC").html(result);
+                //alert(result)
+            }
+        })
+    }
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

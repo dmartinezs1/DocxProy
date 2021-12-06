@@ -1,6 +1,9 @@
 package sena.docx.docxproy.modelo;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,7 +136,7 @@ public class DAOUSUARIO extends Conexion {
     public usuario leerUsuario(usuario usu) throws Exception {
         usuario usus = null;
         ResultSet rs = null;
-        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CLAVE, U.ESTADO, U.IDCARGO "
+        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CORREOUS, U.CLAVE, U.ESTADO, U.IDCARGO "
                 + "FROM usuario U WHERE U.IDUSUARIO = " + usu.getId_usuario();
 
         try {
@@ -143,6 +146,7 @@ public class DAOUSUARIO extends Conexion {
                 usus = new usuario();
                 usus.setId_usuario(rs.getInt("IDUSUARIO"));
                 usus.setNombreUsuario(rs.getString("NOMBREUSUARIO"));
+                usus.setCorreoUsuario(rs.getString("CORREOUS"));
                 usus.setClave(rs.getString("CLAVE"));
                 usus.setEstado(rs.getBoolean("ESTADO"));
                 usus.setCargo(new cargo());
@@ -184,7 +188,7 @@ public class DAOUSUARIO extends Conexion {
 
     public void actualizarUsuarios(usuario usu) throws Exception {
         String sql = "UPDATE usuario SET NOMBREUSUARIO = '"
-                + usu.getNombreUsuario() + "', CLAVE = '"
+                + usu.getNombreUsuario() + "', CORREOUS = '"+ usu.getCorreoUsuario() +"', CLAVE = '"
                 + usu.getClave() + "', ESTADO = "
                 + (usu.isEstado() == true ? "1" : "0")
                 + ", IDCARGO = "
