@@ -72,7 +72,39 @@ public class DAOUSUARIO extends Conexion {
         List<usuario> empleados;
         usuario usu;
         ResultSet rs = null;
-        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CLAVE, U.ESTADO, C.NOMBRECARGO "
+        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.ESTADO, C.NOMBRECARGO "
+                + "FROM usuario U INNER JOIN cargo C "
+                + "ON C.IDCARGO = U.IDCARGO "
+                + "WHERE C.IDCARGO = 2 "
+                + "ORDER BY U.IDUSUARIO";
+
+        try {
+            this.conectar(false);
+            rs = this.ejecutarOrdenDatos(sql);
+            empleados = new ArrayList<>();
+            while (rs.next() == true) {
+                usu = new usuario();
+                usu.setId_usuario(rs.getInt("IDUSUARIO"));
+                usu.setNombreUsuario(rs.getString("NOMBREUSUARIO"));
+                usu.setEstado(rs.getBoolean("ESTADO"));
+                usu.setCargo(new cargo());
+                usu.getCargo().setNombreCargo(rs.getString("NOMBRECARGO"));
+                empleados.add(usu);
+            }
+            this.cerrar(true);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+        }
+        return empleados;
+    }
+
+
+    public List<usuario> listarEmpleadosRep() throws Exception {
+        List<usuario> empleados;
+        usuario usu;
+        ResultSet rs = null;
+        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CORREOUS, U.ESTADO, C.NOMBRECARGO "
                 + "FROM usuario U INNER JOIN cargo C "
                 + "ON C.IDCARGO = U.IDCARGO "
                 + "WHERE C.IDCARGO = 2 "

@@ -55,4 +55,12 @@ public class usuario {
     public void setCargo(sena.docx.docxproy.modelo.cargo cargo) {
         this.cargo = cargo;
     }
+
+    public String getCargoRep() {
+        return this.cargo != null ? this.cargo.getNombreCargo() : "--";
+    }
+
+    public String getEstadoUsuarioRep() {
+        return this.estado ? "Activo" : "Inactivo";
+    }
 }

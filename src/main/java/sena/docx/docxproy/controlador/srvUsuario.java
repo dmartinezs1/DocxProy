@@ -1,12 +1,22 @@
 package sena.docx.docxproy.controlador;
 
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 import sena.docx.docxproy.modelo.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,11 +33,11 @@ public class srvUsuario extends HttpServlet {
     private String password;
 
     public void init() {
-        ServletContext contexto=getServletContext();
-        host=contexto.getInitParameter("host");
-        puerto=contexto.getInitParameter("puerto");
-        remitente=contexto.getInitParameter("remitente");
-        password=contexto.getInitParameter("password");
+        ServletContext contexto = getServletContext();
+        host = contexto.getInitParameter("host");
+        puerto = contexto.getInitParameter("puerto");
+        remitente = contexto.getInitParameter("remitente");
+        password = contexto.getInitParameter("password");
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -106,6 +116,9 @@ public class srvUsuario extends HttpServlet {
                     case "validarCorreo":
                         validarCorreo(request, response);
                         break;
+                    case "reporteEmpleados":
+                        reporteEmpleados(request, response);
+                        break;
                     default:
                         response.sendRedirect("identificar.jsp");
                 }
@@ -129,14 +142,73 @@ public class srvUsuario extends HttpServlet {
 
     }
 
+    private void reporteEmpleados(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        DAOUSPS udao;
+        usuario usuario;
+        udao = new DAOUSPS();
+        ServletOutputStream out = response.getOutputStream();
+        try {
+            java.io.InputStream logo = this.getServletConfig()
+                    .getServletContext()
+                    .getResourceAsStream("Reportes/img/logo.png");
+                    if (logo != null){
+                        System.out.println("logo cargado con exito");
+                    }
+            java.io.InputStream reporteUsuario = this.getServletConfig()
+                    .getServletContext()
+                    .getResourceAsStream("Reportes/RepEmpleados.jasper");
+                    if (reporteUsuario != null){
+                        System.out.println("reporte cargado con exito");
+                    }
+            //Validar que no vengan vacios
+            if (logo != null && reporteUsuario != null) {
+                //Crear lista de la clase Vo para guardar resultado de la consulta
+                List<usuario> reporteUsuario1 = new ArrayList<>();
+                reporteUsuario1 = udao.listar();
+
+                //Declarar variable tipo Jasper Reports asignando el reporte creado
+                JasperReport report = (JasperReport) JRLoader.loadObject(reporteUsuario);
+                //Declarar variable ds para asignar el reporteUsuario1
+                JRBeanArrayDataSource ds = new JRBeanArrayDataSource(reporteUsuario1.toArray());
+
+                //Mapeamos los parámetros del Jasper reports
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("ds", ds);
+                parameters.put("logo", logo);
+                //Formateamos la salida del reporte
+                response.setContentType("application/pdf");
+                //Para abrir el reporte en otra pestaña
+                response.addHeader("Content-disposition", "inline; filename=ReporteUsuarios.pdf");
+                //Imprimimos el reporte
+                JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, ds);
+                JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+                out.flush();
+                out.close();
+            } else {
+                response.setContentType("text/plain");
+                out.println("no se pudo generar el reporte");
+                out.println("esto puede deberse a que la lista de datos no fue recibida o el "
+                        + "archivo plantilla del reporte no se ha encontrado");
+                out.println("contacte a soporte");
+            }
+        } catch (Exception e) {
+            response.setContentType("text/plain");
+            out.print("ocurrió un error al intentar generar el reporte:" + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -147,10 +219,10 @@ public class srvUsuario extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -189,8 +261,8 @@ public class srvUsuario extends HttpServlet {
             sesion = request.getSession();
             sesion.setAttribute("supervisor", usuario);
             this.getServletConfig().getServletContext().getRequestDispatcher("/vistas/Supervisor/formSupervisor.jsp").forward(request, response);
-        }
-        else {request.setAttribute("msje", "Credenciales Incorrectas");
+        } else {
+            request.setAttribute("msje", "Credenciales Incorrectas");
             request.getRequestDispatcher("identificar.jsp").forward(request, response);
         }
 
@@ -264,7 +336,6 @@ public class srvUsuario extends HttpServlet {
         try {
             emp = dao.listarEmpresas();
             request.setAttribute("empresas", emp);
-
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudieron listar las empresas" + e.getMessage());
         } finally {
@@ -306,7 +377,7 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
-    private void presentarPassword(HttpServletRequest request, HttpServletResponse response){
+    private void presentarPassword(HttpServletRequest request, HttpServletResponse response) {
         try {
             this.getServletConfig().getServletContext()
                     .getRequestDispatcher("/vistas/Administrador/changePass.jsp").forward(request, response);
@@ -351,18 +422,18 @@ public class srvUsuario extends HttpServlet {
                 usu.setEstado(false);
             }
 
-            String destinatario=request.getParameter("txtCorreo");
-            String asunto="Bienvenido a Docx";
-            String cuerpo="<h1> Gracias por registrarse en Docx </h1>"
+            String destinatario = request.getParameter("txtCorreo");
+            String asunto = "Bienvenido a Docx";
+            String cuerpo = "<h1> Gracias por registrarse en Docx </h1>"
                     + " <img src ='https://lideresmexicanos.com/wp-content/uploads/2021/08/ISP3.jpg'/>"
                     + " <h4> Para iniciar sesión </h4>"
-                    +" <a href='http://localhost:8080/DocxProy_war_exploded/identificar.jsp'>Haga click aquí para iniciar sesión</a>";
+                    + " <a href='http://localhost:8080/DocxProy_war_exploded/identificar.jsp'>Haga click aquí para iniciar sesión</a>";
 
             try {
                 Configmail.enviarCorreo(host, puerto, remitente, password, destinatario, asunto, cuerpo);
                 System.out.println("El mensaje fue enviado correctamente");
-            }catch(Exception e) {
-                System.out.println("El mensaje NO fue enviado correctamente "+e.getMessage());
+            } catch (Exception e) {
+                System.out.println("El mensaje NO fue enviado correctamente " + e.getMessage());
             }
 
             daoUsu = new DAOUSPS();
@@ -588,7 +659,7 @@ public class srvUsuario extends HttpServlet {
 
         if (request.getParameter("hCodigo") != null
                 && request.getParameter("txtNombre") != null
-                && request.getParameter("txtClave") != null){
+                && request.getParameter("txtClave") != null) {
 
             usus = new usuario();
             usus.setId_usuario(Integer.parseInt(request.getParameter("hCodigo")));
@@ -618,12 +689,12 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
-    private void actPassword (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void actPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DAOUSUARIO dao;
         usuario usus = null;
 
-        if(request.getParameter("id")!=null
-            && request.getParameter("passnew")!=null) {
+        if (request.getParameter("id") != null
+                && request.getParameter("passnew") != null) {
             usus = new usuario();
             usus.setId_usuario(Integer.parseInt(request.getParameter("id")));
             usus.setClave(request.getParameter("passnew"));
@@ -632,8 +703,8 @@ public class srvUsuario extends HttpServlet {
         try {
             dao.changePassword(usus);
             request.getRequestDispatcher("srvUsuario?accion=cerrar").forward(request, response);
-        }catch(Exception e) {
-            System.out.println("error al cambiar password "+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("error al cambiar password " + e.getMessage());
         }
 
     }
@@ -774,7 +845,7 @@ public class srvUsuario extends HttpServlet {
                 && request.getParameter("txtDireccion") != null
                 && request.getParameter("txtCorreoEmpresarial") != null
                 && request.getParameter("txtNombreContacto") != null
-                && request.getParameter("txtTelefonoContacto") != null){
+                && request.getParameter("txtTelefonoContacto") != null) {
             emps = new empresa();
             emps.setId_empresa(Integer.parseInt(request.getParameter("hCodigo")));
             emps.setNombreEmpresa(request.getParameter("txtNombre"));
@@ -811,24 +882,24 @@ public class srvUsuario extends HttpServlet {
 
         DAOUSPS vdao = new DAOUSPS();
         response.setContentType("text/html; charset=iso-8859-1");
-        PrintWriter out=response.getWriter();
+        PrintWriter out = response.getWriter();
         try {
-            int cant=vdao.validarCorreo(request.getParameter("txtNombre"));
-            System.out.println("Usuarios encontrados "+cant);
+            int cant = vdao.validarCorreo(request.getParameter("txtNombre"));
+            System.out.println(request.getParameter("txtNombre"));
+            System.out.println("Usuarios encontrados " + cant);
 
-            if(cant!=0) {
+            if (cant != 0) {
                 System.out.println("El correo ya se encuentra registrado");
                 out.println("El correo ya se encuentra registrado");
-            }else {
+            } else {
                 System.out.println("El nombre no se encuentra registrado");
                 out.println("El correo no se encuentra registrado puede continuar su registro");
             }
 
 
-        }catch(Exception e) {
-            System.out.println("Correo no encontrado "+e.getMessage());
-        }
-        finally {
+        } catch (Exception e) {
+            System.out.println("Correo no encontrado " + e.getMessage());
+        } finally {
             //rdao=null;
         }
 

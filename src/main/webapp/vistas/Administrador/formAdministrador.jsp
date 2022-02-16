@@ -160,7 +160,7 @@
                                 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
+                        <li><a href="srvUsuario?accion=reporteEmpleados"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
                     </ul>
                 </li>
             </ul>
