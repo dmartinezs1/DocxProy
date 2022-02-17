@@ -171,6 +171,8 @@
         <section class="content-header">
             <a href="srvUsuario?accion=nuevoEmpleado" class="btn btn-success">
                 <i class="fa fa-plus"></i> Nuevo Empleado </a>
+            <a href="srvUsuario?accion=presentarDocumento" class="btn btn-info">
+                <i class="fa fa-plus"></i> Nuevo Documento </a>
 
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>

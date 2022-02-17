@@ -183,7 +183,7 @@
                     <i class="fa fa-edit"></i>
                     <h3 class="box-title">Registrar Nuevo Empleado</h3>
                 </div>
-                <form class="form-horizontal" action="srvUsuario?accion=registrarEmpleado" method="post">
+                <form class="form-horizontal" action="srvUsuario?accion=registrarEmpleado" method="post" enctype="multipart/form-data">
                     <div class="box-body">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Nombre Empleado</label>
@@ -201,6 +201,14 @@
                                 <input id="clave" type="password" class="form-control" placeholder="Ejem: $%Ale!**"
                                        name="txtClave" maxlength="10"
                                        value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Documentos empleado</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-file"></i></span>
+                                <input id="documentos" type="file" class="form-control" placeholder="ingrese documentos"
+                                       name="file">
                             </div>
                         </div>
                         <div class="form-group">

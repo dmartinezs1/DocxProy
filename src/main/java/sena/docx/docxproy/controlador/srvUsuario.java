@@ -9,21 +9,22 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import sena.docx.docxproy.modelo.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.io.File;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 @SuppressWarnings("ALL")
+@MultipartConfig
 @WebServlet(name = "srvUsuario", urlPatterns = {"/srvUsuario"})
 public class srvUsuario extends HttpServlet {
 
@@ -31,6 +32,9 @@ public class srvUsuario extends HttpServlet {
     private String puerto;
     private String remitente;
     private String password;
+    private String pathFiles = "C:\\Users\\Daniel\\Desktop\\ProyectoGrado\\DocxProy\\src\\main\\webapp\\files";
+    private File uploads = new File(pathFiles);
+    private String[] extensiones = {".pdf", ".rar", ".zip"};
 
     public void init() {
         ServletContext contexto = getServletContext();
@@ -118,6 +122,12 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "reporteEmpleados":
                         reporteEmpleados(request, response);
+                        break;
+                    case "presentarDocumento":
+                        presentarDocumento(request, response);
+                        break;
+                    case "registrarDocumento":
+                        saveDocument(request, response);
                         break;
                     default:
                         response.sendRedirect("identificar.jsp");
@@ -406,7 +416,6 @@ public class srvUsuario extends HttpServlet {
         cargo carg;
         if (request.getParameter("txtNombre") != null
                 && request.getParameter("txtCorreo") != null
-                && request.getParameter("txtClave") != null
                 && request.getParameter("cboCargo") != null) {
 
             usu = new usuario();
@@ -453,7 +462,7 @@ public class srvUsuario extends HttpServlet {
         DAOUSUARIO daoUsu;
         usuario usu = null;
         if (request.getParameter("txtNombre") != null
-                && request.getParameter("txtClave") != null) {
+                && request.getParameter("txtClave") != null){
             usu = new usuario();
             usu.setNombreUsuario(request.getParameter("txtNombre"));
             usu.setClave(request.getParameter("txtClave"));
@@ -463,6 +472,7 @@ public class srvUsuario extends HttpServlet {
                 usu.setEstado(false);
             }
             daoUsu = new DAOUSUARIO();
+
             try {
                 daoUsu.registrarEmpleado(usu);
                 response.sendRedirect("srvUsuario?accion=listarEmpleados");
@@ -473,6 +483,72 @@ public class srvUsuario extends HttpServlet {
                 this.presentarFormularioSup(request, response);
             }
         }
+    }
+
+    private void presentarDocumento(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/Supervisor/archivosSupervisor.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
+    private void saveDocument(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        DAODOCUMENTOS daodocumentos = new DAODOCUMENTOS();
+        try {
+
+            String name = req.getParameter("name");
+            Part part = req.getPart("file");
+
+            if(part == null) {
+                System.out.println("No ha seleccionado un archivo");
+                return;
+            }
+
+            if(isExtension(part.getSubmittedFileName(), extensiones)) {
+                String photo = saveFile(part, uploads);
+                documentos docs = new documentos(name, photo);
+                daodocumentos.addArchivos(docs);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        res.sendRedirect("srvUsuario?accion=listarEmpleados");
+    }
+
+
+
+    private String saveFile(Part part, File pathUploads) {
+        String pathAbsolute = "";
+
+        try {
+            Path path = Paths.get(part.getSubmittedFileName());
+            String fileName = path.getFileName().toString();
+            InputStream input = part.getInputStream();
+
+            if(input != null) {
+                File file = new File(pathUploads, fileName);
+                pathAbsolute = file.getAbsolutePath();
+                Files.copy(input, file.toPath());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return pathAbsolute;
+    }
+
+    private boolean isExtension(String fileName, String[] extensiones){
+        for(String et : extensiones) {
+            if(fileName.toLowerCase().endsWith(et)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void registrarEmpresa(HttpServletRequest request, HttpServletResponse response) {

@@ -16,6 +16,7 @@ public class DAOUSPS {
     ResultSet rs;
     int row;
     conexion1 c = new conexion1();
+    contrasena contra = new contrasena();
 
     public int validarCorreo(String nombreUsuario) throws Exception {
 
@@ -82,6 +83,7 @@ public class DAOUSPS {
     }
 
     public int registrar(usuario u) throws SQLException {
+
         sql = "INSERT INTO usuario (NOMBREUSUARIO, CORREOUS, CLAVE, ESTADO, IDCARGO) "
                 + "VALUES (?,?,?,?,?)";
         try {
@@ -89,7 +91,7 @@ public class DAOUSPS {
             ps = con.prepareStatement(sql);
             ps.setString(1, u.getNombreUsuario());
             ps.setString(2, u.getCorreoUsuario());
-            ps.setString(3, u.getClave());
+            ps.setString(3, contra.getPassword());
             ps.setBoolean(4, u.isEstado());
             ps.setInt(5, u.getCargo().getCodigo());
 

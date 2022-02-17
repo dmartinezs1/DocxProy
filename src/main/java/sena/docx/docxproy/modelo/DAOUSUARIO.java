@@ -132,10 +132,11 @@ public class DAOUSUARIO extends Conexion {
     }
 
     public void registrarUsuarios(usuario usu) throws Exception {
+        contrasena contra = new contrasena();
         String sql;
         sql = "INSERT INTO Usuario (NOMBREUSUARIO, CLAVE, ESTADO, IDCARGO) "
                 + "VALUES ('" + usu.getNombreUsuario() + "', '"
-                + usu.getClave() + "', "
+                + contra.getPassword() + "', "
                 + (usu.isEstado() == true ? "1" : "0")
                 + ", " + usu.getCargo().getCodigo() + ")";
         try {

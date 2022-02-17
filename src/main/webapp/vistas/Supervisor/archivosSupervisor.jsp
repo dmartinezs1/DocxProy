@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("administrador") != null) {
+    if (session.getAttribute("supervisor") != null) {
 %>
 <html>
 <head>
@@ -55,7 +55,7 @@
                             <img src="dist/img/logodocx1.png" class="user-image" alt="User Image"
                                  style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs"> ${administrador.nombreUsuario}</span>
+                            <span class="hidden-xs"> ${supervisor.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -63,8 +63,8 @@
                                 <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
-                                    Bienvenido - ${administrador.nombreUsuario}
-                                    <small>${administrador.cargo.nombreCargo} </small>
+                                    Bienvenido - ${supervisor.nombreUsuario}
+                                    <small>${supervisor.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -92,7 +92,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido, ${administrador.nombreUsuario} </p>
+                    <p>Bienvenido, ${supervisor.nombreUsuario} </p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -115,17 +115,7 @@
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">INICIO</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="srvUsuario?accion=abrirPassword"><i class="fa fa-user-plus"></i>Cambiar
-                            contraseña</a></li>
-                    </ul>
-                </li>
+                <li><a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span></a></li>
                 <li class="treeview active">
                     <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Registros</span>
                         <span class="pull-right-container">
@@ -137,9 +127,9 @@
                         <li><a href="#"><i class="fa fa-tags"></i>Marcas</a></li>
                         <li><a href="#"><i class="fa fa-cube"></i>Productos</a></li>
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
-                        <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
-                        <li><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a></li>
-                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>
+                        <li><a href=""><i class="fa fa-user-plus"></i>Empleados</a></li>--%>
+                        <li class="active"><a href="srvUsuario?accion=listarEmpleados"><i class="fa fa-address-card"></i>Empleados</a>
                         </li>
                     </ul>
                 </li>
@@ -181,7 +171,7 @@
                 </div>
                 <div class="col-xs-10 col-md-5 ">
                     <div class="btn-group pull-right">
-                        <a href="srvUsuario?accion=listarUsuarios" class="btn btn-default">
+                        <a href="srvUsuario?accion=listarEmpleados" class="btn btn-default">
                             <i class="fa fa-align-justify"></i> Ver listado</a>
                     </div>
                 </div>
@@ -191,53 +181,25 @@
             <div class="box">
                 <div class="box-header with-border">
                     <i class="fa fa-edit"></i>
-                    <h3 class="box-title">Registrar Nuevo Usuario</h3>
+                    <h3 class="box-title">Registrar Nuevo Documento</h3>
                 </div>
-                <form class="form-horizontal" action="srvUsuario?accion=registrarUsuario" method="post">
+                <form class="form-horizontal" action="srvUsuario?accion=registrarDocumento" method="post" enctype="multipart/form-data">
                     <div class="box-body">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Nombre Usuario</label>
+                            <label class="col-sm-2 control-label">Nombre Documento</label>
                             <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input id="nombre" type="text" class="form-control" placeholder="Ejem: Alexander"
-                                       name="txtNombre" maxlength="10"
-                                       value="" onchange="verifyCorreo()">
-                                <div id="validarC" class="text-danger"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Correo Usuario</label>
-                            <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input id="correo" type="email" class="form-control" placeholder="Ejem: correo@correo.com"
-                                       name="txtCorreo" maxlength="40"
+                                <span class="input-group-addon"><i class="fa fa-file"></i></span>
+                                <input id="nombre" type="text" class="form-control" placeholder="Ejem: Documento1"
+                                       name="name" maxlength="10"
                                        value="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Cargo</label>
+                            <label class="col-sm-2 control-label">Documentos empleado</label>
                             <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-tags"></i></span>
-                                <select class="form-control" name="cboCargo" autofocus="" required="">
-                                    <option value="0">Seleccione un cargo</option>
-                                    <c:forEach items="${cargos}" var="car">
-                                        <option value="${car.codigo}"
-                                                <c:if test="${car.codigo ==
-                                                                      usuario.cargo.codigo}">
-                                                    selected
-                                                </c:if>
-                                        >${car.nombreCargo}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="chkEstado" checked=""> Activo
-                                    </label>
-                                </div>
+                                <span class="input-group-addon"><i class="fa fa-file"></i></span>
+                                <input id="documentos" type="file" class="form-control" placeholder="ingrese documentos"
+                                       name="file">
                             </div>
                         </div>
                     </div>
@@ -279,22 +241,6 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    function verifyCorreo(){
-        const nombreUsuario=document.getElementById("nombre").value;
-        $.ajax({
-            url:"srvUsuario?accion=validarCorreo",
-            data:{
-                nombreUsuario:nombreUsuario
-            },
-            success: function(result){
-                $("#validarC").html(result);
-                //alert(result)
-            }
-        })
-    }
-</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
