@@ -169,6 +169,7 @@ public class srvUsuario extends HttpServlet {
         DAOUSPS udao;
         usuario usuario;
         udao = new DAOUSPS();
+        DAOUSUARIO daousuario = new DAOUSUARIO();
         ServletOutputStream out = response.getOutputStream();
         try {
             java.io.InputStream logo = this.getServletConfig()

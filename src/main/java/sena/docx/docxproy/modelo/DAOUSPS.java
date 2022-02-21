@@ -67,7 +67,7 @@ public class DAOUSPS {
                 ;
 
                 users.add(u);
-                System.out.println("Consulta exitosa"+u);
+                System.out.println("Consulta exitosa"+ ps);
 
             }
 

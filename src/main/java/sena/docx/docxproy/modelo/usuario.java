@@ -7,6 +7,7 @@ public class usuario {
     private String clave;
     private boolean estado;
     private cargo cargo;
+    public String estadoUsuarioRep;
 
     public int getId_usuario() {
         return id_usuario;
