@@ -11,9 +11,13 @@ import sena.docx.docxproy.modelo.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.io.File;
 import javax.servlet.ServletContext;
@@ -35,6 +39,8 @@ public class srvUsuario extends HttpServlet {
     private String pathFiles = "C:\\Users\\Daniel\\Desktop\\ProyectoGrado\\DocxProy\\src\\main\\webapp\\files";
     private File uploads = new File(pathFiles);
     private String[] extensiones = {".pdf", ".rar", ".zip"};
+
+    DAOUSUARIO daousuario = new DAOUSUARIO();
 
     public void init() {
         ServletContext contexto = getServletContext();
@@ -77,6 +83,12 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "abrirPassword":
                         presentarPassword(request, response);
+                        break;
+                    case "abrirPasswordEmp":
+                        presentarPasswordEmp(request, response);
+                        break;
+                    case "abrirPasswordSup":
+                        presentarPasswordSup(request, response);
                         break;
                     case "registrarUsuario":
                         registrarUsuario(request, response);
@@ -162,15 +174,15 @@ public class srvUsuario extends HttpServlet {
             java.io.InputStream logo = this.getServletConfig()
                     .getServletContext()
                     .getResourceAsStream("Reportes/img/logo.png");
-                    if (logo != null){
-                        System.out.println("logo cargado con exito");
-                    }
+            if (logo != null) {
+                System.out.println("logo cargado con exito");
+            }
             java.io.InputStream reporteUsuario = this.getServletConfig()
                     .getServletContext()
                     .getResourceAsStream("Reportes/RepEmpleados.jasper");
-                    if (reporteUsuario != null){
-                        System.out.println("reporte cargado con exito");
-                    }
+            if (reporteUsuario != null) {
+                System.out.println("reporte cargado con exito");
+            }
             //Validar que no vengan vacios
             if (logo != null && reporteUsuario != null) {
                 //Crear lista de la clase Vo para guardar resultado de la consulta
@@ -396,6 +408,24 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void presentarPasswordEmp(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/Empleado/changePassEmp.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
+    private void presentarPasswordSup(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/Supervisor/changePassSup.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
     private void cargarCargos(HttpServletRequest request) {
         DAOCARGO dao = new DAOCARGO();
         List<cargo> car = null;
@@ -421,7 +451,8 @@ public class srvUsuario extends HttpServlet {
             usu = new usuario();
             usu.setNombreUsuario(request.getParameter("txtNombre"));
             usu.setCorreoUsuario(request.getParameter("txtCorreo"));
-            usu.setClave(request.getParameter("txtClave"));
+            String contrasena1 = contrasena.getPassword();
+            usu.setClave(daousuario.getMD5(contrasena1));
             carg = new cargo();
             carg.setCodigo(Integer.parseInt(request.getParameter("cboCargo")));
             usu.setCargo(carg);
@@ -435,7 +466,8 @@ public class srvUsuario extends HttpServlet {
             String asunto = "Bienvenido a Docx";
             String cuerpo = "<h1> Gracias por registrarse en Docx </h1>"
                     + " <img src ='https://lideresmexicanos.com/wp-content/uploads/2021/08/ISP3.jpg'/>"
-                    + " <h4> Para iniciar sesión </h4>"
+                    + " <h4> Para iniciar sesión diríjase al siguiente enlace</h4>"
+                    + " <h4> Datos de ingreso: </h4>" + usu.getNombreUsuario()+ ", " + contrasena1
                     + " <a href='http://localhost:8080/DocxProy_war_exploded/identificar.jsp'>Haga click aquí para iniciar sesión</a>";
 
             try {
@@ -462,7 +494,7 @@ public class srvUsuario extends HttpServlet {
         DAOUSUARIO daoUsu;
         usuario usu = null;
         if (request.getParameter("txtNombre") != null
-                && request.getParameter("txtClave") != null){
+                && request.getParameter("txtClave") != null) {
             usu = new usuario();
             usu.setNombreUsuario(request.getParameter("txtNombre"));
             usu.setClave(request.getParameter("txtClave"));
@@ -501,12 +533,12 @@ public class srvUsuario extends HttpServlet {
             String name = req.getParameter("name");
             Part part = req.getPart("file");
 
-            if(part == null) {
+            if (part == null) {
                 System.out.println("No ha seleccionado un archivo");
                 return;
             }
 
-            if(isExtension(part.getSubmittedFileName(), extensiones)) {
+            if (isExtension(part.getSubmittedFileName(), extensiones)) {
                 String photo = saveFile(part, uploads);
                 documentos docs = new documentos(name, photo);
                 daodocumentos.addArchivos(docs);
@@ -520,7 +552,6 @@ public class srvUsuario extends HttpServlet {
     }
 
 
-
     private String saveFile(Part part, File pathUploads) {
         String pathAbsolute = "";
 
@@ -529,7 +560,7 @@ public class srvUsuario extends HttpServlet {
             String fileName = path.getFileName().toString();
             InputStream input = part.getInputStream();
 
-            if(input != null) {
+            if (input != null) {
                 File file = new File(pathUploads, fileName);
                 pathAbsolute = file.getAbsolutePath();
                 Files.copy(input, file.toPath());
@@ -542,9 +573,9 @@ public class srvUsuario extends HttpServlet {
         return pathAbsolute;
     }
 
-    private boolean isExtension(String fileName, String[] extensiones){
-        for(String et : extensiones) {
-            if(fileName.toLowerCase().endsWith(et)){
+    private boolean isExtension(String fileName, String[] extensiones) {
+        for (String et : extensiones) {
+            if (fileName.toLowerCase().endsWith(et)) {
                 return true;
             }
         }

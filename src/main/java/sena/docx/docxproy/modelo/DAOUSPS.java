@@ -91,7 +91,7 @@ public class DAOUSPS {
             ps = con.prepareStatement(sql);
             ps.setString(1, u.getNombreUsuario());
             ps.setString(2, u.getCorreoUsuario());
-            ps.setString(3, contra.getPassword());
+            ps.setString(3, u.getClave());
             ps.setBoolean(4, u.isEstado());
             ps.setInt(5, u.getCargo().getCodigo());
 

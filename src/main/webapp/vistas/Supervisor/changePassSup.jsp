@@ -1,6 +1,8 @@
+<%@ page import="sena.docx.docxproy.modelo.DAOUSUARIO" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
+    DAOUSUARIO daousuario = new DAOUSUARIO();
     if (session.getAttribute("supervisor") != null) {
 %>
 <html>
@@ -115,18 +117,18 @@
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">INICIO</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="fa fa-link"></i> <span>Panel Administrativo</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                             </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="srvUsuario?accion=abrirPasswordSup"><i class="fa fa-user-plus">
+                        <li class="active"><a href="srvUsuario?accion=abrirPasswordSup"><i class="fa fa-user-plus">
                         </i>Cambiar contraseña</a></li>
                     </ul>
                 </li>
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Registros</span>
                         <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
@@ -139,8 +141,7 @@
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>
                         <li><a href=""><i class="fa fa-user-plus"></i>Empleados</a></li>--%>
-                        <li class="active"><a href="srvUsuario?accion=listarEmpleados"><i
-                                class="fa fa-address-card"></i>Empleados</a>
+                        <li><a href="srvUsuario?accion=listarEmpleados"><i class="fa fa-address-card"></i>Empleados</a>
                         </li>
                     </ul>
                 </li>
@@ -170,10 +171,10 @@
                 <div class="col-xs-2 col-md-1">
                 </div>
                 <div class="col-xs-10 col-md-5 ">
-                    <div class="btn-group pull-right">
-                        <a href="srvUsuario?accion=listarEmpleados" class="btn btn-default">
-                            <i class="fa fa-align-justify"></i> Ver listado</a>
-                    </div>
+                    <!-- <div class="btn-group pull-right">
+                         <a href="srvUsuario?accion=listarEmpresas" class="btn btn-default">
+                             <i class="fa fa-align-justify"></i> Ver listado</a>
+                     </div>-->
                 </div>
             </div>
         </section>
@@ -181,43 +182,20 @@
             <div class="box">
                 <div class="box-header with-border">
                     <i class="fa fa-edit"></i>
-                    <h3 class="box-title">Registrar Nuevo Empleado</h3>
+                    <h3 class="box-title">Cambiar Contraseña</h3>
                 </div>
-                <form class="form-horizontal" action="srvUsuario?accion=registrarEmpleado" method="post"
-                      enctype="multipart/form-data">
+                <form class="form-horizontal" action="srvUsuario?accion=actualizarPassword" method="post">
+                    <input type="hidden" name="id" id="id" value="${supervisor.id_usuario}">
+                    <input type="hidden" name="passu" id="passu" value="${supervisor.clave}">
                     <div class="box-body">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Nombre Empleado</label>
-                            <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input id="nombre" type="text" class="form-control" placeholder="Ejem: Alexander"
-                                       name="txtNombre" maxlength="10"
-                                       value="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Clave</label>
-                            <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input id="clave" type="password" class="form-control" placeholder="Ejem: $%Ale!**"
-                                       name="txtClave" maxlength="10"
-                                       value="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Documentos empleado</label>
-                            <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-file"></i></span>
-                                <input id="documentos" type="file" class="form-control" placeholder="ingrese documentos"
-                                       name="file">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="chkEstado" checked=""> Activo
-                                    </label>
+                                <label class="col-sm-2 control-label">Clave nueva</label>
+                                <div class="col-sm-4 input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input id="passnew" type="password" class="form-control"
+                                           name="passnew" maxlength="10"
+                                           value="">
                                 </div>
                             </div>
                         </div>
@@ -236,6 +214,10 @@
         </section>
 
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"
+            integrity="sha512-8pbzenDolL1l5OPSsoURCx9TEdMFTaeFipASVrMYKhuYtly+k3tcsQYliOEKTmuB1t7yuzAiVo+yd7SJz+ijFQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <!-- /.content-wrapper -->
 
     <!-- Main Footer -->

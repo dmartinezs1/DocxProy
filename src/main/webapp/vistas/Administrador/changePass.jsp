@@ -1,6 +1,8 @@
+<%@ page import="sena.docx.docxproy.modelo.DAOUSUARIO" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
+    DAOUSUARIO daousuario = new DAOUSUARIO();
     if (session.getAttribute("administrador") != null) {
 %>
 <html>
@@ -199,17 +201,6 @@
                     <div class="box-body">
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <label class="col-sm-2 control-label">Clave actual</label>
-                                <div class="col-sm-4 input-group">
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                    <input onchange="verifyPass()" id="passant" type="password" class="form-control"
-                                           name="passant" maxlength="10" placeholder="Ingrese la clave actual"
-                                           value="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
                                 <label class="col-sm-2 control-label">Clave nueva</label>
                                 <div class="col-sm-4 input-group">
                                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -234,15 +225,17 @@
         </section>
 
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js" integrity="sha512-8pbzenDolL1l5OPSsoURCx9TEdMFTaeFipASVrMYKhuYtly+k3tcsQYliOEKTmuB1t7yuzAiVo+yd7SJz+ijFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function verifyPass() {
             const txtClave = document.getElementById("passu");
-            const ClaveAnt = document.getElementById("passant");
+            const ClaveAnt = document.getElementById("passant") ;
 
             if (txtClave.value === ClaveAnt.value) {
                 alert("La contraseña se ha verificado")
             } else {
                 alert("La contraseña no coincide")
+
                 ClaveAnt.focus();
                 ClaveAnt.value = "";
             }

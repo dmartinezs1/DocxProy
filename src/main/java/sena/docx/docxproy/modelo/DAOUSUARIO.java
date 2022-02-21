@@ -1,5 +1,7 @@
 package sena.docx.docxproy.modelo;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +18,7 @@ public class DAOUSUARIO extends Conexion {
         String sql = "SELECT U.IDUSUARIO, U.CLAVE, C.NOMBRECARGO FROM USUARIO U "
                 + "INNER JOIN CARGO C ON U.IDCARGO = C.IDCARGO "
                 + "WHERE U.ESTADO = 1 AND U.NOMBREUSUARIO = '" + user.getNombreUsuario() + "' "
-                + "AND U.CLAVE = '" + user.getClave() + "'";
+                + "AND U.CLAVE = '" + getMD5(user.getClave()) + "'";
         try {
             this.conectar(false);
             rs = this.ejecutarOrdenDatos(sql);
@@ -27,7 +29,7 @@ public class DAOUSUARIO extends Conexion {
                 usu.setCargo(new cargo());
                 usu.getCargo().setNombreCargo(rs.getString("NOMBRECARGO"));
                 usu.setEstado(true);
-                usu.setClave(rs.getString("CLAVE"));
+                usu.setClave(getMD5(rs.getString("CLAVE")));
             }
             rs.close();
         } catch (Exception e) {
@@ -36,6 +38,22 @@ public class DAOUSUARIO extends Conexion {
             this.cerrar(false);
         }
         return usu;
+    }
+
+    public String getMD5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] encBytes = md.digest(input.getBytes());
+            BigInteger numero = new BigInteger(1, encBytes);
+            String encString = numero.toString(16);
+            while (encString.length() < 32) {
+                encString = "0"+encString;
+            }
+            return encString;
+        } catch (Exception e) {
+            System.out.println("enctriptacion error "+e);
+            throw new RuntimeException(e);
+        }
     }
 
     public List<usuario> listarUsuarios() throws Exception {
@@ -295,7 +313,7 @@ public class DAOUSUARIO extends Conexion {
 
     public void changePassword(usuario usu) throws Exception {
         String sql = "UPDATE usuario SET CLAVE = '"
-                + usu.getClave()
+                + getMD5(usu.getClave())
                 + "' WHERE IDUSUARIO = " + usu.getId_usuario();
         try {
             this.conectar(false);
