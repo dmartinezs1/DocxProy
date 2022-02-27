@@ -182,6 +182,8 @@
         <section class="content-header">
             <a href="srvUsuario?accion=nuevaEmpresa" class="btn btn-success">
                 <i class="fa fa-plus"></i> Nueva Empresa </a>
+            <a href="srvUsuario?accion=nuevaSede" class="btn btn-primary">
+                <i class="fa fa-plus"></i> Nueva Sede </a>
 
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -243,6 +245,16 @@
                                                     <i class="glyphicon glyphicon-eye-open"></i></a>
                                             </c:otherwise>
                                         </c:choose>
+                                        <!-- AGREGAR SEDE -->
+                                        <input type="hidden" id="codigo" value="${user.id_empresa}">
+                                        <a id="addSHQ" href="<c:url value="srvUsuario">
+                                            <c:param name="accion" value="listarSedes" />
+                                            <c:param name="cod" value="${user.id_empresa}" />
+                                            </c:url>">
+                                            <button type="button" class="btn btn-success" data-toggle="tooltip"
+                                                    title="Agregar horario" data-original-title="Agregar horario">
+                                                <i class="fa fa-calendar"></i></button>
+                                        </a>
                                         <!-- ELIMINAR USUARIOS -->
                                         <input type="hidden" id="codigo" value="${user.id_empresa}">
                                         <a id="deleteUser" href="#">

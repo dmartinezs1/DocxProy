@@ -70,8 +70,14 @@ public class srvUsuario extends HttpServlet {
                     case "listarEmpresas":
                         listarEmpresas(request, response);
                         break;
+                    case "listarSedes":
+                        listarSedes(request, response);
+                        break;
                     case "nuevoUsuario":
                         presentarFormulario(request, response);
+                        break;
+                    case "nuevaSede":
+                        presentarFormularioSede(request, response);
                         break;
                     case "nuevoEmpleado":
                         presentarFormularioSup(request, response);
@@ -84,6 +90,9 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "abrirPasswordEmp":
                         presentarPasswordEmp(request, response);
+                        break;
+                    case "abrirHorariosAdm":
+                        presentarHorarios(request, response);
                         break;
                     case "abrirPasswordSup":
                         presentarPasswordSup(request, response);
@@ -370,6 +379,33 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void listarSedes(HttpServletRequest request, HttpServletResponse response) {
+        DAOSEDE dao = new DAOSEDE();
+        List<sede> se = null;
+        empresa emp;
+
+        if(request.getParameter("cod") != null) {
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("cod")));
+            //se.setEmpresa(emp);
+
+            try {
+                se = dao.listar(emp);
+                request.setAttribute("sedes", se);
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudieron listar las empresas" + e.getMessage());
+            } finally {
+                dao = null;
+            }
+            try {
+                this.getServletConfig().getServletContext()
+                        .getRequestDispatcher("/vistas/Administrador/listarSedes.jsp").forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+            }
+        }
+    }
+
     private void presentarFormulario(HttpServletRequest request, HttpServletResponse response) {
         try {
             this.cargarCargos(request);
@@ -384,6 +420,15 @@ public class srvUsuario extends HttpServlet {
         try {
             this.getServletConfig().getServletContext()
                     .getRequestDispatcher("/vistas/Administrador/nuevaEmpresa.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
+    private void presentarFormularioSede(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/Administrador/agregarSede.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo cargar la vista");
         }
@@ -435,6 +480,21 @@ public class srvUsuario extends HttpServlet {
             request.setAttribute("msje", "No se pudo cargar los cargos :( " + e.getMessage());
         } finally {
             car = null;
+            dao = null;
+        }
+    }
+
+    private void cargarEmpresas(HttpServletRequest request) {
+        DAOEMPRESA dao = new DAOEMPRESA();
+        List<empresa> emp = null;
+        try {
+            emp = dao.listarEmpresasSede();
+            request.setAttribute("empresas", emp);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar las empresas" + e.getMessage());
+            System.out.println("error cargando empresas: "+ e.getMessage());
+        } finally {
+            emp = null;
             dao = null;
         }
     }
@@ -643,6 +703,37 @@ public class srvUsuario extends HttpServlet {
             this.cargarCargos(request);
             this.getServletConfig().getServletContext().
                     getRequestDispatcher("/vistas/Administrador/actualizarUsuario.jsp"
+                    ).forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
+        }
+    }
+
+    private void presentarHorarios(HttpServletRequest request, HttpServletResponse response) {
+        DAOUSUARIO dao;
+        usuario usus;
+        if (request.getParameter("cod") != null) {
+            usus = new usuario();
+            usus.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+
+            dao = new DAOUSUARIO();
+            try {
+                usus = dao.leerUsuario(usus);
+                if (usus != null) {
+                    request.setAttribute("usuario", usus);
+                } else {
+                    request.setAttribute("msje", "No se encontró el usuario");
+                }
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se tiene el parámetro necesario");
+        }
+        try {
+            this.cargarCargos(request);
+            this.getServletConfig().getServletContext().
+                    getRequestDispatcher("/vistas/Administrador/agregarHorariosAdm.jsp"
                     ).forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());

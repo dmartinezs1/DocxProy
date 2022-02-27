@@ -1,6 +1,7 @@
 package sena.docx.docxproy.modelo.DAO;
 
 import sena.docx.docxproy.modelo.UT.Conexion;
+import sena.docx.docxproy.modelo.VO.cargo;
 import sena.docx.docxproy.modelo.VO.empresa;
 
 import java.sql.ResultSet;
@@ -27,6 +28,31 @@ public class DAOEMPRESA extends Conexion {
                 emp.setId_empresa(rs.getInt("id_empresa"));
                 emp.setNombreEmpresa(rs.getString("nombreEmpresa"));
                 emp.setEstado(rs.getBoolean("estado"));
+                empresas.add(emp);
+            }
+            this.cerrar(true);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+        }
+        return empresas;
+    }
+
+    public List<empresa> listarEmpresasSede() throws Exception {
+        List<empresa> empresas;
+        empresa emp;
+        ResultSet rs = null;
+        String sql = "SELECT E.id_empresa, E.nombreEmpresa FROM empresa E "
+                + "ORDER BY E.id_empresa";
+
+        try {
+            this.conectar(false);
+            rs = this.ejecutarOrdenDatos(sql);
+            empresas = new ArrayList<>();
+            while (rs.next() == true) {
+                emp = new empresa();
+                emp.setId_empresa(rs.getInt("id_empresa"));
+                emp.setNombreEmpresa(rs.getString("nombreEmpresa"));
                 empresas.add(emp);
             }
             this.cerrar(true);

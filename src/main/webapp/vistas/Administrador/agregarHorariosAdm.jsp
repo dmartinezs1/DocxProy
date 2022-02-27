@@ -175,111 +175,22 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Página Usuarios</h1>
+            <h1>Página Horarios</h1>
         </section>
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <a href="srvUsuario?accion=nuevoUsuario" class="btn btn-success">
-                <i class="fa fa-plus"></i> Nuevo Usuario </a>
+                <i class="fa fa-plus"></i> Nuevo Horario </a>
 
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Usuarios</li>
+                <li class="active">Usuarios</li><li class="active">Manejar horarios</li>
             </ol>
         </section>
-
-        <section class="content">
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Listado de Usuarios</h3>
-                </div>
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped dataTable table-hover" id="tablaUsuarios"
-                               class="display">
-                            <thead>
-                            <tr>
-                                <th>IDUsuario</th>
-                                <th>Usuario</th>
-                                <th>Estado</th>
-                                <th>Cargo</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <c:forEach var="user" items="${usuarios}" varStatus="iteracion">
-                                <tr>
-                                    <td>${user.id_usuario}</td>
-                                    <td>${user.nombreUsuario}</td>
-                                    <c:if test="${user.estado == true}">
-                                        <td><span class="badge bg-green active">Usuario Activo</span></td>
-                                    </c:if>
-                                    <c:if test="${user.estado == false}">
-                                        <td><span class="badge bg-red active">Usuario Inactivo</span></td>
-                                    </c:if>
-                                    <td>${user.cargo.nombreCargo}</td>
-                                    <td><a href="<c:url value="srvUsuario">
-                                                       <c:param name="accion" value="leerUsuario" />
-                                                       <c:param name="cod" value="${user.id_usuario}" />
-                                                   </c:url>">
-                                        <button type="button" class="btn btn-warning" data-toggle="tooltip"
-                                                title="Editar" data-original-title="Editar">
-                                            <i class="fa fa-pencil"></i></button>
-                                    </a>
-                                        <!-- DESACTIVAR / ACTIVAR USUARIOS -->
-                                        <c:choose>
-                                            <c:when test="${user.estado == true}">
-                                                <input type="hidden" id="item" value="${user.id_usuario}">
-                                                <a id="desactivarUsuario"
-                                                   href="srvUsuario?cambiar=desactivar&cod=${user.id_usuario}"
-                                                   class="btn btn-danger" data-toggle="tooltip" title="Desactivar"
-                                                   data-original-title="Desactivar">
-                                                    <i class="fa fa-remove"></i></a>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <input type="hidden" id="item" value="${user.id_usuario}">
-                                                <a id="activarUsuario"
-                                                   href="srvUsuario?cambiar=activar&cod=${user.id_usuario}"
-                                                   class="btn btn-primary" data-toggle="tooltip" title="Activar"
-                                                   data-original-title="Activar">
-                                                    <i class="glyphicon glyphicon-eye-open"></i></a>
-                                            </c:otherwise>
-                                        </c:choose>
-                                            <!-- AGREGAR HORARIOS -->
-                                            <input type="hidden" id="codigo" value="${user.id_usuario}">
-                                            <a id="addSchedule" href="<c:url value="srvUsuario">
-                                            <c:param name="accion" value="abrirHorariosAdm" />
-                                            <c:param name="cod" value="${user.id_usuario}" />
-                                            </c:url>">
-                                                <button type="button" class="btn btn-success" data-toggle="tooltip"
-                                                        title="Agregar horario" data-original-title="Agregar horario">
-                                                    <i class="fa fa-calendar"></i></button>
-                                            </a>
-                                            <!-- ELIMINAR USUARIOS -->
-                                            <input type="hidden" id="codigo" value="${user.id_usuario}">
-                                            <a id="deleteUser" href="<c:url value="srvUsuario">
-                                                           <c:param name="accion" value="eliminarUsuario" />
-                                                           <c:param name="cod" value="${user.id_usuario}" />
-                                                       </c:url>">
-                                                <button type="button" class="btn btn-danger" data-toggle="tooltip"
-                                                        title="Eliminar" data-original-title="Eliminar">
-                                                    <i class="fa fa-trash"></i></button>
-                                            </a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
-                    </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <!--Pie de página-->
-                </div>
-                <!-- /.box-footer-->
-            </div>
-        </section>
-        <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
+
 
     <!-- Main Footer -->
     <footer class="main-footer">

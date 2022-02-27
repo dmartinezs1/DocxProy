@@ -69,7 +69,6 @@ public class DAOUSPS {
                 u.setEstado(rs.getBoolean(4));
                 u.setCargo(new cargo());
                 u.getCargo().setNombreCargo(rs.getString(5));
-                ;
 
                 users.add(u);
                 System.out.println("Consulta exitosa"+ ps);
