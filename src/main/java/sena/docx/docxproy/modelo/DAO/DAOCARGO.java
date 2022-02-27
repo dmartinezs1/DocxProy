@@ -1,11 +1,14 @@
-package sena.docx.docxproy.modelo;
+package sena.docx.docxproy.modelo.DAO;
+
+import sena.docx.docxproy.modelo.UT.Conexion;
+import sena.docx.docxproy.modelo.VO.cargo;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("ALL")
-public class DAOCARGO extends Conexion{
+public class DAOCARGO extends Conexion {
 
     public List<cargo> listarCargos() throws Exception {
         List<cargo> cargos;

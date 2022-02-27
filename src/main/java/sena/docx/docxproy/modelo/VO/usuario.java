@@ -1,4 +1,6 @@
-package sena.docx.docxproy.modelo;
+package sena.docx.docxproy.modelo.VO;
+
+import sena.docx.docxproy.modelo.VO.cargo;
 
 public class usuario {
     private int id_usuario;
@@ -49,11 +51,11 @@ public class usuario {
         this.estado = estado;
     }
 
-    public sena.docx.docxproy.modelo.cargo getCargo() {
+    public sena.docx.docxproy.modelo.VO.cargo getCargo() {
         return cargo;
     }
 
-    public void setCargo(sena.docx.docxproy.modelo.cargo cargo) {
+    public void setCargo(sena.docx.docxproy.modelo.VO.cargo cargo) {
         this.cargo = cargo;
     }
 

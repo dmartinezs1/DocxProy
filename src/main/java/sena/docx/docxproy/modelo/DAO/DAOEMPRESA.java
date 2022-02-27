@@ -1,4 +1,7 @@
-package sena.docx.docxproy.modelo;
+package sena.docx.docxproy.modelo.DAO;
+
+import sena.docx.docxproy.modelo.UT.Conexion;
+import sena.docx.docxproy.modelo.VO.empresa;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;

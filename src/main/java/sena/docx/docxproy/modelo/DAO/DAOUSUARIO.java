@@ -1,11 +1,13 @@
-package sena.docx.docxproy.modelo;
+package sena.docx.docxproy.modelo.DAO;
+
+import sena.docx.docxproy.modelo.UT.Conexion;
+import sena.docx.docxproy.modelo.VO.cargo;
+import sena.docx.docxproy.modelo.VO.contrasena;
+import sena.docx.docxproy.modelo.VO.usuario;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

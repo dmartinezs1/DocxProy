@@ -1,4 +1,4 @@
-package sena.docx.docxproy.modelo;
+package sena.docx.docxproy.modelo.UT;
 
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 import java.sql.CallableStatement;

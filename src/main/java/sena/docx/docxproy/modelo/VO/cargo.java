@@ -1,4 +1,4 @@
-package sena.docx.docxproy.modelo;
+package sena.docx.docxproy.modelo.VO;
 
 public class cargo {
     private int codigo;

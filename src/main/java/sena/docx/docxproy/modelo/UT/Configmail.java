@@ -1,4 +1,4 @@
-package sena.docx.docxproy.modelo;
+package sena.docx.docxproy.modelo.UT;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;

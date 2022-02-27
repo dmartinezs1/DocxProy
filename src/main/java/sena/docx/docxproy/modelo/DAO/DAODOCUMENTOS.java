@@ -1,4 +1,7 @@
-package sena.docx.docxproy.modelo;
+package sena.docx.docxproy.modelo.DAO;
+
+import sena.docx.docxproy.modelo.UT.conexion1;
+import sena.docx.docxproy.modelo.VO.documentos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
