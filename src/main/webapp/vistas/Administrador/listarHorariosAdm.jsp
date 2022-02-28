@@ -175,22 +175,81 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Página Horarios</h1>
+            <h1>Página Sedes</h1>
         </section>
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <a href="srvUsuario?accion=nuevoUsuario" class="btn btn-success">
-                <i class="fa fa-plus"></i> Nuevo Horario </a>
+            <a href="srvUsuario?accion=listarUsuarios" class="btn btn-secondary">
+                <i class="fa fa-align-justify"></i> Agregar horario </a>
 
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Usuarios</li><li class="active">Manejar horarios</li>
+                <li class="active">Sedes</li>
             </ol>
         </section>
+
+        <section class="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Listado de Sedes</h3>
+                </div>
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped dataTable table-hover" id="tablaUsuarios"
+                               class="display">
+                            <thead>
+                            <tr>
+                                <th>Id programación</th>
+                                <th>Fecha inicio</th>
+                                <th>Fecha final</th>
+                                <th>Hora entrada</th>
+                                <th>Hora salida</th>
+                                <th>Empresa</th>
+                                <th>Sede</th>
+                                <th>Empleado</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <c:forEach var="user" items="${programaciones}" varStatus="iteracion">
+                                <tr>
+                                    <td>${user.idProgramacion}</td>
+                                    <td>${user.fechaInicioLabor}</td>
+                                    <td>${user.fechaFinLabor}</td>
+                                    <td>${user.horaEntrada}</td>
+                                    <td>${user.horaSalida}</td>
+                                    <td>${user.empresa.nombreEmpresa}</td>
+                                    <td>${user.sede.direccion}</td>
+                                    <td>${user.usuario.nombreUsuario}</td>
+                                    <td><a href="#">
+                                        <button type="button" class="btn btn-warning" data-toggle="tooltip"
+                                                title="Editar" data-original-title="Editar">
+                                            <i class="fa fa-pencil"></i></button>
+                                    </a>
+                                        <!-- DESACTIVAR / ACTIVAR USUARIOS -->
+                                        <!-- AGREGAR HORARIOS -->
+                                        <!-- ELIMINAR SEDE -->
+                                        <input type="hidden" id="codigo">
+                                        <a id="deleteUser">
+                                            <button type="button" class="btn btn-danger" data-toggle="tooltip"
+                                                    title="Eliminar" data-original-title="Eliminar">
+                                                <i class="fa fa-trash"></i></button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <!--Pie de página-->
+                </div>
+                <!-- /.box-footer-->
+            </div>
+        </section>
+        <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-
-
 
     <!-- Main Footer -->
     <footer class="main-footer">
@@ -234,3 +293,4 @@
         response.sendRedirect("identificar.jsp");
     }
 %>
+

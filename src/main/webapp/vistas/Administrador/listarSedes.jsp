@@ -179,8 +179,8 @@
     </section>
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <a href="srvUsuario?accion=nuevoUsuario" class="btn btn-success">
-        <i class="fa fa-plus"></i> Nueva sede </a>
+      <a href="srvUsuario?accion=listarEmpresas" class="btn btn-secondary">
+        <i class="fa fa-align-justify"></i> Volver a empresas </a>
 
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -222,12 +222,6 @@
                   </a>
                     <!-- DESACTIVAR / ACTIVAR USUARIOS -->
                     <!-- AGREGAR HORARIOS -->
-                    <input type="hidden">
-                    <a id="addSchedule">
-                      <button type="button" class="btn btn-success" data-toggle="tooltip"
-                              title="Agregar horario" data-original-title="Agregar horario">
-                        <i class="fa fa-calendar"></i></button>
-                    </a>
                     <!-- ELIMINAR SEDE -->
                     <input type="hidden" id="codigo">
                     <a id="deleteUser">

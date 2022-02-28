@@ -181,7 +181,7 @@
                 </div>
                 <div class="col-xs-10 col-md-5 ">
                     <div class="btn-group pull-right">
-                        <a href="srvUsuario?accion=listarUsuarios" class="btn btn-default">
+                        <a href="srvUsuario?accion=listarEmpresas" class="btn btn-default">
                             <i class="fa fa-align-justify"></i> Ver listado</a>
                     </div>
                 </div>

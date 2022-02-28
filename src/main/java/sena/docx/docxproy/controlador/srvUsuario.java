@@ -91,8 +91,8 @@ public class srvUsuario extends HttpServlet {
                     case "abrirPasswordEmp":
                         presentarPasswordEmp(request, response);
                         break;
-                    case "abrirHorariosAdm":
-                        presentarHorarios(request, response);
+                    case "listarHorariosAdm":
+                        listarHorariosAdm(request, response);
                         break;
                     case "abrirPasswordSup":
                         presentarPasswordSup(request, response);
@@ -441,6 +441,38 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void listarHorariosAdm(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG dao = new DAOPROG();
+        List<programacion> pr = null;
+        empresa emp;
+        usuario usu;
+
+        if(request.getParameter("cod") != null) {
+            usu = new usuario();
+            usu.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+            //se.setEmpresa(emp);
+
+            try {
+                pr = dao.listar(usu);
+                System.out.println(pr.size());
+                request.setAttribute("programaciones", pr);
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudieron listar los horarios" + e.getMessage());
+                System.out.println("no se pudieron listar los horarios"+ e.getMessage());
+            } finally {
+                dao = null;
+            }
+            try {
+                this.getServletConfig().getServletContext()
+                        .getRequestDispatcher("/vistas/Administrador/listarHorariosAdm.jsp").forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+                System.out.println("No se puedo realizar la petición" + ex.getMessage());
+            }
+        }
+    }
+
+
     private void presentarFormulario(HttpServletRequest request, HttpServletResponse response) {
         try {
             this.cargarCargos(request);
@@ -769,7 +801,7 @@ public class srvUsuario extends HttpServlet {
         try {
             this.cargarCargos(request);
             this.getServletConfig().getServletContext().
-                    getRequestDispatcher("/vistas/Administrador/agregarHorariosAdm.jsp"
+                    getRequestDispatcher("/vistas/Administrador/listarHorariosAdm.jsp"
                     ).forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());

@@ -246,12 +246,12 @@
                                         </c:choose>
                                             <!-- AGREGAR HORARIOS -->
                                             <input type="hidden" id="codigo" value="${user.id_usuario}">
-                                            <a id="addSchedule" href="<c:url value="srvUsuario">
-                                            <c:param name="accion" value="abrirHorariosAdm" />
-                                            <c:param name="cod" value="${user.id_usuario}" />
-                                            </c:url>">
+                                            <a id="addSHQ" href="<c:url value="srvUsuario">
+                                                <c:param name="accion" value="listarHorariosAdm" />
+                                                <c:param name="cod" value="${user.id_usuario}" />
+                                                </c:url>">
                                                 <button type="button" class="btn btn-success" data-toggle="tooltip"
-                                                        title="Agregar horario" data-original-title="Agregar horario">
+                                                        title="Consultar horarios" data-original-title="Consultar horarios">
                                                     <i class="fa fa-calendar"></i></button>
                                             </a>
                                             <!-- ELIMINAR USUARIOS -->
