@@ -193,51 +193,59 @@
                     <i class="fa fa-edit"></i>
                     <h3 class="box-title">Registrar Nueva Sede</h3>
                 </div>
-                <form class="form-horizontal" action="srvUsuario?accion=registrarUsuario" method="post">
+                <form class="form-horizontal" action="srvUsuario?accion=registrarSede" method="post">
                     <div class="box-body">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Nombre Usuario</label>
+                            <label class="col-sm-2 control-label">Dirección sede</label>
                             <div class="col-sm-4 input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input id="nombre" type="text" class="form-control" placeholder="Ejem: Alexander"
-                                       name="txtNombre" maxlength="10"
-                                       value="" onchange="verifyCorreo()">
-                                <div id="validarC" class="text-danger"></div>
+                                <input id="direccion" type="text" class="form-control" placeholder="Ejem: Cra 1 #1a 01"
+                                       name="txtDireccion" maxlength="10"
+                                       value="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Correo Usuario</label>
+                            <label class="col-sm-2 control-label">Nombre Contacto</label>
                             <div class="col-sm-4 input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input id="correo" type="email" class="form-control" placeholder="Ejem: correo@correo.com"
+                                <input id="nombreContacto" type="text" class="form-control" placeholder="Ejem: Don luis"
+                                       name="txtNombreContacto" maxlength="40"
+                                       value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Teléfono Contacto</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="numeroContacto" type="number" class="form-control" placeholder="Ejem: 321 123123"
+                                       name="txtNumeroContacto" maxlength="40"
+                                       value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Correo sede</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="correo" type="email" class="form-control" placeholder="Ejem: empresa@mail.com"
                                        name="txtCorreo" maxlength="40"
                                        value="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Cargo</label>
+                            <label class="col-sm-2 control-label">Empresa</label>
                             <div class="col-sm-4 input-group">
                                 <span class="input-group-addon"><i class="fa fa-tags"></i></span>
-                                <select class="form-control" name="cboCargo" autofocus="" required="">
-                                    <option value="0">Seleccione un cargo</option>
-                                    <c:forEach items="${cargos}" var="car">
-                                        <option value="${car.codigo}"
-                                                <c:if test="${car.codigo ==
-                                                                      usuario.cargo.codigo}">
+                                <select class="form-control" name="cboEmpresa" autofocus="" required="">
+                                    <option value="0">Seleccione una empresa</option>
+                                    <c:forEach items="${empresas}" var="emp">
+                                        <option value="${emp.id_empresa}"
+                                                <c:if test="${emp.id_empresa ==
+                                                                      sede.empresa.id_empresa}">
                                                     selected
                                                 </c:if>
-                                        >${car.nombreCargo}</option>
+                                        >${emp.nombreEmpresa}</option>
                                     </c:forEach>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="chkEstado" checked=""> Activo
-                                    </label>
-                                </div>
                             </div>
                         </div>
                     </div>

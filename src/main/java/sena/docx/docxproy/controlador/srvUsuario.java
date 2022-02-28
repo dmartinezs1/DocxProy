@@ -106,6 +106,9 @@ public class srvUsuario extends HttpServlet {
                     case "registrarEmpresa":
                         registrarEmpresa(request, response);
                         break;
+                    case "registrarSede":
+                        registrarSede(request, response);
+                        break;
                     case "leerUsuario":
                         presentarUsuario(request, response);
                         break;
@@ -169,6 +172,38 @@ public class srvUsuario extends HttpServlet {
             }
         }
 
+    }
+
+    private void registrarSede(HttpServletRequest request, HttpServletResponse response) {
+        DAOSEDE daosede;
+        sede sede = null;
+        empresa emp;
+        if (request.getParameter("txtDireccion") != null
+                && request.getParameter("txtNombreContacto") != null
+                && request.getParameter("txtNumeroContacto") != null
+                && request.getParameter("txtCorreo") != null
+                && request.getParameter("cboEmpresa") != null) {
+
+            sede = new sede();
+            sede.setDireccion(request.getParameter("txtDireccion"));
+            sede.setNombreContacto(request.getParameter("txtNombreContacto"));
+            sede.setNumeroContacto(Integer.parseInt(request.getParameter("txtNumeroContacto")));
+            sede.setCorreo(request.getParameter("txtCorreo"));
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("cboEmpresa")));
+            sede.setEmpresa(emp);
+
+            daosede = new DAOSEDE();
+            try {
+                daosede.registrar(sede);
+                response.sendRedirect("srvUsuario?accion=listarEmpresas");
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo registrar el usuario" + e.getMessage());
+                request.setAttribute("sede", sede);
+                this.presentarFormularioSede(request, response);
+            }
+        }
     }
 
     private void reporteEmpleados(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -427,6 +462,7 @@ public class srvUsuario extends HttpServlet {
 
     private void presentarFormularioSede(HttpServletRequest request, HttpServletResponse response) {
         try {
+            this.cargarEmpresas(request);
             this.getServletConfig().getServletContext()
                     .getRequestDispatcher("/vistas/Administrador/agregarSede.jsp").forward(request, response);
         } catch (Exception e) {

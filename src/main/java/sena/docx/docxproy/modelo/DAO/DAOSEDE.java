@@ -64,6 +64,32 @@ public class DAOSEDE extends conexion1 {
         return users;
     }
 
+    public int registrar(sede se) throws SQLException {
+
+        sql = "INSERT INTO sede (direccion, nombreContacto, numeroContacto, correoElectronico, empresaCon_id) "
+                + "VALUES (?,?,?,?,?)";
+        try {
+            con = c.conectar1();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, se.getDireccion());
+            ps.setString(2, se.getNombreContacto());
+            ps.setInt(3, se.getNumeroContacto());
+            ps.setString(4, se.getCorreo());
+            ps.setInt(5, se.getEmpresa().getId_empresa());
+
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se registró una sede");
+
+        } catch (Exception e) {
+            System.out.println("Error al registrar la sede" + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return row;//Retorna cantidad de filas afectadas
+    }
+
 
 
 }
