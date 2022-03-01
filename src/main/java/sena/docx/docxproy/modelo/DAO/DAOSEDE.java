@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("all")
 public class DAOSEDE extends conexion1 {
 
     String sql;
@@ -30,7 +31,7 @@ public class DAOSEDE extends conexion1 {
                 ", E.nombreEmpresa " +
                 "FROM sede S INNER JOIN empresa E " +
                 "ON E.id_empresa = S.empresaCon_id " +
-                "WHERE E.id_empresa = "+ emp.getId_empresa() + " " +
+                "WHERE E.id_empresa = " + emp.getId_empresa() + " " +
                 "ORDER BY S.idSede";
         try {
             con = c.conectar1(); //Abriendo la conexión a la BD
@@ -49,7 +50,7 @@ public class DAOSEDE extends conexion1 {
 
 
                 users.add(s);
-                System.out.println("Consulta exitosa"+ ps);
+                System.out.println("Consulta exitosa" + ps);
 
             }
 
@@ -90,6 +91,85 @@ public class DAOSEDE extends conexion1 {
         return row;//Retorna cantidad de filas afectadas
     }
 
+    public sede leerSede(sede se) throws Exception {
+
+        sede sedes = new sede();
+        String sql = "SELECT S.idSede, S.direccion, S.nombreContacto, S.numeroContacto, S.correoElectronico, S.empresaCon_id"
+                + " FROM sede S WHERE S.idSede = " + se.getIdSede();
+
+        try {
+            con = c.conectar1(); //Abriendo la conexión a la BD
+            ps = con.prepareStatement(sql); //preparar sentencia
+            rs = ps.executeQuery();//Ejecución de la sentencia guardar resultado en el resultset
+
+            while (rs.next()) {
+                sedes.setIdSede(rs.getInt(1));
+                sedes.setDireccion(rs.getString(2));
+                sedes.setNombreContacto(rs.getString(3));
+                sedes.setNumeroContacto(rs.getInt(4));
+                sedes.setCorreo(rs.getString(5));
+                sedes.setEmpresa(new empresa());
+                sedes.getEmpresa().setId_empresa(rs.getInt(6));
+
+                System.out.println("Consulta exitosa" + ps);
+
+            }
+
+            ps.close();
+
+
+        } catch (Exception e) {
+            System.out.println("Consulta no exitosa" + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return sedes;
+    }
+
+    public int actualizarSede(sede se) throws SQLException{
+        sql = "UPDATE sede SET direccion=?, nombreContacto=?, numeroContacto=?, " +
+              "correoElectronico=?, empresaCon_id=? " +
+              "WHERE idSede ="+se.getIdSede();
+        try{
+            con= c.conectar1();
+            ps=con.prepareStatement(sql);
+            ps.setString(1,se.getDireccion());
+            ps.setString(2,se.getNombreContacto());
+            ps.setInt(3,se.getNumeroContacto());
+            ps.setString(4,se.getCorreo());
+            ps.setInt(5,se.getEmpresa().getId_empresa());
+
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se cambió la sede");
+
+        }catch (Exception e){
+            System.out.println("no se pudo actualizar la sede "+e.getMessage());
+        }finally {
+            con.close();
+        }
+        return row;
+    }
+
+    public int eliminar(sede se) throws SQLException {
+        sql = "DELETE FROM sede WHERE idSede=" + se.getIdSede();
+        try {
+            con = c.conectar1(); //Abriendo la conexión a la BD
+            ps = con.prepareStatement(sql); //preparar sentencia
+
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se eliminó una sede");
+
+        } catch (Exception e) {
+            System.out.println("Error al eliminar la sede " + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return row;
+    }
 
 
 }

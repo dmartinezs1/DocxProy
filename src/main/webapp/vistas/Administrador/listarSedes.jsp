@@ -213,7 +213,7 @@
                   <td>${user.nombreContacto}</td>
                   <td>${user.empresa.nombreEmpresa}</td>
                   <td><a href="<c:url value="srvUsuario">
-                                                       <c:param name="accion" value="leerUsuario" />
+                                                       <c:param name="accion" value="leerSede" />
                                                        <c:param name="cod" value="${user.idSede}" />
                                                    </c:url>">
                     <button type="button" class="btn btn-warning" data-toggle="tooltip"
@@ -223,8 +223,12 @@
                     <!-- DESACTIVAR / ACTIVAR USUARIOS -->
                     <!-- AGREGAR HORARIOS -->
                     <!-- ELIMINAR SEDE -->
-                    <input type="hidden" id="codigo">
-                    <a id="deleteUser">
+                    <input type="hidden" id="codigo" value="${user.idSede}">
+                    <input type="hidden" id="codigoEmpresa" value="${user.empresa.id_empresa}">
+                    <a id="deleteUser" href="<c:url value="srvUsuario">
+                                                           <c:param name="accion" value="eliminarSede" />
+                                                           <c:param name="cod" value="${user.idSede}" />
+                                                       </c:url>">
                       <button type="button" class="btn btn-danger" data-toggle="tooltip"
                               title="Eliminar" data-original-title="Eliminar">
                         <i class="fa fa-trash"></i></button>
@@ -272,7 +276,7 @@
 <script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script src="swetalert/sweetalert.js" type="text/javascript"></script>
-<script src="js/funcionesUsuario.js" type="text/javascript"></script>
+<script src="js/funcionesSede.js" type="text/javascript"></script>
 <script>
   $(document).ready(function () {
     $('#tablaUsuarios').DataTable();

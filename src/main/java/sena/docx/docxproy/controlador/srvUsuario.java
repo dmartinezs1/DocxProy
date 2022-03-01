@@ -112,6 +112,9 @@ public class srvUsuario extends HttpServlet {
                     case "leerUsuario":
                         presentarUsuario(request, response);
                         break;
+                    case "leerSede":
+                        presentarSede(request, response);
+                        break;
                     case "leerEmpleado":
                         presentarEmpleado(request, response);
                         break;
@@ -120,6 +123,9 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "actualizarUsuario":
                         actualizarUsuario(request, response);
+                        break;
+                    case "actualizarSede":
+                        actualizarSede(request, response);
                         break;
                     case "actualizarEmpleado":
                         actualizarEmpleado(request, response);
@@ -138,6 +144,9 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "eliminarEmpresa":
                         eliminarEmpresa(request, response);
+                        break;
+                    case "eliminarSede":
+                        eliminarSede(request, response);
                         break;
                     case "validarCorreo":
                         validarCorreo(request, response);
@@ -777,18 +786,18 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
-    private void presentarHorarios(HttpServletRequest request, HttpServletResponse response) {
-        DAOUSUARIO dao;
-        usuario usus;
+    private void presentarSede(HttpServletRequest request, HttpServletResponse response) {
+        DAOSEDE dao;
+        sede sedes;
         if (request.getParameter("cod") != null) {
-            usus = new usuario();
-            usus.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+            sedes = new sede();
+            sedes.setIdSede(Integer.parseInt(request.getParameter("cod")));
 
-            dao = new DAOUSUARIO();
+            dao = new DAOSEDE();
             try {
-                usus = dao.leerUsuario(usus);
-                if (usus != null) {
-                    request.setAttribute("usuario", usus);
+                sedes = dao.leerSede(sedes);
+                if (sedes != null) {
+                    request.setAttribute("sede", sedes);
                 } else {
                     request.setAttribute("msje", "No se encontró el usuario");
                 }
@@ -799,9 +808,9 @@ public class srvUsuario extends HttpServlet {
             request.setAttribute("msje", "No se tiene el parámetro necesario");
         }
         try {
-            this.cargarCargos(request);
+            this.cargarEmpresas(request);
             this.getServletConfig().getServletContext().
-                    getRequestDispatcher("/vistas/Administrador/listarHorariosAdm.jsp"
+                    getRequestDispatcher("/vistas/Administrador/actualizarSede.jsp"
                     ).forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
@@ -917,6 +926,50 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void actualizarSede(HttpServletRequest request, HttpServletResponse response) {
+        DAOSEDE daosede;
+        sede sedes = null;
+        empresa emp;
+
+        if (request.getParameter("hCodigo") != null
+                && request.getParameter("txtDireccion") != null
+                && request.getParameter("txtNombreContacto") != null
+                && request.getParameter("txtNumeroContacto") != null
+                && request.getParameter("txtCorreo") != null
+                && request.getParameter("cboEmpresa") != null) {
+
+            sedes = new sede();
+            sedes.setIdSede(Integer.parseInt(request.getParameter("hCodigo")));
+            sedes.setDireccion(request.getParameter("txtDireccion"));
+            sedes.setNombreContacto(request.getParameter("txtNombreContacto"));
+            sedes.setNumeroContacto(Integer.parseInt(request.getParameter("txtNumeroContacto")));
+            sedes.setCorreo(request.getParameter("txtCorreo"));
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("cboEmpresa")));
+            int codigoEmpresa = emp.getId_empresa();
+            sedes.setEmpresa(emp);
+            daosede = new DAOSEDE();
+            try {
+                daosede.actualizarSede(sedes);
+                response.sendRedirect("srvUsuario?accion=listarSedes&cod="+codigoEmpresa);
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo actualizar la sede" + e.getMessage());
+                request.setAttribute("sede", sedes);
+                System.out.println(e);
+            }
+            try {
+                this.cargarEmpresas(request);
+                this.getServletConfig().getServletContext().
+                        getRequestDispatcher("/vistas/Administrador/actualizarSede.jsp"
+                        ).forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
+                System.out.println(ex);
+            }
+        }
+    }
+
     private void actualizarEmpleado(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO daoUsu;
         usuario usus = null;
@@ -982,6 +1035,23 @@ public class srvUsuario extends HttpServlet {
             try {
                 dao.eliminarUsuario(usus);
                 response.sendRedirect("srvUsuario?accion=listarUsuarios");
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se encontro el usuario");
+        }
+    }
+
+    private void eliminarSede(HttpServletRequest request, HttpServletResponse response) {
+        DAOSEDE dao = new DAOSEDE();
+        sede sedes = new sede();
+        if (request.getParameter("cod") != null) {
+            sedes.setIdSede(Integer.parseInt(request.getParameter("cod")));
+            try {
+                dao.eliminar(sedes);
+                int empresaSede = sedes.getEmpresa().getId_empresa();
+                response.sendRedirect("srvUsuario?accion=listarSedes&cod="+empresaSede);
             } catch (Exception e) {
                 request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
             }
