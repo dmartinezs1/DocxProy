@@ -28,7 +28,7 @@ public class DAOSEDE extends conexion1 {
         System.out.println(emp.getId_empresa());
         List<sede> users = new ArrayList<>();
         sql = "SELECT S.idSede, S.direccion, S.nombreContacto, S.numeroContacto, S.correoElectronico" +
-                ", E.nombreEmpresa " +
+                ", E.nombreEmpresa, E.id_empresa " +
                 "FROM sede S INNER JOIN empresa E " +
                 "ON E.id_empresa = S.empresaCon_id " +
                 "WHERE E.id_empresa = " + emp.getId_empresa() + " " +
@@ -47,6 +47,7 @@ public class DAOSEDE extends conexion1 {
                 s.setCorreo(rs.getString(5));
                 s.setEmpresa(new empresa());
                 s.getEmpresa().setNombreEmpresa(rs.getString(6));
+                s.getEmpresa().setId_empresa(rs.getInt(7));
 
 
                 users.add(s);

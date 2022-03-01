@@ -2,7 +2,7 @@ $(document).ready(function () {
     $("tr #deleteUser").click(function (e) {
         e.preventDefault();
         var cod = $(this).parent().find('#codigo').val();
-        var codEmp = $(this).parent().find('#CodigoEmpresa').val();
+        var codEmp = $(this).parent().find('#codigoEmpresa').val();
         swal({
                 title: "Esta Seguro de Eliminar?",
                 text: "Una vez eliminado deberá agregar de nuevo!",
