@@ -175,23 +175,23 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Página Sedes</h1>
+            <h1>Página programaciones ${sede.empresa.nombreEmpresa}</h1>
         </section>
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <a href="srvUsuario?accion=listarUsuarios" class="btn btn-secondary">
-                <i class="fa fa-align-justify"></i> Agregar horario </a>
+            <a href="srvUsuario?accion=registrarProgramacion&cod=${sede.idSede}" class="btn btn-secondary">
+                <i class="fa fa-align-justify"></i> Programar empleado </a>
 
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Sedes</li>
+                <li class="active">Programaciones</li>
             </ol>
         </section>
 
         <section class="content">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Listado de Sedes</h3>
+                    <h3 class="box-title">Listado programaciones</h3>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">
@@ -227,7 +227,7 @@
                                     </a>
                                         <!-- DESACTIVAR / ACTIVAR USUARIOS -->
                                         <!-- AGREGAR HORARIOS -->
-                                        <!-- ELIMINAR SEDE -->
+                                        <!-- ELIMINAR HORARIO -->
                                         <input type="hidden" id="codigo">
                                         <a id="deleteUser">
                                             <button type="button" class="btn btn-danger" data-toggle="tooltip"

@@ -82,6 +82,9 @@ public class srvUsuario extends HttpServlet {
                     case "nuevaSede":
                         presentarFormularioSede(request, response);
                         break;
+                    case "registrarProgramacion":
+                        presentarFormularioProgramacion(request, response);
+                        break;
                     case "nuevoEmpleado":
                         presentarFormularioSup(request, response);
                         break;
@@ -188,6 +191,7 @@ public class srvUsuario extends HttpServlet {
 
     private void listarHorariosSede(HttpServletRequest request, HttpServletResponse response) {
         DAOPROG dao = new DAOPROG();
+        DAOSEDE daosede = new DAOSEDE();
         List<programacion> pr = null;
         empresa emp;
         usuario usu;
@@ -197,7 +201,13 @@ public class srvUsuario extends HttpServlet {
             se = new sede();
             se.setIdSede(Integer.parseInt(request.getParameter("cod")));
             //se.setEmpresa(emp);
-
+            try{
+                se = daosede.leerDatosSede(se);
+                request.setAttribute("sede", se);
+            }catch(Exception e) {
+                request.setAttribute("msje", "No se pudieron obtener los datos de sede" + e.getMessage());
+                System.out.println("no se obtuvieron los datos de sede" + e.getMessage());
+            }
             try {
                 pr = dao.listarHS(se);
                 System.out.println(pr.size());
@@ -547,9 +557,29 @@ public class srvUsuario extends HttpServlet {
     }
 
     private void presentarFormularioProgramacion(HttpServletRequest request, HttpServletResponse response) {
+        sede sedes;
+        DAOSEDE dao;
+
+        if (request.getParameter("cod") != null) {
+            sedes = new sede();
+            sedes.setIdSede(Integer.parseInt(request.getParameter("cod")));
+
+            dao = new DAOSEDE();
+            try {
+                sedes = dao.leerDatosSede(sedes);
+                if (sedes != null) {
+                    request.setAttribute("sede", sedes);
+                } else {
+                    request.setAttribute("msje", "No se encontró el usuario");
+                }
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se tiene el parámetro necesario");
+        }
         try {
             this.cargarEmpleados(request);
-            this.cargarEmpresas(request);
             this.getServletConfig().getServletContext()
                     .getRequestDispatcher("/vistas/Administrador/nuevaProgramacionAdmin.jsp").forward(request, response);
         } catch (Exception e) {

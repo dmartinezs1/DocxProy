@@ -196,54 +196,72 @@
         <form class="form-horizontal" action="srvUsuario?accion=registrarProgramacion" method="post">
           <div class="box-body">
             <div class="form-group">
-              <label class="col-sm-2 control-label">Dirección sede</label>
+              <label class="col-sm-2 control-label">Fecha inicio labor</label>
               <div class="col-sm-4 input-group">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input id="direccion" type="text" class="form-control" placeholder="Ejem: Cra 1 #1a 01"
-                       name="txtDireccion" maxlength="10"
+                <input type="date" class="form-control"
+                       name="txtFechaInicioLabor"
                        value="">
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Nombre Contacto</label>
+              <label class="col-sm-2 control-label">Fecha fin labor</label>
               <div class="col-sm-4 input-group">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input id="nombreContacto" type="text" class="form-control" placeholder="Ejem: Don luis"
-                       name="txtNombreContacto" maxlength="40"
+                <input type="date" class="form-control"
+                       name="txtFechaFinLabor"
                        value="">
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Teléfono Contacto</label>
+              <label class="col-sm-2 control-label">Hora entrada</label>
               <div class="col-sm-4 input-group">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input id="numeroContacto" type="number" class="form-control" placeholder="Ejem: 321 123123"
-                       name="txtNumeroContacto" maxlength="40"
+                <input type="time" class="form-control"
+                       name="txtHoraInicioLabor"
                        value="">
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Correo sede</label>
+              <label class="col-sm-2 control-label">Hora salida</label>
               <div class="col-sm-4 input-group">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input id="correo" type="email" class="form-control" placeholder="Ejem: empresa@mail.com"
-                       name="txtCorreo" maxlength="40"
+                <input type="time" class="form-control"
+                       name="txtHoraFinLabor"
                        value="">
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label">Empresa</label>
               <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input type="text" class="form-control"
+                       name="txtEmpresa"
+                       value="${sede.empresa.nombreEmpresa}" disabled>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Sede</label>
+              <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input id="numeroContacto" type="text" class="form-control"
+                       name="txtNumeroContacto" maxlength="40"
+                       value="${sede.direccion}" disabled>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Empleado</label>
+              <div class="col-sm-4 input-group">
                 <span class="input-group-addon"><i class="fa fa-tags"></i></span>
                 <select class="form-control" name="cboEmpresa" autofocus="" required="">
-                  <option value="0">Seleccione una empresa</option>
-                  <c:forEach items="${empresas}" var="emp">
-                    <option value="${emp.id_empresa}"
-                            <c:if test="${emp.id_empresa ==
-                                                                      sede.empresa.id_empresa}">
+                  <option value="0">Seleccione un empleado</option>
+                  <c:forEach items="${empleados}" var="empleado">
+                    <option value="${empleado.id_usuario}"
+                            <c:if test="${empleado.id_usuario ==
+                                                                      programacion.usuario.id_usuario}">
                               selected
                             </c:if>
-                    >${emp.nombreEmpresa}</option>
+                    >${empleado.nombreUsuario}</option>
                   </c:forEach>
                 </select>
               </div>

@@ -127,6 +127,41 @@ public class DAOSEDE extends conexion1 {
         return sedes;
     }
 
+    public sede leerDatosSede(sede se) throws Exception {
+
+        sede sedes = new sede();
+        String sql = "SELECT S.idSede, S.direccion, S.empresaCon_id, E.nombreEmpresa " +
+                " FROM sede S INNER JOIN empresa E " +
+                "ON S.empresaCon_id = E.id_empresa " +
+                "WHERE S.idSede = " + se.getIdSede();
+
+        try {
+            con = c.conectar1(); //Abriendo la conexión a la BD
+            ps = con.prepareStatement(sql); //preparar sentencia
+            rs = ps.executeQuery();//Ejecución de la sentencia guardar resultado en el resultset
+
+            while (rs.next()) {
+                sedes.setIdSede(rs.getInt(1));
+                sedes.setDireccion(rs.getString(2));
+                sedes.setEmpresa(new empresa());
+                sedes.getEmpresa().setId_empresa(rs.getInt(3));
+                sedes.getEmpresa().setNombreEmpresa(rs.getString(4));
+
+                System.out.println("Consulta exitosa" + ps);
+
+            }
+
+            ps.close();
+
+
+        } catch (Exception e) {
+            System.out.println("Consulta no exitosa" + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return sedes;
+    }
+
     public int actualizarSede(sede se) throws SQLException{
         sql = "UPDATE sede SET direccion=?, nombreContacto=?, numeroContacto=?, " +
               "correoElectronico=?, empresaCon_id=? " +
