@@ -17,8 +17,7 @@
   <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
   <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
-  <link href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
-  <link href="swetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
+
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
@@ -172,90 +171,97 @@
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <section class="content-header">
-      <h1>Página Sedes</h1>
+      <div class="row">
+        <div class="col-xs-12 col-md-3">
+        </div>
+        <div class="col-md-3 hidden-xs"></div>
+        <div class="col-xs-2 col-md-1">
+        </div>
+        <div class="col-xs-10 col-md-5 ">
+          <div class="btn-group pull-right">
+            <a href="srvUsuario?accion=listarEmpresas" class="btn btn-default">
+              <i class="fa fa-align-justify"></i> Ver listado</a>
+          </div>
+        </div>
+      </div>
     </section>
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <a href="srvUsuario?accion=listarEmpresas" class="btn btn-secondary">
-        <i class="fa fa-align-justify"></i> Volver a empresas </a>
-
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-        <li class="active">Sedes</li>
-      </ol>
-    </section>
-
     <section class="content">
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title">Listado de Sedes</h3>
+          <i class="fa fa-edit"></i>
+          <h3 class="box-title">Registrar Programación</h3>
         </div>
-        <div class="box-body">
-          <div class="table-responsive">
-            <table class="table table-bordered table-striped dataTable table-hover" id="tablaUsuarios"
-                   class="display">
-              <thead>
-              <tr>
-                <th>idSede</th>
-                <th>Dirección</th>
-                <th>Nombre Contacto</th>
-                <th>Empresa</th>
-                <th>Acciones</th>
-              </tr>
-              </thead>
-              <c:forEach var="user" items="${sedes}" varStatus="iteracion">
-                <tr>
-                  <td>${user.idSede}</td>
-                  <td>${user.direccion}</td>
-                  <td>${user.nombreContacto}</td>
-                  <td>${user.empresa.nombreEmpresa}</td>
-                  <td><a href="<c:url value="srvUsuario">
-                                                       <c:param name="accion" value="leerSede" />
-                                                       <c:param name="cod" value="${user.idSede}" />
-                                                   </c:url>">
-                    <button type="button" class="btn btn-warning" data-toggle="tooltip"
-                            title="Editar" data-original-title="Editar">
-                      <i class="fa fa-pencil"></i></button>
-                  </a>
-                    <!-- DESACTIVAR / ACTIVAR USUARIOS -->
-                    <!-- HORARIOS -->
-                    <input type="hidden" value="${user.idSede}">
-                    <a id="addSHQ" href="<c:url value="srvUsuario">
-                                                <c:param name="accion" value="listarHS" />
-                                                <c:param name="cod" value="${user.idSede}" />
-                                                </c:url>">
-                      <button type="button" class="btn btn-success" data-toggle="tooltip"
-                              title="Consultar horarios" data-original-title="Consultar horarios">
-                        <i class="fa fa-calendar"></i></button>
-                    </a>
-                    <!-- ELIMINAR SEDE -->
-                    <input type="hidden" id="codigo" value="${user.idSede}">
-                    <input type="hidden" id="codigoEmpresa" value="${user.empresa.id_empresa}">
-                    <a id="deleteUser" href="<c:url value="srvUsuario">
-                                                           <c:param name="accion" value="eliminarSede" />
-                                                           <c:param name="cod" value="${user.idSede}" />
-                                                       </c:url>">
-                      <button type="button" class="btn btn-danger" data-toggle="tooltip"
-                              title="Eliminar" data-original-title="Eliminar">
-                        <i class="fa fa-trash"></i></button>
-                    </a>
-                  </td>
-                </tr>
-              </c:forEach>
-            </table>
+        <form class="form-horizontal" action="srvUsuario?accion=registrarProgramacion" method="post">
+          <div class="box-body">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Dirección sede</label>
+              <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input id="direccion" type="text" class="form-control" placeholder="Ejem: Cra 1 #1a 01"
+                       name="txtDireccion" maxlength="10"
+                       value="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Nombre Contacto</label>
+              <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input id="nombreContacto" type="text" class="form-control" placeholder="Ejem: Don luis"
+                       name="txtNombreContacto" maxlength="40"
+                       value="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Teléfono Contacto</label>
+              <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input id="numeroContacto" type="number" class="form-control" placeholder="Ejem: 321 123123"
+                       name="txtNumeroContacto" maxlength="40"
+                       value="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Correo sede</label>
+              <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input id="correo" type="email" class="form-control" placeholder="Ejem: empresa@mail.com"
+                       name="txtCorreo" maxlength="40"
+                       value="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Empresa</label>
+              <div class="col-sm-4 input-group">
+                <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                <select class="form-control" name="cboEmpresa" autofocus="" required="">
+                  <option value="0">Seleccione una empresa</option>
+                  <c:forEach items="${empresas}" var="emp">
+                    <option value="${emp.id_empresa}"
+                            <c:if test="${emp.id_empresa ==
+                                                                      sede.empresa.id_empresa}">
+                              selected
+                            </c:if>
+                    >${emp.nombreEmpresa}</option>
+                  </c:forEach>
+                </select>
+              </div>
+            </div>
           </div>
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-          <!--Pie de página-->
-        </div>
-        <!-- /.box-footer-->
+          <!-- /.box-body -->
+          <div class="box-footer">
+            <button type="reset" class="btn btn-danger"><i class="fa fa-close red"></i> Cancelar</button>
+            <button type="submit" id="" name="btnRegistrar" value="Registrar" class="btn btn-success"><i
+                    class="fa fa-floppy-o"></i> Registrar
+            </button>
+
+          </div>
+          <!-- /.box-footer -->
+        </form>
       </div>
     </section>
-    <!-- /.content -->
+
   </div>
   <!-- /.content-wrapper -->
 
@@ -279,18 +285,25 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-<script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-<script src="swetalert/sweetalert.js" type="text/javascript"></script>
-<script src="js/funcionesSede.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-  $(document).ready(function () {
-    $('#tablaUsuarios').DataTable();
-  });
+  function verifyCorreo(){
+    const nombreUsuario=document.getElementById("nombre").value;
+    $.ajax({
+      url:"srvUsuario?accion=validarCorreo",
+      data:{
+        nombreUsuario:nombreUsuario
+      },
+      success: function(result){
+        $("#validarC").html(result);
+        //alert(result)
+      }
+    })
+  }
 </script>
+
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
