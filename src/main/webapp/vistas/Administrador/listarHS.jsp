@@ -179,8 +179,11 @@
         </section>
         <!-- Content Header (Page header) -->
         <section class="content-header">
+            <a href="srvUsuario?accion=listarSedes&cod=${sede.empresa.id_empresa}" class="btn btn-secondary">
+                <i class="fa fa-align-justify"></i> Volver a listar sedes ${sede.empresa.nombreEmpresa} </a>
             <a href="srvUsuario?accion=registrarProgramacion&cod=${sede.idSede}" class="btn btn-secondary">
                 <i class="fa fa-align-justify"></i> Programar empleado </a>
+
 
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>

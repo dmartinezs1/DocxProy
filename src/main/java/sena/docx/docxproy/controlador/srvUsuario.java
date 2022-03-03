@@ -115,6 +115,9 @@ public class srvUsuario extends HttpServlet {
                     case "registrarSede":
                         registrarSede(request, response);
                         break;
+                    case "registrarHorario":
+                        registrarHorario(request, response);
+                        break;
                     case "leerUsuario":
                         presentarUsuario(request, response);
                         break;
@@ -189,6 +192,50 @@ public class srvUsuario extends HttpServlet {
 
     }
 
+    private void registrarHorario(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG daoprog;
+        programacion programacion = null;
+        sede sede;
+        empresa emp;
+        usuario usuario;
+        if (request.getParameter("txtFechaInicioLabor") != null
+                && request.getParameter("txtFechaFinLabor") != null
+                && request.getParameter("txtHoraInicioLabor") != null
+                && request.getParameter("txtHoraFinLabor") != null
+                && request.getParameter("txtIdEmpresa") != null
+                && request.getParameter("txtIdSede") != null
+                && request.getParameter("cboEmpleado") != null) {
+
+            programacion = new programacion();
+            programacion.setFechaInicioLabor(request.getParameter("txtFechaInicioLabor"));
+            programacion.setFechaFinLabor(request.getParameter("txtFechaFinLabor"));
+            programacion.setHoraEntrada(request.getParameter("txtHoraInicioLabor"));
+            programacion.setHoraSalida(request.getParameter("txtHoraFinLabor"));
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("txtIdEmpresa")));
+            sede = new sede();
+            sede.setIdSede(Integer.parseInt(request.getParameter("txtIdSede")));
+            programacion.setEmpresa(emp);
+            programacion.setSede(sede);
+            usuario = new usuario();
+            usuario.setId_usuario(Integer.parseInt(request.getParameter("cboEmpleado")));
+            programacion.setUsuario(usuario);
+
+            int codSede = Integer.parseInt(request.getParameter("txtIdSede"));
+
+            daoprog = new DAOPROG();
+            try {
+                daoprog.registrar(programacion);
+                response.sendRedirect("srvUsuario?accion=listarHS&cod="+codSede);
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo registrar el usuario" + e.getMessage());
+                request.setAttribute("sede", sede);
+                this.presentarFormularioSede(request, response);
+            }
+        }
+    }
+
     private void listarHorariosSede(HttpServletRequest request, HttpServletResponse response) {
         DAOPROG dao = new DAOPROG();
         DAOSEDE daosede = new DAOSEDE();
@@ -197,14 +244,14 @@ public class srvUsuario extends HttpServlet {
         usuario usu;
         sede se;
 
-        if(request.getParameter("cod") != null) {
+        if (request.getParameter("cod") != null) {
             se = new sede();
             se.setIdSede(Integer.parseInt(request.getParameter("cod")));
             //se.setEmpresa(emp);
-            try{
+            try {
                 se = daosede.leerDatosSede(se);
                 request.setAttribute("sede", se);
-            }catch(Exception e) {
+            } catch (Exception e) {
                 request.setAttribute("msje", "No se pudieron obtener los datos de sede" + e.getMessage());
                 System.out.println("no se obtuvieron los datos de sede" + e.getMessage());
             }
@@ -214,7 +261,7 @@ public class srvUsuario extends HttpServlet {
                 request.setAttribute("programaciones", pr);
             } catch (Exception e) {
                 request.setAttribute("msje", "No se pudieron listar los horarios" + e.getMessage());
-                System.out.println("no se pudieron listar los horarios"+ e.getMessage());
+                System.out.println("no se pudieron listar los horarios" + e.getMessage());
             } finally {
                 dao = null;
             }
@@ -473,7 +520,7 @@ public class srvUsuario extends HttpServlet {
         List<sede> se = null;
         empresa emp;
 
-        if(request.getParameter("cod") != null) {
+        if (request.getParameter("cod") != null) {
             emp = new empresa();
             emp.setId_empresa(Integer.parseInt(request.getParameter("cod")));
             //se.setEmpresa(emp);
@@ -501,7 +548,7 @@ public class srvUsuario extends HttpServlet {
         empresa emp;
         usuario usu;
 
-        if(request.getParameter("cod") != null) {
+        if (request.getParameter("cod") != null) {
             usu = new usuario();
             usu.setId_usuario(Integer.parseInt(request.getParameter("cod")));
             //se.setEmpresa(emp);
@@ -512,7 +559,7 @@ public class srvUsuario extends HttpServlet {
                 request.setAttribute("programaciones", pr);
             } catch (Exception e) {
                 request.setAttribute("msje", "No se pudieron listar los horarios" + e.getMessage());
-                System.out.println("no se pudieron listar los horarios"+ e.getMessage());
+                System.out.println("no se pudieron listar los horarios" + e.getMessage());
             } finally {
                 dao = null;
             }
@@ -659,7 +706,7 @@ public class srvUsuario extends HttpServlet {
             request.setAttribute("empresas", emp);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo cargar las empresas" + e.getMessage());
-            System.out.println("error cargando empresas: "+ e.getMessage());
+            System.out.println("error cargando empresas: " + e.getMessage());
         } finally {
             emp = null;
             dao = null;
@@ -693,7 +740,7 @@ public class srvUsuario extends HttpServlet {
             String cuerpo = "<h1> Gracias por registrarse en Docx </h1>"
                     + " <img src ='https://lideresmexicanos.com/wp-content/uploads/2021/08/ISP3.jpg'/>"
                     + " <h4> Para iniciar sesión diríjase al siguiente enlace</h4>"
-                    + " <h4> Datos de ingreso: </h4>" + usu.getNombreUsuario()+ ", " + contrasena1
+                    + " <h4> Datos de ingreso: </h4>" + usu.getNombreUsuario() + ", " + contrasena1
                     + " <a href='http://localhost:8080/DocxProy_war_exploded/identificar.jsp'>Haga click aquí para iniciar sesión</a>";
 
             try {
@@ -908,7 +955,6 @@ public class srvUsuario extends HttpServlet {
     }
 
 
-
     private void presentarEmpleado(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO dao;
         usuario usus;
@@ -1043,7 +1089,7 @@ public class srvUsuario extends HttpServlet {
             daosede = new DAOSEDE();
             try {
                 daosede.actualizarSede(sedes);
-                response.sendRedirect("srvUsuario?accion=listarSedes&cod="+codigoEmpresa);
+                response.sendRedirect("srvUsuario?accion=listarSedes&cod=" + codigoEmpresa);
             } catch (Exception e) {
                 request.setAttribute("msje",
                         "No se pudo actualizar la sede" + e.getMessage());
@@ -1143,7 +1189,7 @@ public class srvUsuario extends HttpServlet {
             try {
                 dao.eliminar(sedes);
                 int empresaSede = sedes.getEmpresa().getId_empresa();
-                response.sendRedirect("srvUsuario?accion=listarSedes&cod="+empresaSede);
+                response.sendRedirect("srvUsuario?accion=listarSedes&cod=" + empresaSede);
             } catch (Exception e) {
                 request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
             }

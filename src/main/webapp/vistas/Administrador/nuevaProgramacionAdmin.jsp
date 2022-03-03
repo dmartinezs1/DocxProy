@@ -193,7 +193,7 @@
           <i class="fa fa-edit"></i>
           <h3 class="box-title">Registrar Programación</h3>
         </div>
-        <form class="form-horizontal" action="srvUsuario?accion=registrarProgramacion" method="post">
+        <form class="form-horizontal" action="srvUsuario?accion=registrarHorario" method="post">
           <div class="box-body">
             <div class="form-group">
               <label class="col-sm-2 control-label">Fecha inicio labor</label>
@@ -235,6 +235,7 @@
               <label class="col-sm-2 control-label">Empresa</label>
               <div class="col-sm-4 input-group">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input type="hidden" value="${sede.empresa.id_empresa}" name="txtIdEmpresa">
                 <input type="text" class="form-control"
                        name="txtEmpresa"
                        value="${sede.empresa.nombreEmpresa}" disabled>
@@ -244,8 +245,9 @@
               <label class="col-sm-2 control-label">Sede</label>
               <div class="col-sm-4 input-group">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input id="numeroContacto" type="text" class="form-control"
-                       name="txtNumeroContacto" maxlength="40"
+                <input type="hidden" value="${sede.idSede}" name="txtIdSede">
+                <input type="text" class="form-control"
+                       name="txtSede" maxlength="40"
                        value="${sede.direccion}" disabled>
               </div>
             </div>
@@ -253,7 +255,7 @@
               <label class="col-sm-2 control-label">Empleado</label>
               <div class="col-sm-4 input-group">
                 <span class="input-group-addon"><i class="fa fa-tags"></i></span>
-                <select class="form-control" name="cboEmpresa" autofocus="" required="">
+                <select class="form-control" name="cboEmpleado" autofocus="" required="">
                   <option value="0">Seleccione un empleado</option>
                   <c:forEach items="${empleados}" var="empleado">
                     <option value="${empleado.id_usuario}"
