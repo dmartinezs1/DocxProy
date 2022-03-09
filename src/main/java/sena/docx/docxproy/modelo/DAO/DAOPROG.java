@@ -185,4 +185,81 @@ public class DAOPROG extends conexion1 {
         return usuarios;
     }
 
+    public programacion leerProgramacion(programacion pr) throws Exception {
+
+        programacion pro = new programacion();
+        String sql = "SELECT P.idProgramacion, P.fechaInicioLabor, P.fechaFinLabor, " +
+                        "P.sede_id, P.usuario_id, P.empresa_id, " +
+                        "P.horaSalida, P.horaEntrada, E.nombreEmpresa, S.direccion " +
+                        "FROM programacion P " +
+                        "INNER JOIN empresa E ON " +
+                        "P.empresa_id = E.id_empresa " +
+                        "INNER JOIN sede S ON " +
+                        "P.sede_id = S.idSede " +
+                        "WHERE P.idProgramacion = "+ pr.getIdProgramacion();
+
+        try {
+            con = c.conectar1(); //Abriendo la conexión a la BD
+            ps = con.prepareStatement(sql); //preparar sentencia
+            rs = ps.executeQuery();//Ejecución de la sentencia guardar resultado en el resultset
+
+            while (rs.next()) {
+                pro.setIdProgramacion(rs.getInt(1));
+                pro.setFechaInicioLabor(rs.getString(2));
+                pro.setFechaFinLabor(rs.getString(3));
+                pro.setSede(new sede());
+                pro.getSede().setIdSede(rs.getInt(4));
+                pro.setUsuario(new usuario());
+                pro.getUsuario().setId_usuario(rs.getInt(5));
+                pro.setEmpresa(new empresa());
+                pro.getEmpresa().setId_empresa(rs.getInt(6));
+                pro.setHoraSalida(rs.getString(7));
+                pro.setHoraEntrada(rs.getString(8));
+                pro.getEmpresa().setNombreEmpresa(rs.getString(9));
+                pro.getSede().setDireccion(rs.getString(10));
+
+                System.out.println("Consulta exitosa" + ps);
+
+            }
+
+            ps.close();
+
+
+        } catch (Exception e) {
+            System.out.println("Consulta no exitosa" + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return pro;
+    }
+
+    public int actualizarProgramacion(programacion pr) throws SQLException{
+        System.out.println("entró a actualizar programacion");
+        sql =   "UPDATE programacion SET fechaInicioLabor=?, fechaFinLabor=?, sede_id=?, " +
+                "usuario_id=?, empresa_id=?, horaSalida=?, horaEntrada=? " +
+                "WHERE idProgramacion ="+pr.getIdProgramacion();
+        try{
+            con= c.conectar1();
+            ps=con.prepareStatement(sql);
+            ps.setString(1,pr.getFechaInicioLabor());
+            ps.setString(2,pr.getFechaFinLabor());
+            ps.setInt(3,pr.getSede().getIdSede());
+            ps.setInt(4,pr.getUsuario().getId_usuario());
+            ps.setInt(5,pr.getEmpresa().getId_empresa());
+            ps.setString(6,pr.getHoraSalida());
+            ps.setString(7,pr.getHoraEntrada());
+
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se cambió la prgramacion");
+
+        }catch (Exception e){
+            System.out.println("no se pudo actualizar la programacion "+e.getMessage());
+        }finally {
+            con.close();
+        }
+        return row;
+    }
+
 }

@@ -121,6 +121,9 @@ public class srvUsuario extends HttpServlet {
                     case "leerUsuario":
                         presentarUsuario(request, response);
                         break;
+                    case "editarHorarioHS":
+                        presentarProgramacion(request, response);
+                        break;
                     case "leerSede":
                         presentarSede(request, response);
                         break;
@@ -132,6 +135,9 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "actualizarUsuario":
                         actualizarUsuario(request, response);
+                        break;
+                    case "actualizarProgramacion":
+                        actualizarProgramacion(request, response);
                         break;
                     case "actualizarSede":
                         actualizarSede(request, response);
@@ -226,12 +232,13 @@ public class srvUsuario extends HttpServlet {
             daoprog = new DAOPROG();
             try {
                 daoprog.registrar(programacion);
+                System.out.println("registró programación");
                 response.sendRedirect("srvUsuario?accion=listarHS&cod="+codSede);
             } catch (Exception e) {
                 request.setAttribute("msje",
-                        "No se pudo registrar el usuario" + e.getMessage());
-                request.setAttribute("sede", sede);
-                this.presentarFormularioSede(request, response);
+                        "No se pudo registrar la programación" + e.getMessage());
+                request.setAttribute("programacion", programacion);
+                this.presentarFormularioProgramacion(request, response);
             }
         }
     }
@@ -954,6 +961,37 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void presentarProgramacion(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG daoprog;
+        programacion programacion;
+        if (request.getParameter("cod") != null) {
+            programacion = new programacion();
+            programacion.setIdProgramacion(Integer.parseInt(request.getParameter("cod")));
+
+            daoprog = new DAOPROG();
+            try {
+                programacion = daoprog.leerProgramacion(programacion);
+                if (programacion != null) {
+                    request.setAttribute("programacion", programacion);
+                } else {
+                    request.setAttribute("msje", "No se encontró el usuario");
+                }
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se tiene el parámetro necesario");
+        }
+        try {
+            this.cargarEmpleados(request);
+            this.getServletConfig().getServletContext().
+                    getRequestDispatcher("/vistas/Administrador/EditarProgramacionAdmin.jsp"
+                    ).forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
+        }
+    }
+
 
     private void presentarEmpleado(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO dao;
@@ -1100,6 +1138,63 @@ public class srvUsuario extends HttpServlet {
                 this.cargarEmpresas(request);
                 this.getServletConfig().getServletContext().
                         getRequestDispatcher("/vistas/Administrador/actualizarSede.jsp"
+                        ).forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
+                System.out.println(ex);
+            }
+        }
+    }
+
+    private void actualizarProgramacion(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG daoprog;
+        programacion programacion = null;
+        empresa emp;
+        sede sede;
+        usuario usu;
+
+        if (request.getParameter("hCodigo") != null
+                && request.getParameter("txtFechaInicioLabor") != null
+                && request.getParameter("txtFechaFinLabor") != null
+                && request.getParameter("txtHoraInicioLabor") != null
+                && request.getParameter("txtHoraFinLabor") != null
+                && request.getParameter("txtIdEmpresa") != null
+                && request.getParameter("txtIdSede") != null
+                && request.getParameter("cboEmpleado") != null) {
+
+            programacion = new programacion();
+            programacion.setIdProgramacion(Integer.parseInt(request.getParameter("hCodigo")));
+            programacion.setFechaInicioLabor(request.getParameter("txtFechaInicioLabor"));
+            programacion.setFechaFinLabor(request.getParameter("txtFechaFinLabor"));
+            programacion.setHoraEntrada(request.getParameter("txtHoraInicioLabor"));
+            programacion.setHoraSalida(request.getParameter("txtHoraFinLabor"));
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("txtIdEmpresa")));
+            sede = new sede();
+            sede.setIdSede(Integer.parseInt(request.getParameter("txtIdSede")));
+            int idSede = Integer.parseInt(request.getParameter("txtIdSede"));
+
+            usu = new usuario();
+            usu.setId_usuario(Integer.parseInt(request.getParameter("cboEmpleado")));
+            programacion.setEmpresa(emp);
+            programacion.setSede(sede);
+            programacion.setUsuario(usu);
+
+            daoprog = new DAOPROG();
+            try {
+                daoprog.actualizarProgramacion(programacion);
+                System.out.println("hizo el dao");
+                response.sendRedirect("srvUsuario?accion=listarHS&cod=" + idSede);
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo actualizar la sede" + e.getMessage());
+                request.setAttribute("programacion", programacion);
+                System.out.println(e);
+            }
+            try {
+                this.cargarEmpleados(request);
+                this.getServletConfig().getServletContext().
+                        getRequestDispatcher("/vistas/Administrador/EditarProgramacionAdmin.jsp"
                         ).forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());

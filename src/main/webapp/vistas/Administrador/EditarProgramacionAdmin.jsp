@@ -17,8 +17,7 @@
     <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style -->
     <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
-    <link href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="swetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
+
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
@@ -172,88 +171,119 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Página programaciones ${sede.empresa.nombreEmpresa}</h1>
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                </div>
+                <div class="col-md-3 hidden-xs"></div>
+                <div class="col-xs-2 col-md-1">
+                </div>
+                <div class="col-xs-10 col-md-5 ">
+                    <div class="btn-group pull-right">
+                        <a href="srvUsuario?accion=listarEmpresas" class="btn btn-default">
+                            <i class="fa fa-align-justify"></i> Ver listado</a>
+                    </div>
+                </div>
+            </div>
         </section>
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <a href="srvUsuario?accion=listarSedes&cod=${sede.empresa.id_empresa}" class="btn btn-secondary">
-                <i class="fa fa-align-justify"></i> Volver a listar sedes ${sede.empresa.nombreEmpresa} </a>
-            <a href="srvUsuario?accion=registrarProgramacion&cod=${sede.idSede}" class="btn btn-secondary">
-                <i class="fa fa-align-justify"></i> Programar empleado </a>
-
-
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Programaciones</li>
-            </ol>
-        </section>
-
         <section class="content">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Listado programaciones</h3>
+                    <i class="fa fa-edit"></i>
+                    <h3 class="box-title">Editar Programación</h3>
                 </div>
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped dataTable table-hover" id="tablaUsuarios"
-                               class="display">
-                            <thead>
-                            <tr>
-                                <th>Id programación</th>
-                                <th>Fecha inicio</th>
-                                <th>Fecha final</th>
-                                <th>Hora entrada</th>
-                                <th>Hora salida</th>
-                                <th>Empresa</th>
-                                <th>Sede</th>
-                                <th>Empleado</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <c:forEach var="user" items="${programaciones}" varStatus="iteracion">
-                                <tr>
-                                    <td>${user.idProgramacion}</td>
-                                    <td>${user.fechaInicioLabor}</td>
-                                    <td>${user.fechaFinLabor}</td>
-                                    <td>${user.horaEntrada}</td>
-                                    <td>${user.horaSalida}</td>
-                                    <td>${user.empresa.nombreEmpresa}</td>
-                                    <td>${user.sede.direccion}</td>
-                                    <td>${user.usuario.nombreUsuario}</td>
-                                    <td><a href="<c:url value="srvUsuario">
-                                                <c:param name="accion" value="editarHorarioHS" />
-                                                <c:param name="cod" value="${user.idProgramacion}" />
-                                                </c:url>">
-                                        <button type="button" class="btn btn-warning" data-toggle="tooltip"
-                                                title="Editar" data-original-title="Editar">
-                                            <i class="fa fa-pencil"></i></button>
-                                    </a>
-                                        <!-- DESACTIVAR / ACTIVAR USUARIOS -->
-                                        <!-- AGREGAR HORARIOS -->
-                                        <!-- ELIMINAR HORARIO -->
-                                        <input type="hidden" id="codigo">
-                                        <a id="deleteUser">
-                                            <button type="button" class="btn btn-danger" data-toggle="tooltip"
-                                                    title="Eliminar" data-original-title="Eliminar">
-                                                <i class="fa fa-trash"></i></button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
+                <form class="form-horizontal" action="srvUsuario?accion=actualizarProgramacion" method="post">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <input type="hidden" name="hCodigo" value="${programacion.idProgramacion}">
+                            <label class="col-sm-2 control-label">Fecha inicio labor</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="date" class="form-control"
+                                       name="txtFechaInicioLabor"
+                                       value="${programacion.fechaInicioLabor}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Fecha fin labor</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="date" class="form-control"
+                                       name="txtFechaFinLabor"
+                                       value="${programacion.fechaFinLabor}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Hora entrada</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="time" class="form-control"
+                                       name="txtHoraInicioLabor"
+                                       value="${programacion.horaEntrada}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Hora salida</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="time" class="form-control"
+                                       name="txtHoraFinLabor"
+                                       value="${programacion.horaSalida}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Empresa</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="hidden" value="${programacion.empresa.id_empresa}" name="txtIdEmpresa">
+                                <input type="text" class="form-control"
+                                       name="txtEmpresa"
+                                       value="${programacion.empresa.nombreEmpresa}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Sede</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="hidden" value="${programacion.sede.idSede}" name="txtIdSede">
+                                <input type="text" class="form-control"
+                                       name="txtSede" maxlength="40"
+                                       value="${programacion.sede.direccion}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Empleado</label>
+                            <input type="hidden" value="${programacion.usuario.id_usuario}">
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                                <select class="form-control" name="cboEmpleado" autofocus="" required="">
+                                    <option value="0">Seleccione un empleado</option>
+                                    <c:forEach items="${empleados}" var="empleado">
+                                        <option value="${empleado.id_usuario}"
+                                                <c:if test="${empleado.id_usuario ==
+                                                                      programacion.usuario.id_usuario}">
+                                                    selected
+                                                </c:if>
+                                        >${empleado.nombreUsuario}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <!--Pie de página-->
-                </div>
-                <!-- /.box-footer-->
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="reset" class="btn btn-danger"><i class="fa fa-close red"></i> Cancelar</button>
+                        <button type="submit" id="" name="btnActualizar" value="Actualizar" class="btn btn-success"><i
+                                class="fa fa-floppy-o"></i> Actualizar
+                        </button>
+
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
             </div>
         </section>
-        <!-- /.content -->
+
     </div>
     <!-- /.content-wrapper -->
 
@@ -277,18 +307,25 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-<script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-<script src="swetalert/sweetalert.js" type="text/javascript"></script>
-<script src="js/funcionesUsuario.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    $(document).ready(function () {
-        $('#tablaUsuarios').DataTable();
-    });
+    function verifyCorreo(){
+        const nombreUsuario=document.getElementById("nombre").value;
+        $.ajax({
+            url:"srvUsuario?accion=validarCorreo",
+            data:{
+                nombreUsuario:nombreUsuario
+            },
+            success: function(result){
+                $("#validarC").html(result);
+                //alert(result)
+            }
+        })
+    }
 </script>
+
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
