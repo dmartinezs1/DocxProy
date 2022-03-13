@@ -163,6 +163,9 @@ public class srvUsuario extends HttpServlet {
                     case "eliminarSede":
                         eliminarSede(request, response);
                         break;
+                    case "eliminarProgramacion":
+                        eliminarProgramacion(request, response);
+                        break;
                     case "validarCorreo":
                         validarCorreo(request, response);
                         break;
@@ -1285,6 +1288,23 @@ public class srvUsuario extends HttpServlet {
                 dao.eliminar(sedes);
                 int empresaSede = sedes.getEmpresa().getId_empresa();
                 response.sendRedirect("srvUsuario?accion=listarSedes&cod=" + empresaSede);
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se encontro el usuario");
+        }
+    }
+
+    private void eliminarProgramacion(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG dao = new DAOPROG();
+        programacion pr = new programacion();
+        if (request.getParameter("cod") != null) {
+            pr.setIdProgramacion(Integer.parseInt(request.getParameter("cod")));
+            try {
+                dao.eliminar(pr);
+                int sedeProgramacion = pr.getSede().getIdSede();
+                response.sendRedirect("srvUsuario?accion=listarSedes&cod=" + sedeProgramacion);
             } catch (Exception e) {
                 request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
             }

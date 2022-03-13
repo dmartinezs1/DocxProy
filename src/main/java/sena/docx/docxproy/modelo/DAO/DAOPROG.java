@@ -262,4 +262,23 @@ public class DAOPROG extends conexion1 {
         return row;
     }
 
+    public int eliminar(programacion pr) throws SQLException {
+        sql = "DELETE FROM programacion WHERE idProgramacion=" + pr.getIdProgramacion();
+        try {
+            con = c.conectar1(); //Abriendo la conexión a la BD
+            ps = con.prepareStatement(sql); //preparar sentencia
+
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se eliminó la prgramacion");
+
+        } catch (Exception e) {
+            System.out.println("Error al eliminar la programacion " + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return row;
+    }
+
 }
