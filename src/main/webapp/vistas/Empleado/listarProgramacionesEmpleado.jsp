@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("administrador") != null) {
+    if (session.getAttribute("empleado") != null) {
 %>
 <html>
 <head>
@@ -56,7 +56,7 @@
                             <img src="dist/img/logodocx1.png" class="user-image" alt="User Image"
                                  style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs"> ${administrador.nombreUsuario}</span>
+                            <span class="hidden-xs"> ${empleado.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -64,8 +64,8 @@
                                 <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
-                                    Bienvenido - ${administrador.nombreUsuario}
-                                    <small>${administrador.cargo.nombreCargo} </small>
+                                    Bienvenido - ${empleado.nombreUsuario}
+                                    <small>${empleado.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -93,7 +93,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido, ${administrador.nombreUsuario} </p>
+                    <p>Bienvenido, ${empleado.nombreUsuario} </p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -123,8 +123,7 @@
                             </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="srvUsuario?accion=abrirPassword"><i class="fa fa-user-plus"></i>Cambiar
-                            contraseña</a></li>
+                        <li><a href="srvUsuario?accion=abrirPasswordEmp"><i class="fa fa-user-plus"></i>Cambiar contraseña</a></li>
                     </ul>
                 </li>
                 <li class="treeview active">
@@ -139,8 +138,8 @@
                         <li><a href="#"><i class="fa fa-cube"></i>Productos</a></li>
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
-                        <li><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a></li>
-                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        <li class="active"><a href="srvUsuario?accion=listarProgramacionesEmpleado&cod=${empleado.id_usuario}">
+                            <i class="fa fa-user-plus"></i>Programaciones</a></li>
                         </li>
                     </ul>
                 </li>
@@ -155,16 +154,6 @@
                         <li><a href="#"><i class="fa fa-tags"></i>Administrar Ventas</a></li>
                     </ul>
                 </li>--%>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-area-chart"></i> <span>Reportes</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="srvUsuario?accion=reporteEmpleados"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
-                    </ul>
-                </li>
             </ul>
             <!-- /.sidebar-menu -->
         </section>
@@ -175,26 +164,18 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Página programaciones sede ${sede.direccion}</h1>
-        </section>
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <a href="srvUsuario?accion=listarSedes&cod=${sede.empresa.id_empresa}" class="btn btn-secondary">
-                <i class="fa fa-align-justify"></i> Volver a listar sedes ${sede.empresa.nombreEmpresa} </a>
-            <a href="srvUsuario?accion=registrarProgramacion&cod=${sede.idSede}" class="btn btn-secondary">
-                <i class="fa fa-align-justify"></i> Programar empleado </a>
-
-
+            <h1>Programaciones de ${empleado.nombreUsuario}</h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Programaciones</li>
+                <li class="active">Programaciones ${empleado.nombreUsuario}</li>
             </ol>
         </section>
+        <!-- Content Header (Page header) -->
 
         <section class="content">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Listado programaciones</h3>
+                    <h3 class="box-title">Programaciones ${empleado.nombreUsuario}</h3>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">
@@ -210,7 +191,6 @@
                                 <th>Empresa</th>
                                 <th>Sede</th>
                                 <th>Empleado</th>
-                                <th>Acciones</th>
                             </tr>
                             </thead>
                             <c:forEach var="user" items="${programaciones}" varStatus="iteracion">
@@ -223,28 +203,6 @@
                                     <td>${user.empresa.nombreEmpresa}</td>
                                     <td>${user.sede.direccion}</td>
                                     <td>${user.usuario.nombreUsuario}</td>
-                                    <td><a href="<c:url value="srvUsuario">
-                                                <c:param name="accion" value="editarHorarioHS" />
-                                                <c:param name="cod" value="${user.idProgramacion}" />
-                                                </c:url>">
-                                        <button type="button" class="btn btn-warning" data-toggle="tooltip"
-                                                title="Editar" data-original-title="Editar">
-                                            <i class="fa fa-pencil"></i></button>
-                                    </a>
-                                        <!-- DESACTIVAR / ACTIVAR USUARIOS -->
-                                        <!-- AGREGAR HORARIOS -->
-                                        <!-- ELIMINAR HORARIO -->
-                                        <input type="hidden" id="codigo" value="${user.idProgramacion}">
-                                        <input type="hidden" id="codigoSede" value="${sede.idSede}">
-                                        <a id="deleteUser" href="<c:url value="srvUsuario">
-                                                           <c:param name="accion" value="eliminarHS" />
-                                                           <c:param name="cod" value="${user.idProgramacion}" />
-                                                       </c:url>">
-                                            <button type="button" class="btn btn-danger" data-toggle="tooltip"
-                                                    title="Eliminar" data-original-title="Eliminar">
-                                                <i class="fa fa-trash"></i></button>
-                                        </a>
-                                    </td>
                                 </tr>
                             </c:forEach>
                         </table>
@@ -287,7 +245,7 @@
 <script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script src="swetalert/sweetalert.js" type="text/javascript"></script>
-<script src="js/funcionesProgramaciones.js" type="text/javascript"></script>
+<script src="js/funcionesUsuario.js" type="text/javascript"></script>
 <script>
     $(document).ready(function () {
         $('#tablaUsuarios').DataTable();
@@ -303,4 +261,5 @@
         response.sendRedirect("identificar.jsp");
     }
 %>
+
 

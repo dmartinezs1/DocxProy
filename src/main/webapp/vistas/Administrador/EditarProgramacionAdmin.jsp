@@ -181,8 +181,8 @@
                 </div>
                 <div class="col-xs-10 col-md-5 ">
                     <div class="btn-group pull-right">
-                        <a href="srvUsuario?accion=listarEmpresas" class="btn btn-default">
-                            <i class="fa fa-align-justify"></i> Ver listado</a>
+                        <a href="srvUsuario?accion=listarHS&cod=${programacion.sede.idSede}" class="btn btn-default">
+                            <i class="fa fa-align-justify"></i> Ver listado programaciones</a>
                     </div>
                 </div>
             </div>
@@ -191,7 +191,7 @@
             <div class="box">
                 <div class="box-header with-border">
                     <i class="fa fa-edit"></i>
-                    <h3 class="box-title">Editar Programación</h3>
+                    <h3 class="box-title">Editar Programación #${programacion.idProgramacion}</h3>
                 </div>
                 <form class="form-horizontal" action="srvUsuario?accion=actualizarProgramacion" method="post">
                     <div class="box-body">

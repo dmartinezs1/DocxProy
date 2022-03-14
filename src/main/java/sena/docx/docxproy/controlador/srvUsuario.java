@@ -117,6 +117,9 @@ public class srvUsuario extends HttpServlet {
                     case "listarHorariosAdm":
                         listarHorariosAdm(request, response);
                         break;
+                    case "listarProgramacionesEmpleado":
+                        listarProgramacionesEmpleado(request, response);
+                        break;
                     case "abrirPasswordSup":
                         presentarPasswordSup(request, response);
                         break;
@@ -725,6 +728,7 @@ public class srvUsuario extends HttpServlet {
     private void listarSedes(HttpServletRequest request, HttpServletResponse response) {
         DAOSEDE dao = new DAOSEDE();
         List<sede> se = null;
+        DAOEMPRESA daoemp = new DAOEMPRESA();
         empresa emp;
 
         if (request.getParameter("cod") != null) {
@@ -732,11 +736,19 @@ public class srvUsuario extends HttpServlet {
             emp.setId_empresa(Integer.parseInt(request.getParameter("cod")));
             //se.setEmpresa(emp);
 
+            try{
+                emp = daoemp.leerEmpresa(emp);
+                request.setAttribute("empresa", emp);
+            }catch (Exception e){
+                request.setAttribute("msje", "No se pudieron listar las empresas" + e.getMessage());
+            }finally{
+                daoemp = null;
+            }
             try {
                 se = dao.listar(emp);
                 request.setAttribute("sedes", se);
             } catch (Exception e) {
-                request.setAttribute("msje", "No se pudieron listar las empresas" + e.getMessage());
+                request.setAttribute("msje", "No se pudieron listar las sedes" + e.getMessage());
             } finally {
                 dao = null;
             }
@@ -799,6 +811,36 @@ public class srvUsuario extends HttpServlet {
             try {
                 this.getServletConfig().getServletContext()
                         .getRequestDispatcher("/vistas/Administrador/listarHorariosAdm.jsp").forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+                System.out.println("No se puedo realizar la petición" + ex.getMessage());
+            }
+        }
+    }
+    private void listarProgramacionesEmpleado(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG dao = new DAOPROG();
+        List<programacion> pr = null;
+        empresa emp;
+        usuario usu;
+
+        if (request.getParameter("cod") != null) {
+            usu = new usuario();
+            usu.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+            //se.setEmpresa(emp);
+
+            try {
+                pr = dao.listar(usu);
+                System.out.println(pr.size());
+                request.setAttribute("programaciones", pr);
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudieron listar los horarios" + e.getMessage());
+                System.out.println("no se pudieron listar los horarios" + e.getMessage());
+            } finally {
+                dao = null;
+            }
+            try {
+                this.getServletConfig().getServletContext()
+                        .getRequestDispatcher("/vistas/Empleado/listarProgramacionesEmpleado.jsp").forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
                 System.out.println("No se puedo realizar la petición" + ex.getMessage());

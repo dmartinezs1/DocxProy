@@ -175,7 +175,7 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <section class="content-header">
-      <h1>Página Sedes</h1>
+      <h1>Página Sedes ${empresa.nombreEmpresa}</h1>
     </section>
     <!-- Content Header (Page header) -->
     <section class="content-header">
