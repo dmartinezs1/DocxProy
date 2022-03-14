@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("tr #deleteUser").click(function (e) {
+    $("tr #deleteUserProg").click(function (e) {
         e.preventDefault();
         var cod = $(this).parent().find('#codigo').val();
         var codSede = $(this).parent().find('#codigoSede').val();
@@ -16,10 +16,10 @@ $(document).ready(function () {
             },
             function (isConfirm) {
                 if (isConfirm) {
-                    eliminarSede(cod);
+                    eliminarSedeSupervisor(cod);
                     swal("Eliminado!", "La sede se ha eliminado", "success");
                     setTimeout(function () {
-                        parent.location.href = "srvUsuario?accion=listarHS&cod="+codSede
+                        parent.location.href = "srvUsuario?accion=listarHSsupervisor&cod="+codSede
                     }, 1800);
                 } else {
                     swal("Cancelado", "Cancelaste la eliminación", "error");
@@ -27,7 +27,7 @@ $(document).ready(function () {
             });
     });
 
-    function eliminarSede(cod) {
+    function eliminarSedeSupervisor(cod) {
         var url = "srvUsuario?accion=eliminarProgramacion&cod=" + cod;
         console.log("eliminado");
         $.ajax({
@@ -35,10 +35,7 @@ $(document).ready(function () {
             url: url,
             async: true,
             success: function (r) {
-
             }
         });
     }
 });
-
-

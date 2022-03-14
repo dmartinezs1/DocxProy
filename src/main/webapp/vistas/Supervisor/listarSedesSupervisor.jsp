@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("administrador") != null) {
+    if (session.getAttribute("supervisor") != null) {
 %>
 <html>
 <head>
@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style -->
     <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
-
+    <link href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="swetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
@@ -55,7 +56,7 @@
                             <img src="dist/img/logodocx1.png" class="user-image" alt="User Image"
                                  style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs"> ${administrador.nombreUsuario}</span>
+                            <span class="hidden-xs"> ${supervisor.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -63,8 +64,8 @@
                                 <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
-                                    Bienvenido - ${administrador.nombreUsuario}
-                                    <small>${administrador.cargo.nombreCargo} </small>
+                                    Bienvenido - ${supervisor.nombreUsuario}
+                                    <small>${supervisor.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -92,7 +93,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido, ${administrador.nombreUsuario} </p>
+                    <p>Bienvenido, ${supervisor.nombreUsuario} </p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -122,10 +123,11 @@
                             </span>
                     </a>
                     <ul class="treeview-menu">
-                    <li><a href="srvUsuario?accion=abrirPassword"><i class="fa fa-user-plus"></i>Cambiar contraseña</a></li>
+                        <li><a href="srvUsuario?accion=abrirPassword"><i class="fa fa-user-plus"></i>Cambiar
+                            contraseña</a></li>
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Registros</span>
                         <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
@@ -137,8 +139,8 @@
                         <li><a href="#"><i class="fa fa-cube"></i>Productos</a></li>
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
-                        <li><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a></li>
-                        <li><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        <li class="active"><a href="srvUsuario?accion=listarEmpresasSupervisor"><i class="fa fa-user-plus"></i>Empresas</a></li>
+                        <li><a href="srvUsuario?accion=listarEmpleados"><i class="fa fa-address-card"></i>Usuarios</a>
                         </li>
                     </ul>
                 </li>
@@ -161,15 +163,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="srvUsuario?accion=reporteEmpleados"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
-                        <li><a href="<c:url value="srvUsuario">
-                                                <c:param name="accion" value="CertificadoLaboral" />
-                                                <c:param name="cod" value="${administrador.id_usuario}"/>
-                                                <c:param name="nom" value="${administrador.nombreUsuario}"/>
-                                                <c:param name="nomC" value="${administrador.cargo.nombreCargo}"/>
-                                                </c:url>"><i class="fa fa-bar-chart"></i>Certificado Laboral</a></li>
                     </ul>
-
-
                 </li>
             </ul>
             <!-- /.sidebar-menu -->
@@ -178,84 +172,72 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
+    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+        <section class="content-header">
+            <h1>Página Sedes</h1>
+        </section>
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Page Header
-                <small>Optional description</small>
-            </h1>
+            <a href="srvUsuario?accion=listarEmpresasSupervisor" class="btn btn-secondary">
+                <i class="fa fa-align-justify"></i> Volver a empresas </a>
+
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Panel Administrativo</li>
+                <li class="active">Empresas</li>
+                <li class="active">Sedes</li>
             </ol>
         </section>
 
-        <%--<section class="content">
-            <!-- Small boxes (Stat box) -->
-            <div class="row">
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3>150</h3>
-
-                            <p>Nuevos Clientes</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
+        <section class="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Listado de Sedes</h3>
+                </div>
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped dataTable table-hover" id="tablaUsuarios"
+                               class="display">
+                            <thead>
+                            <tr>
+                                <th>idSede</th>
+                                <th>Dirección</th>
+                                <th>Nombre Contacto</th>
+                                <th>Empresa</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <c:forEach var="user" items="${sedes}" varStatus="iteracion">
+                                <tr>
+                                    <td>${user.idSede}</td>
+                                    <td>${user.direccion}</td>
+                                    <td>${user.nombreContacto}</td>
+                                    <td>${user.empresa.nombreEmpresa}</td>
+                                    <td>
+                                        <!-- DESACTIVAR / ACTIVAR USUARIOS -->
+                                        <!-- HORARIOS -->
+                                        <input type="hidden" value="${user.idSede}">
+                                        <a id="addSHQ" href="<c:url value="srvUsuario">
+                                                <c:param name="accion" value="listarHSsupervisor" />
+                                                <c:param name="cod" value="${user.idSede}" />
+                                                </c:url>">
+                                            <button type="button" class="btn btn-success" data-toggle="tooltip"
+                                                    title="Consultar horarios" data-original-title="Consultar horarios">
+                                                <i class="fa fa-calendar"></i></button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
                     </div>
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                            <p>Bounce Rate</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <!--Pie de página-->
                 </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3>44</h3>
-
-                            <p>User Registrations</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-red">
-                        <div class="inner">
-                            <h3>65</h3>
-
-                            <p>Unique Visitors</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
+                <!-- /.box-footer-->
             </div>
-        </section>--%>
+        </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
@@ -280,9 +262,17 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-
+<script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
+<script src="swetalert/sweetalert.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function () {
+        $('#tablaUsuarios').DataTable();
+    });
+</script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
@@ -293,3 +283,4 @@
         response.sendRedirect("identificar.jsp");
     }
 %>
+

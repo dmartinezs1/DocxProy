@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    if (session.getAttribute("administrador") != null) {
+    if (session.getAttribute("supervisor") != null) {
 %>
 <html>
 <head>
@@ -55,7 +55,7 @@
                             <img src="dist/img/logodocx1.png" class="user-image" alt="User Image"
                                  style="border-radius: 0%;">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs"> ${administrador.nombreUsuario}</span>
+                            <span class="hidden-xs"> ${supervisor.nombreUsuario}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
@@ -63,8 +63,8 @@
                                 <img src="dist/img/logodocx1.png" alt="User Image">
 
                                 <p>
-                                    Bienvenido - ${administrador.nombreUsuario}
-                                    <small>${administrador.cargo.nombreCargo} </small>
+                                    Bienvenido - ${supervisor.nombreUsuario}
+                                    <small>${supervisor.cargo.nombreCargo} </small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -92,7 +92,7 @@
                     <img src="dist/img/logodocx1.png" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Bienvenido, ${administrador.nombreUsuario} </p>
+                    <p>Bienvenido, ${supervisor.nombreUsuario} </p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -122,10 +122,11 @@
                             </span>
                     </a>
                     <ul class="treeview-menu">
-                    <li><a href="srvUsuario?accion=abrirPassword"><i class="fa fa-user-plus"></i>Cambiar contraseña</a></li>
+                        <li><a href="srvUsuario?accion=abrirPassword"><i class="fa fa-user-plus"></i>Cambiar
+                            contraseña</a></li>
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Registros</span>
                         <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
@@ -138,7 +139,7 @@
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
                         <li><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a></li>
-                        <li><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
                         </li>
                     </ul>
                 </li>
@@ -161,15 +162,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="srvUsuario?accion=reporteEmpleados"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
-                        <li><a href="<c:url value="srvUsuario">
-                                                <c:param name="accion" value="CertificadoLaboral" />
-                                                <c:param name="cod" value="${administrador.id_usuario}"/>
-                                                <c:param name="nom" value="${administrador.nombreUsuario}"/>
-                                                <c:param name="nomC" value="${administrador.cargo.nombreCargo}"/>
-                                                </c:url>"><i class="fa fa-bar-chart"></i>Certificado Laboral</a></li>
                     </ul>
-
-
                 </li>
             </ul>
             <!-- /.sidebar-menu -->
@@ -179,84 +172,116 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Page Header
-                <small>Optional description</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Panel Administrativo</li>
-            </ol>
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                </div>
+                <div class="col-md-3 hidden-xs"></div>
+                <div class="col-xs-2 col-md-1">
+                </div>
+                <div class="col-xs-10 col-md-5 ">
+                    <div class="btn-group pull-right">
+                        <a href="srvUsuario?accion=listarEmpresas" class="btn btn-default">
+                            <i class="fa fa-align-justify"></i> Ver listado</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content">
+            <div class="box">
+                <div class="box-header with-border">
+                    <i class="fa fa-edit"></i>
+                    <h3 class="box-title">Registrar Programación</h3>
+                </div>
+                <form class="form-horizontal" action="srvUsuario?accion=registrarHorarioSupervisor" method="post">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Fecha inicio labor</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="date" class="form-control"
+                                       name="txtFechaInicioLabor"
+                                       value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Fecha fin labor</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="date" class="form-control"
+                                       name="txtFechaFinLabor"
+                                       value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Hora entrada</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="time" class="form-control"
+                                       name="txtHoraInicioLabor"
+                                       value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Hora salida</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="time" class="form-control"
+                                       name="txtHoraFinLabor"
+                                       value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Empresa</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="hidden" value="${sede.empresa.id_empresa}" name="txtIdEmpresa">
+                                <input type="text" class="form-control"
+                                       name="txtEmpresa"
+                                       value="${sede.empresa.nombreEmpresa}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Sede</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="hidden" value="${sede.idSede}" name="txtIdSede">
+                                <input type="text" class="form-control"
+                                       name="txtSede" maxlength="40"
+                                       value="${sede.direccion}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Empleado</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                                <select class="form-control" name="cboEmpleado" autofocus="" required="">
+                                    <option value="0">Seleccione un empleado</option>
+                                    <c:forEach items="${empleados}" var="empleado">
+                                        <option value="${empleado.id_usuario}"
+                                                <c:if test="${empleado.id_usuario ==
+                                                                      programacion.usuario.id_usuario}">
+                                                    selected
+                                                </c:if>
+                                        >${empleado.nombreUsuario}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="reset" class="btn btn-danger"><i class="fa fa-close red"></i> Cancelar</button>
+                        <button type="submit" id="" name="btnRegistrar" value="Registrar" class="btn btn-success"><i
+                                class="fa fa-floppy-o"></i> Registrar
+                        </button>
+
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
         </section>
 
-        <%--<section class="content">
-            <!-- Small boxes (Stat box) -->
-            <div class="row">
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-aqua">
-                        <div class="inner">
-                            <h3>150</h3>
-
-                            <p>Nuevos Clientes</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">Más info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-green">
-                        <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                            <p>Bounce Rate</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3>44</h3>
-
-                            <p>User Registrations</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-red">
-                        <div class="inner">
-                            <h3>65</h3>
-
-                            <p>Unique Visitors</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-            </div>
-        </section>--%>
-        <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
 
@@ -282,6 +307,22 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    function verifyCorreo(){
+        const nombreUsuario=document.getElementById("nombre").value;
+        $.ajax({
+            url:"srvUsuario?accion=validarCorreo",
+            data:{
+                nombreUsuario:nombreUsuario
+            },
+            success: function(result){
+                $("#validarC").html(result);
+                //alert(result)
+            }
+        })
+    }
+</script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
@@ -293,3 +334,4 @@
         response.sendRedirect("identificar.jsp");
     }
 %>
+

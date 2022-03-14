@@ -71,7 +71,7 @@ public class DAOUSPS {
                 u.getCargo().setNombreCargo(rs.getString(5));
 
                 users.add(u);
-                System.out.println("Consulta exitosa"+ ps);
+                System.out.println("Consulta exitosa" + ps);
 
             }
 
@@ -110,5 +110,31 @@ public class DAOUSPS {
             con.close();
         }
         return row;//Retorna cantidad de filas afectadas
+    }
+
+    public usuario CertificadoLaboral(int idusuario) throws SQLException {
+        usuario u = new usuario();
+        sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, C.NOMBRECARGO FROM usuario U " +
+                "INNER JOIN cargo C " +
+                "ON U.IDCARGO = C.IDCARGO " +
+                "WHERE IDUSUARIO=?";
+
+        try {
+            con = c.conectar1();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idusuario);
+            rs = ps.executeQuery();
+                u.setId_usuario(rs.getInt(1));
+                u.setNombreUsuario(rs.getString(2));
+                u.setCargo(new cargo());
+                u.getCargo().setNombreCargo(rs.getString(3));
+            ps.close();
+            System.out.println("Se encontró el Usuario");
+        } catch (Exception e) {
+            System.out.println("Se encontró el Usuario" + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return u;
     }
 }

@@ -4,7 +4,9 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRAbstractBeanDataSource;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import sena.docx.docxproy.modelo.DAO.*;
 import sena.docx.docxproy.modelo.UT.Configmail;
@@ -70,11 +72,23 @@ public class srvUsuario extends HttpServlet {
                     case "listarEmpresas":
                         listarEmpresas(request, response);
                         break;
+                    case "listarEmpresasSupervisor":
+                        listarEmpresasSupervisor(request, response);
+                        break;
                     case "listarSedes":
                         listarSedes(request, response);
                         break;
+                    case "listarSedesSupervisor":
+                        listarSedesSupervisor(request, response);
+                        break;
                     case "listarHS":
                         listarHorariosSede(request, response);
+                        break;
+                    case "listarHSsupervisor":
+                        listarHorariosSedeSupervisor(request, response);
+                        break;
+                    case "CertificadoLaboral":
+                        CertificadoLaboral(request, response);
                         break;
                     case "nuevoUsuario":
                         presentarFormulario(request, response);
@@ -84,6 +98,9 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "registrarProgramacion":
                         presentarFormularioProgramacion(request, response);
+                        break;
+                    case "registrarProgramacionSupervisor":
+                        presentarFormularioProgramacionSupervisor(request, response);
                         break;
                     case "nuevoEmpleado":
                         presentarFormularioSup(request, response);
@@ -118,11 +135,17 @@ public class srvUsuario extends HttpServlet {
                     case "registrarHorario":
                         registrarHorario(request, response);
                         break;
+                    case "registrarHorarioSupervisor":
+                        registrarHorarioSupervisor(request, response);
+                        break;
                     case "leerUsuario":
                         presentarUsuario(request, response);
                         break;
                     case "editarHorarioHS":
                         presentarProgramacion(request, response);
+                        break;
+                    case "editarHorarioHSsupervisor":
+                        presentarProgramacionSupervisor(request, response);
                         break;
                     case "leerSede":
                         presentarSede(request, response);
@@ -138,6 +161,9 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "actualizarProgramacion":
                         actualizarProgramacion(request, response);
+                        break;
+                    case "actualizarProgramacionSupervisor":
+                        actualizarProgramacionSupervisor(request, response);
                         break;
                     case "actualizarSede":
                         actualizarSede(request, response);
@@ -246,6 +272,51 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void registrarHorarioSupervisor(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG daoprog;
+        programacion programacion = null;
+        sede sede;
+        empresa emp;
+        usuario usuario;
+        if (request.getParameter("txtFechaInicioLabor") != null
+                && request.getParameter("txtFechaFinLabor") != null
+                && request.getParameter("txtHoraInicioLabor") != null
+                && request.getParameter("txtHoraFinLabor") != null
+                && request.getParameter("txtIdEmpresa") != null
+                && request.getParameter("txtIdSede") != null
+                && request.getParameter("cboEmpleado") != null) {
+
+            programacion = new programacion();
+            programacion.setFechaInicioLabor(request.getParameter("txtFechaInicioLabor"));
+            programacion.setFechaFinLabor(request.getParameter("txtFechaFinLabor"));
+            programacion.setHoraEntrada(request.getParameter("txtHoraInicioLabor"));
+            programacion.setHoraSalida(request.getParameter("txtHoraFinLabor"));
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("txtIdEmpresa")));
+            sede = new sede();
+            sede.setIdSede(Integer.parseInt(request.getParameter("txtIdSede")));
+            programacion.setEmpresa(emp);
+            programacion.setSede(sede);
+            usuario = new usuario();
+            usuario.setId_usuario(Integer.parseInt(request.getParameter("cboEmpleado")));
+            programacion.setUsuario(usuario);
+
+            int codSede = Integer.parseInt(request.getParameter("txtIdSede"));
+
+            daoprog = new DAOPROG();
+            try {
+                daoprog.registrar(programacion);
+                System.out.println("registró programación");
+                response.sendRedirect("srvUsuario?accion=listarHSsupervisor&cod="+codSede);
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo registrar la programación" + e.getMessage());
+                request.setAttribute("programacion", programacion);
+                this.presentarFormularioProgramacionSupervisor(request, response);
+            }
+        }
+    }
+
     private void listarHorariosSede(HttpServletRequest request, HttpServletResponse response) {
         DAOPROG dao = new DAOPROG();
         DAOSEDE daosede = new DAOSEDE();
@@ -278,6 +349,45 @@ public class srvUsuario extends HttpServlet {
             try {
                 this.getServletConfig().getServletContext()
                         .getRequestDispatcher("/vistas/Administrador/listarHS.jsp").forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+                System.out.println("No se puedo realizar la petición" + ex.getMessage());
+            }
+        }
+    }
+
+    private void listarHorariosSedeSupervisor(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG dao = new DAOPROG();
+        DAOSEDE daosede = new DAOSEDE();
+        List<programacion> pr = null;
+        empresa emp;
+        usuario usu;
+        sede se;
+
+        if (request.getParameter("cod") != null) {
+            se = new sede();
+            se.setIdSede(Integer.parseInt(request.getParameter("cod")));
+            //se.setEmpresa(emp);
+            try {
+                se = daosede.leerDatosSede(se);
+                request.setAttribute("sede", se);
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudieron obtener los datos de sede" + e.getMessage());
+                System.out.println("no se obtuvieron los datos de sede" + e.getMessage());
+            }
+            try {
+                pr = dao.listarHS(se);
+                System.out.println(pr.size());
+                request.setAttribute("programaciones", pr);
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudieron listar los horarios" + e.getMessage());
+                System.out.println("no se pudieron listar los horarios" + e.getMessage());
+            } finally {
+                dao = null;
+            }
+            try {
+                this.getServletConfig().getServletContext()
+                        .getRequestDispatcher("/vistas/Supervisor/listarHSsupervisor.jsp").forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
                 System.out.println("No se puedo realizar la petición" + ex.getMessage());
@@ -358,6 +468,73 @@ public class srvUsuario extends HttpServlet {
                 response.addHeader("Content-disposition", "inline; filename=ReporteUsuarios.pdf");
                 //Imprimimos el reporte
                 JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, ds);
+                JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+                out.flush();
+                out.close();
+            } else {
+                response.setContentType("text/plain");
+                out.println("no se pudo generar el reporte");
+                out.println("esto puede deberse a que la lista de datos no fue recibida o el "
+                        + "archivo plantilla del reporte no se ha encontrado");
+                out.println("contacte a soporte");
+            }
+        } catch (Exception e) {
+            response.setContentType("text/plain");
+            out.print("ocurrió un error al intentar generar el reporte:" + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+    private void CertificadoLaboral(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        DAOUSPS udao;
+        usuario usuario;
+        udao = new DAOUSPS();
+        DAOUSUARIO daousuario = new DAOUSUARIO();
+        ServletOutputStream out = response.getOutputStream();
+        try {
+            java.io.InputStream logo = this.getServletConfig()
+                    .getServletContext()
+                    .getResourceAsStream("Reportes/img/logo.png");
+            if (logo != null) {
+                System.out.println("logo cargado con exito");
+            }
+            java.io.InputStream certificado = this.getServletConfig()
+                    .getServletContext()
+                    .getResourceAsStream("Certificados/Certificado.jasper");
+            if (certificado != null) {
+                System.out.println("reporte cargado con exito");
+            }
+            java.lang.String nombreUsuario = request.getParameter("nom");
+
+            if (logo != null) {
+                System.out.println("logo cargado con exito");
+            }if (nombreUsuario != null) {
+                System.out.println("nombreUsuario cargado con exito");
+            }
+
+            //Validar que no vengan vacios
+            if (logo != null && certificado != null
+                && request.getParameter("cod") != null
+                && request.getParameter("nom") != null) {
+                //Crear lista de la clase Vo para guardar resultado de la consulta
+                usuario CertificadoLaboral = new usuario();
+                CertificadoLaboral = udao.CertificadoLaboral(Integer.parseInt(request.getParameter("cod")));
+
+                //Declarar variable tipo Jasper Reports asignando el reporte creado
+                JasperReport report = (JasperReport) JRLoader.loadObject(certificado);
+
+                //Mapeamos los parámetros del Jasper reports
+                Map<String, Object> parameters = new HashMap();
+                parameters.put("logo", logo);
+                parameters.put("nombreUsuario", nombreUsuario);
+                //Formateamos la salida del reporte
+                response.setContentType("application/pdf");
+                //Para abrir el reporte en otra pestaña
+                response.addHeader("Content-disposition", "inline; filename=ReporteUsuarios.pdf");
+                //Imprimimos el reporte
+                JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters);
                 JasperExportManager.exportReportToPdfStream(jasperPrint, out);
                 out.flush();
                 out.close();
@@ -525,6 +702,26 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void listarEmpresasSupervisor(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("listó empresas supervisor");
+        DAOEMPRESA dao = new DAOEMPRESA();
+        List<empresa> emp = null;
+        try {
+            emp = dao.listarEmpresas();
+            request.setAttribute("empresas", emp);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudieron listar las empresas" + e.getMessage());
+        } finally {
+            dao = null;
+        }
+        try {
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/Supervisor/listarEmpresasSupervisor.jsp").forward(request, response);
+        } catch (Exception ex) {
+            request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+        }
+    }
+
     private void listarSedes(HttpServletRequest request, HttpServletResponse response) {
         DAOSEDE dao = new DAOSEDE();
         List<sede> se = null;
@@ -546,6 +743,32 @@ public class srvUsuario extends HttpServlet {
             try {
                 this.getServletConfig().getServletContext()
                         .getRequestDispatcher("/vistas/Administrador/listarSedes.jsp").forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+            }
+        }
+    }
+    private void listarSedesSupervisor(HttpServletRequest request, HttpServletResponse response) {
+        DAOSEDE dao = new DAOSEDE();
+        List<sede> se = null;
+        empresa emp;
+
+        if (request.getParameter("cod") != null) {
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("cod")));
+            //se.setEmpresa(emp);
+
+            try {
+                se = dao.listar(emp);
+                request.setAttribute("sedes", se);
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudieron listar las sedes" + e.getMessage());
+            } finally {
+                dao = null;
+            }
+            try {
+                this.getServletConfig().getServletContext()
+                        .getRequestDispatcher("/vistas/Supervisor/listarSedesSupervisor.jsp").forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
             }
@@ -639,6 +862,37 @@ public class srvUsuario extends HttpServlet {
             this.cargarEmpleados(request);
             this.getServletConfig().getServletContext()
                     .getRequestDispatcher("/vistas/Administrador/nuevaProgramacionAdmin.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
+    private void presentarFormularioProgramacionSupervisor(HttpServletRequest request, HttpServletResponse response) {
+        sede sedes;
+        DAOSEDE dao;
+
+        if (request.getParameter("cod") != null) {
+            sedes = new sede();
+            sedes.setIdSede(Integer.parseInt(request.getParameter("cod")));
+
+            dao = new DAOSEDE();
+            try {
+                sedes = dao.leerDatosSede(sedes);
+                if (sedes != null) {
+                    request.setAttribute("sede", sedes);
+                } else {
+                    request.setAttribute("msje", "No se encontró el usuario");
+                }
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se tiene el parámetro necesario");
+        }
+        try {
+            this.cargarEmpleados(request);
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/Supervisor/nuevaProgramacionSupervisor.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo cargar la vista");
         }
@@ -996,6 +1250,38 @@ public class srvUsuario extends HttpServlet {
     }
 
 
+    private void presentarProgramacionSupervisor(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG daoprog;
+        programacion programacion;
+        if (request.getParameter("cod") != null) {
+            programacion = new programacion();
+            programacion.setIdProgramacion(Integer.parseInt(request.getParameter("cod")));
+
+            daoprog = new DAOPROG();
+            try {
+                programacion = daoprog.leerProgramacion(programacion);
+                if (programacion != null) {
+                    request.setAttribute("programacion", programacion);
+                } else {
+                    request.setAttribute("msje", "No se encontró el usuario");
+                }
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se tiene el parámetro necesario");
+        }
+        try {
+            this.cargarEmpleados(request);
+            this.getServletConfig().getServletContext().
+                    getRequestDispatcher("/vistas/Supervisor/EditarProgramacionSupervisor.jsp"
+                    ).forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
+        }
+    }
+
+
     private void presentarEmpleado(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO dao;
         usuario usus;
@@ -1198,6 +1484,63 @@ public class srvUsuario extends HttpServlet {
                 this.cargarEmpleados(request);
                 this.getServletConfig().getServletContext().
                         getRequestDispatcher("/vistas/Administrador/EditarProgramacionAdmin.jsp"
+                        ).forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
+                System.out.println(ex);
+            }
+        }
+    }
+
+    private void actualizarProgramacionSupervisor(HttpServletRequest request, HttpServletResponse response) {
+        DAOPROG daoprog;
+        programacion programacion = null;
+        empresa emp;
+        sede sede;
+        usuario usu;
+
+        if (request.getParameter("hCodigo") != null
+                && request.getParameter("txtFechaInicioLabor") != null
+                && request.getParameter("txtFechaFinLabor") != null
+                && request.getParameter("txtHoraInicioLabor") != null
+                && request.getParameter("txtHoraFinLabor") != null
+                && request.getParameter("txtIdEmpresa") != null
+                && request.getParameter("txtIdSede") != null
+                && request.getParameter("cboEmpleado") != null) {
+
+            programacion = new programacion();
+            programacion.setIdProgramacion(Integer.parseInt(request.getParameter("hCodigo")));
+            programacion.setFechaInicioLabor(request.getParameter("txtFechaInicioLabor"));
+            programacion.setFechaFinLabor(request.getParameter("txtFechaFinLabor"));
+            programacion.setHoraEntrada(request.getParameter("txtHoraInicioLabor"));
+            programacion.setHoraSalida(request.getParameter("txtHoraFinLabor"));
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("txtIdEmpresa")));
+            sede = new sede();
+            sede.setIdSede(Integer.parseInt(request.getParameter("txtIdSede")));
+            int idSede = Integer.parseInt(request.getParameter("txtIdSede"));
+
+            usu = new usuario();
+            usu.setId_usuario(Integer.parseInt(request.getParameter("cboEmpleado")));
+            programacion.setEmpresa(emp);
+            programacion.setSede(sede);
+            programacion.setUsuario(usu);
+
+            daoprog = new DAOPROG();
+            try {
+                daoprog.actualizarProgramacion(programacion);
+                System.out.println("hizo el dao");
+                response.sendRedirect("srvUsuario?accion=listarHSsupervisor&cod=" + idSede);
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo actualizar la sede" + e.getMessage());
+                request.setAttribute("programacion", programacion);
+                System.out.println(e);
+            }
+            try {
+                this.cargarEmpleados(request);
+                this.getServletConfig().getServletContext().
+                        getRequestDispatcher("/vistas/Supervisor/EditarProgramacionSupervisor.jsp"
                         ).forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
