@@ -166,10 +166,9 @@
                                                 <c:param name="cod" value="${administrador.id_usuario}"/>
                                                 <c:param name="nom" value="${administrador.nombreUsuario}"/>
                                                 <c:param name="nomC" value="${administrador.cargo.nombreCargo}"/>
-                                                </c:url>"><i class="fa fa-bar-chart"></i>Certificado Laboral</a></li>
+                                                </c:url>"><i class="fa fa-bar-chart"></i>Certificado Laboral</a>
+                        </li>
                     </ul>
-
-
                 </li>
             </ul>
             <!-- /.sidebar-menu -->
@@ -267,7 +266,7 @@
             Anything you want
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2021 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
+        <strong>Copyright &copy; 2022 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
     </footer>
 
     <div class="control-sidebar-bg"></div>

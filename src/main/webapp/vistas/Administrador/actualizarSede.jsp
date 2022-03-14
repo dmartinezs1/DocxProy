@@ -139,8 +139,8 @@
                         <li><a href="#"><i class="fa fa-cube"></i>Productos</a></li>
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
-                        <li><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a></li>
-                        <li class="active"><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        <li class="active"><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a></li>
+                        <li><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
                         </li>
                     </ul>
                 </li>
@@ -163,6 +163,13 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="srvUsuario?accion=reporteEmpleados"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
+                        <li><a href="<c:url value="srvUsuario">
+                                                <c:param name="accion" value="CertificadoLaboral" />
+                                                <c:param name="cod" value="${administrador.id_usuario}"/>
+                                                <c:param name="nom" value="${administrador.nombreUsuario}"/>
+                                                <c:param name="nomC" value="${administrador.cargo.nombreCargo}"/>
+                                                </c:url>"><i class="fa fa-bar-chart"></i>Certificado Laboral</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -195,7 +202,7 @@
             <div class="box">
                 <div class="box-header with-border">
                     <i class="fa fa-edit"></i>
-                    <h3 class="box-title">Actualizar Datos Sede</h3>
+                    <h3 class="box-title">Actualizar datos sede ${sede.direccion}</h3>
                 </div>
                 <form class="form-horizontal" action="srvUsuario?accion=actualizarSede" method="post">
                     <input type="hidden" name="hCodigo" value="${sede.idSede}">
@@ -277,7 +284,7 @@
             Anything you want
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2021 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
+        <strong>Copyright &copy; 2022 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
     </footer>
 
     <div class="control-sidebar-bg"></div>

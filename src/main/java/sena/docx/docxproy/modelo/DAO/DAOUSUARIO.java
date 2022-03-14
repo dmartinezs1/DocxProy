@@ -241,8 +241,8 @@ public class DAOUSUARIO extends Conexion {
 
     public void actualizarUsuarios(usuario usu) throws Exception {
         String sql = "UPDATE usuario SET NOMBREUSUARIO = '"
-                + usu.getNombreUsuario() + "', CORREOUS = '"+ usu.getCorreoUsuario() +"', CLAVE = '"
-                + usu.getClave() + "', ESTADO = "
+                + usu.getNombreUsuario() + "', CORREOUS = '"+ usu.getCorreoUsuario() +"'," +
+                " ESTADO = "
                 + (usu.isEstado() == true ? "1" : "0")
                 + ", IDCARGO = "
                 + usu.getCargo().getCodigo()

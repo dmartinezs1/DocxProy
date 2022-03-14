@@ -163,6 +163,13 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="srvUsuario?accion=reporteEmpleados"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
+                        <li><a href="<c:url value="srvUsuario">
+                                                <c:param name="accion" value="CertificadoLaboral" />
+                                                <c:param name="cod" value="${administrador.id_usuario}"/>
+                                                <c:param name="nom" value="${administrador.nombreUsuario}"/>
+                                                <c:param name="nomC" value="${administrador.cargo.nombreCargo}"/>
+                                                </c:url>"><i class="fa fa-bar-chart"></i>Certificado Laboral</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -175,18 +182,14 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Página Sedes</h1>
-        </section>
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <a href="srvUsuario?accion=listarUsuarios" class="btn btn-secondary">
-                <i class="fa fa-align-justify"></i> Agregar horario </a>
-
+            <h1>Página programaciones</h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Sedes</li>
+                <li class="active">Usuarios</li>
+                <li class="active">Programaciones</li>
             </ol>
         </section>
+        <!-- Content Header (Page header) -->
 
         <section class="content">
             <div class="box">
@@ -258,7 +261,7 @@
             Anything you want
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2021 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
+        <strong>Copyright &copy; 2022 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
     </footer>
 
     <div class="control-sidebar-bg"></div>

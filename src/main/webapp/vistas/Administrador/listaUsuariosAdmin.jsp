@@ -163,6 +163,13 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="srvUsuario?accion=reporteEmpleados"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
+                        <li><a href="<c:url value="srvUsuario">
+                                                <c:param name="accion" value="CertificadoLaboral" />
+                                                <c:param name="cod" value="${administrador.id_usuario}"/>
+                                                <c:param name="nom" value="${administrador.nombreUsuario}"/>
+                                                <c:param name="nomC" value="${administrador.cargo.nombreCargo}"/>
+                                                </c:url>"><i class="fa fa-bar-chart"></i>Certificado Laboral</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -288,7 +295,7 @@
             Anything you want
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2021 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
+        <strong>Copyright &copy; 2022 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
     </footer>
 
     <div class="control-sidebar-bg"></div>

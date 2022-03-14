@@ -162,6 +162,13 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="srvUsuario?accion=reporteEmpleados"><i class="fa fa-bar-chart"></i>Reporte empleados</a></li>
+                        <li><a href="<c:url value="srvUsuario">
+                                                <c:param name="accion" value="CertificadoLaboral" />
+                                                <c:param name="cod" value="${administrador.id_usuario}"/>
+                                                <c:param name="nom" value="${administrador.nombreUsuario}"/>
+                                                <c:param name="nomC" value="${administrador.cargo.nombreCargo}"/>
+                                                </c:url>"><i class="fa fa-bar-chart"></i>Certificado Laboral</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -191,7 +198,7 @@
             <div class="box">
                 <div class="box-header with-border">
                     <i class="fa fa-edit"></i>
-                    <h3 class="box-title">Actualizar Datos Usuario</h3>
+                    <h3 class="box-title">Actualizar datos ${usuario.nombreUsuario}</h3>
                 </div>
                 <form class="form-horizontal" action="srvUsuario?accion=actualizarUsuario" method="post">
                     <input type="hidden" name="hCodigo" value="${usuario.id_usuario}">
@@ -212,15 +219,6 @@
                                 <input id="correo" type="text" class="form-control" placeholder="Ejem: correo@correo.com"
                                        name="txtCorreo" maxlength="40"
                                        value="${usuario.correoUsuario}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Clave</label>
-                            <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input id="clave" type="password" class="form-control" placeholder="Ejem: $%Ale!**"
-                                       name="txtClave" maxlength="10"
-                                       value="${usuario.clave}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -276,7 +274,7 @@
             Anything you want
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2021 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
+        <strong>Copyright &copy; 2022 <a href="#">Docx</a>.</strong> Todos los derechos reservados.
     </footer>
 
     <div class="control-sidebar-bg"></div>

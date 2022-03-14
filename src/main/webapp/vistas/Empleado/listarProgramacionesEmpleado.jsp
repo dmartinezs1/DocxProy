@@ -183,26 +183,22 @@
                                class="display">
                             <thead>
                             <tr>
-                                <th>Id programación</th>
                                 <th>Fecha inicio</th>
                                 <th>Fecha final</th>
                                 <th>Hora entrada</th>
                                 <th>Hora salida</th>
                                 <th>Empresa</th>
                                 <th>Sede</th>
-                                <th>Empleado</th>
                             </tr>
                             </thead>
                             <c:forEach var="user" items="${programaciones}" varStatus="iteracion">
                                 <tr>
-                                    <td>${user.idProgramacion}</td>
                                     <td>${user.fechaInicioLabor}</td>
                                     <td>${user.fechaFinLabor}</td>
                                     <td>${user.horaEntrada}</td>
                                     <td>${user.horaSalida}</td>
                                     <td>${user.empresa.nombreEmpresa}</td>
                                     <td>${user.sede.direccion}</td>
-                                    <td>${user.usuario.nombreUsuario}</td>
                                 </tr>
                             </c:forEach>
                         </table>
