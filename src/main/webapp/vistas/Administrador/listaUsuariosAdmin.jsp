@@ -206,7 +206,7 @@
                                class="display">
                             <thead>
                             <tr>
-                                <th>IDUsuario</th>
+                                <th>Documento usuario</th>
                                 <th>Usuario</th>
                                 <th>Estado</th>
                                 <th>Cargo</th>
@@ -215,7 +215,7 @@
                             </thead>
                             <c:forEach var="user" items="${usuarios}" varStatus="iteracion">
                                 <tr>
-                                    <td>${user.id_usuario}</td>
+                                    <td>${user.id_identificacion.tipoIdentificacion} - ${user.numeroIdentificacion}</td>
                                     <td>${user.nombreUsuario}</td>
                                     <c:if test="${user.estado == true}">
                                         <td><span class="badge bg-green active">Usuario Activo</span></td>

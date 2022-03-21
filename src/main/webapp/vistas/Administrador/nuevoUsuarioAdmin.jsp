@@ -222,6 +222,32 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">Tipo de documento</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                                <select class="form-control" name="cboIdentificacion" autofocus="" required="">
+                                    <option value="0">Seleccione su tipo de documento</option>
+                                    <c:forEach items="${identificaciones}" var="ide">
+                                        <option value="${ide.id_identificacion}"
+                                                <c:if test="${ide.id_identificacion ==
+                                                                      usuario.identificaciones.id_identificacion}">
+                                                    selected
+                                                </c:if>
+                                        >${ide.tipoIdentificacion}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Número de identificación</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="number" class="form-control" placeholder="Ejem: 1234567890"
+                                       name="txtNumeroIdentificacion" maxlength="25"
+                                       value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">Cargo</label>
                             <div class="col-sm-4 input-group">
                                 <span class="input-group-addon"><i class="fa fa-tags"></i></span>

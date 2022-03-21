@@ -140,6 +140,8 @@
                         <li><a href="#"><i class="fa fa-users"></i>Clientes</a></li>
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>
                         <li><a href=""><i class="fa fa-user-plus"></i>Empleados</a></li>--%>
+                        <li><a href="srvUsuario?accion=listarEmpresasSupervisor"><i class="fa fa-user-plus"></i>Empresas</a>
+                        </li>
                         <li class="active"><a href="srvUsuario?accion=listarEmpleados"><i class="fa fa-address-card"></i>Empleados</a>
                         </li>
                     </ul>
@@ -170,8 +172,8 @@
         <section class="content-header">
             <a href="srvUsuario?accion=nuevoEmpleado" class="btn btn-success">
                 <i class="fa fa-plus"></i> Nuevo Empleado </a>
-            <a href="srvUsuario?accion=presentarDocumento" class="btn btn-info">
-                <i class="fa fa-plus"></i> Nuevo Documento </a>
+            <!-- <a href="srvUsuario?accion=presentarDocumento" class="btn btn-info">
+                <i class="fa fa-plus"></i> Nuevo Documento </a> -->
 
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>

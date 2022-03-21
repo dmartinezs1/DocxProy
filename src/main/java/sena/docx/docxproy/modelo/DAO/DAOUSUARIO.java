@@ -3,6 +3,7 @@ package sena.docx.docxproy.modelo.DAO;
 import sena.docx.docxproy.modelo.UT.Conexion;
 import sena.docx.docxproy.modelo.VO.cargo;
 import sena.docx.docxproy.modelo.VO.contrasena;
+import sena.docx.docxproy.modelo.VO.identificaciones;
 import sena.docx.docxproy.modelo.VO.usuario;
 
 import java.math.BigInteger;
@@ -17,9 +18,9 @@ public class DAOUSUARIO extends Conexion {
     public usuario identificar(usuario user) throws Exception {
         usuario usu = null;
         ResultSet rs = null;
-        String sql = "SELECT U.IDUSUARIO, U.CLAVE, C.NOMBRECARGO FROM USUARIO U "
+        String sql = "SELECT U.NOMBREUSUARIO, U.IDUSUARIO, U.CLAVE, C.NOMBRECARGO FROM USUARIO U "
                 + "INNER JOIN CARGO C ON U.IDCARGO = C.IDCARGO "
-                + "WHERE U.ESTADO = 1 AND U.NOMBREUSUARIO = '" + user.getNombreUsuario() + "' "
+                + "WHERE U.ESTADO = 1 AND U.NUMEROIDENTIFICACION = '" + user.getNumeroIdentificacion() + "' "
                 + "AND U.CLAVE = '" + getMD5(user.getClave()) + "'";
         try {
             this.conectar(false);
@@ -27,7 +28,8 @@ public class DAOUSUARIO extends Conexion {
             if (rs.next() == true) {
                 usu = new usuario();
                 usu.setId_usuario(rs.getInt("IDUSUARIO"));
-                usu.setNombreUsuario(user.getNombreUsuario());
+                usu.setNombreUsuario(rs.getString("NOMBREUSUARIO"));
+                usu.setNumeroIdentificacion(user.getNumeroIdentificacion());
                 usu.setCargo(new cargo());
                 usu.getCargo().setNombreCargo(rs.getString("NOMBRECARGO"));
                 usu.setEstado(true);
@@ -62,9 +64,12 @@ public class DAOUSUARIO extends Conexion {
         List<usuario> usuarios;
         usuario usu;
         ResultSet rs = null;
-        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CLAVE, U.ESTADO, C.NOMBRECARGO "
+        String sql = "SELECT U.NUMEROIDENTIFICACION, U.IDUSUARIO, U.NOMBREUSUARIO, U.CLAVE, U.ESTADO, "
+                + "C.NOMBRECARGO, I.tipo_identificacion "
                 + "FROM usuario U INNER JOIN cargo C "
                 + "ON C.IDCARGO = U.IDCARGO "
+                + "INNER JOIN identificacion I "
+                + "ON I.id_identificacion = U.TIPOIDENTIFICACION "
                 + "ORDER BY U.IDUSUARIO";
 
         try {
@@ -75,9 +80,12 @@ public class DAOUSUARIO extends Conexion {
                 usu = new usuario();
                 usu.setId_usuario(rs.getInt("IDUSUARIO"));
                 usu.setNombreUsuario(rs.getString("NOMBREUSUARIO"));
+                usu.setNumeroIdentificacion(Integer.parseInt(rs.getString("NUMEROIDENTIFICACION")));
                 usu.setEstado(rs.getBoolean("ESTADO"));
                 usu.setCargo(new cargo());
                 usu.getCargo().setNombreCargo(rs.getString("NOMBRECARGO"));
+                usu.setId_identificacion(new identificaciones());
+                usu.getId_identificacion().setTipoIdentificacion(rs.getString("tipo_identificacion"));
                 usuarios.add(usu);
             }
             this.cerrar(true);

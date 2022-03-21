@@ -88,8 +88,9 @@ public class DAOUSPS {
 
     public int registrar(usuario u) throws SQLException {
 
-        sql = "INSERT INTO usuario (NOMBREUSUARIO, CORREOUS, CLAVE, ESTADO, IDCARGO) "
-                + "VALUES (?,?,?,?,?)";
+        sql = "INSERT INTO usuario (NOMBREUSUARIO, CORREOUS, CLAVE, ESTADO, IDCARGO, TIPOIDENTIFICACION, " +
+                " NUMEROIDENTIFICACION) "
+                + "VALUES (?,?,?,?,?,?,?)";
         try {
             con = c.conectar1();
             ps = con.prepareStatement(sql);
@@ -98,6 +99,8 @@ public class DAOUSPS {
             ps.setString(3, u.getClave());
             ps.setBoolean(4, u.isEstado());
             ps.setInt(5, u.getCargo().getCodigo());
+            ps.setInt(6, u.getId_identificacion().getId_identificacion());
+            ps.setInt(7,u.getNumeroIdentificacion());
 
             System.out.println(ps);
             ps.executeUpdate();

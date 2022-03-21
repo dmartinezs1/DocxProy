@@ -634,7 +634,7 @@ public class srvUsuario extends HttpServlet {
 
     private usuario obtenerUsuario(HttpServletRequest request) {
         usuario u = new usuario();
-        u.setNombreUsuario(request.getParameter("txtUsu"));
+        u.setNumeroIdentificacion(Integer.parseInt(request.getParameter("txtUsu")));
         u.setClave(request.getParameter("txtPass"));
         return u;
     }
@@ -852,6 +852,7 @@ public class srvUsuario extends HttpServlet {
     private void presentarFormulario(HttpServletRequest request, HttpServletResponse response) {
         try {
             this.cargarCargos(request);
+            this.cargarIdentificaciones(request);
             this.getServletConfig().getServletContext()
                     .getRequestDispatcher("/vistas/Administrador/nuevoUsuarioAdmin.jsp").forward(request, response);
         } catch (Exception e) {
@@ -990,6 +991,20 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void cargarIdentificaciones(HttpServletRequest request) {
+        DAOIDENTIFICACIONES dao = new DAOIDENTIFICACIONES();
+        List<identificaciones> ide = null;
+        try {
+            ide = dao.listarIdentificaciones();
+            request.setAttribute("identificaciones", ide);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar las identificaciones :( " + e.getMessage());
+        } finally {
+            ide = null;
+            dao = null;
+        }
+    }
+
     private void cargarEmpleados(HttpServletRequest request) {
         DAOPROG daoprog = new DAOPROG();
         List<usuario> usuarios = null;
@@ -1023,8 +1038,11 @@ public class srvUsuario extends HttpServlet {
         DAOUSPS daoUsu;
         usuario usu = null;
         cargo carg;
+        identificaciones ident;
         if (request.getParameter("txtNombre") != null
                 && request.getParameter("txtCorreo") != null
+                && request.getParameter("cboIdentificacion") != null
+                && request.getParameter("txtNumeroIdentificacion") != null
                 && request.getParameter("cboCargo") != null) {
 
             usu = new usuario();
@@ -1032,6 +1050,10 @@ public class srvUsuario extends HttpServlet {
             usu.setCorreoUsuario(request.getParameter("txtCorreo"));
             String contrasena1 = contrasena.getPassword();
             usu.setClave(daousuario.getMD5(contrasena1));
+            ident = new identificaciones();
+            ident.setId_identificacion(Integer.parseInt(request.getParameter("cboIdentificacion")));
+            usu.setId_identificacion(ident);
+            usu.setNumeroIdentificacion(Integer.parseInt(request.getParameter("txtNumeroIdentificacion")));
             carg = new cargo();
             carg.setCodigo(Integer.parseInt(request.getParameter("cboCargo")));
             usu.setCargo(carg);
@@ -1221,6 +1243,7 @@ public class srvUsuario extends HttpServlet {
         }
         try {
             this.cargarCargos(request);
+            this.cargarIdentificaciones(request);
             this.getServletConfig().getServletContext().
                     getRequestDispatcher("/vistas/Administrador/actualizarUsuario.jsp"
                     ).forward(request, response);
@@ -1421,6 +1444,7 @@ public class srvUsuario extends HttpServlet {
             }
             try {
                 this.cargarCargos(request);
+                this.cargarIdentificaciones(request);
                 this.getServletConfig().getServletContext().
                         getRequestDispatcher("/vistas/Administrador/actualizarUsuario.jsp"
                         ).forward(request, response);

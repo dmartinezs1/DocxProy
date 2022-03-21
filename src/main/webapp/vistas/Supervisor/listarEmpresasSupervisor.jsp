@@ -141,7 +141,7 @@
                         <li><a href="#"><i class="fa fa-truck"></i>Proveedores</a></li>--%>
                         <li class="active"><a href="srvUsuario?accion=listarEmpresas"><i class="fa fa-user-plus"></i>Empresas</a>
                         </li>
-                        <li><a href="srvUsuario?accion=listarUsuarios"><i class="fa fa-address-card"></i>Usuarios</a>
+                        <li><a href="srvUsuario?accion=listarEmpleados"><i class="fa fa-address-card"></i>Empleados</a>
                         </li>
                     </ul>
                 </li>

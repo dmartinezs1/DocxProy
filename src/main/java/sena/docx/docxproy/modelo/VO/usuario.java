@@ -1,7 +1,7 @@
 package sena.docx.docxproy.modelo.VO;
 
 import sena.docx.docxproy.modelo.VO.cargo;
-
+@SuppressWarnings("ALL")
 public class usuario {
     private int id_usuario;
     private String nombreUsuario;
@@ -9,7 +9,25 @@ public class usuario {
     private String clave;
     private boolean estado;
     private cargo cargo;
+    private identificaciones id_identificacion;
+    private int numeroIdentificacion;
     public String estadoUsuarioRep;
+
+    public identificaciones getId_identificacion() {
+        return id_identificacion;
+    }
+
+    public void setId_identificacion(identificaciones id_identificacion) {
+        this.id_identificacion = id_identificacion;
+    }
+
+    public int getNumeroIdentificacion() {
+        return numeroIdentificacion;
+    }
+
+    public void setNumeroIdentificacion(int numeroIdentificacion) {
+        this.numeroIdentificacion = numeroIdentificacion;
+    }
 
     public int getId_usuario() {
         return id_usuario;
