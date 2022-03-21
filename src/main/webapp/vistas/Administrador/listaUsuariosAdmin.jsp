@@ -206,8 +206,8 @@
                                class="display">
                             <thead>
                             <tr>
-                                <th>Documento usuario</th>
-                                <th>Usuario</th>
+                                <th>Tipo - Número de documento</th>
+                                <th>Nombre usuario</th>
                                 <th>Estado</th>
                                 <th>Cargo</th>
                                 <th>Acciones</th>

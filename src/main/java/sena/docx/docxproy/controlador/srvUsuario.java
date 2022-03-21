@@ -1414,19 +1414,25 @@ public class srvUsuario extends HttpServlet {
         DAOUSUARIO daoUsu;
         usuario usus = null;
         cargo car;
-
+        identificaciones ide;
         if (request.getParameter("hCodigo") != null
                 && request.getParameter("txtNombre") != null
                 && request.getParameter("txtCorreo") != null
+                && request.getParameter("txtNumeroIdentificacion") != null
+                && request.getParameter("cboIdentificacion") != null
                 && request.getParameter("cboCargo") != null) {
 
             usus = new usuario();
             usus.setId_usuario(Integer.parseInt(request.getParameter("hCodigo")));
             usus.setNombreUsuario(request.getParameter("txtNombre"));
             usus.setCorreoUsuario(request.getParameter("txtCorreo"));
+            usus.setNumeroIdentificacion(Integer.parseInt(request.getParameter("txtNumeroIdentificacion")));
             car = new cargo();
             car.setCodigo(Integer.parseInt(request.getParameter("cboCargo")));
             usus.setCargo(car);
+            ide = new identificaciones();
+            ide.setId_identificacion(Integer.parseInt(request.getParameter("cboIdentificacion")));
+            usus.setId_identificacion(ide);
             if (request.getParameter("chkEstado") != null) {
                 usus.setEstado(true);
             } else {

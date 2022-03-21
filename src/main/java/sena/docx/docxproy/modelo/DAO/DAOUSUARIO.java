@@ -257,6 +257,10 @@ public class DAOUSUARIO extends Conexion {
                 + (usu.isEstado() == true ? "1" : "0")
                 + ", IDCARGO = "
                 + usu.getCargo().getCodigo()
+                + ", TIPOIDENTIFICACION = "
+                + usu.getId_identificacion().getId_identificacion()
+                + ", NUMEROIDENTIFICACION = "
+                + usu.getNumeroIdentificacion()
                 + " WHERE IDUSUARIO = " + usu.getId_usuario();
         try {
             this.conectar(false);
