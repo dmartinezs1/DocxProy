@@ -197,7 +197,7 @@ public class DAOUSUARIO extends Conexion {
     public usuario leerUsuario(usuario usu) throws Exception {
         usuario usus = null;
         ResultSet rs = null;
-        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CORREOUS, U.CLAVE, U.ESTADO, U.IDCARGO "
+        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CORREOUS, U.CLAVE, U.ESTADO, U.IDCARGO, U.NUMEROIDENTIFICACION, U.TIPOIDENTIFICACION "
                 + "FROM usuario U WHERE U.IDUSUARIO = " + usu.getId_usuario();
 
         try {
@@ -210,8 +210,11 @@ public class DAOUSUARIO extends Conexion {
                 usus.setCorreoUsuario(rs.getString("CORREOUS"));
                 usus.setClave(rs.getString("CLAVE"));
                 usus.setEstado(rs.getBoolean("ESTADO"));
+                usus.setNumeroIdentificacion(rs.getInt("NUMEROIDENTIFICACION"));
                 usus.setCargo(new cargo());
                 usus.getCargo().setCodigo(rs.getInt("IDCARGO"));
+                usus.setId_identificacion(new identificaciones());
+                usus.getId_identificacion().setId_identificacion(rs.getInt("TIPOIDENTIFICACION"));
             }
             this.cerrar(true);
         } catch (Exception e) {
