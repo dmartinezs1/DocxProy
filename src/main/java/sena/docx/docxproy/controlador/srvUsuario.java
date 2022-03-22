@@ -4,9 +4,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRAbstractBeanDataSource;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import sena.docx.docxproy.modelo.DAO.*;
 import sena.docx.docxproy.modelo.UT.Configmail;
@@ -943,6 +941,7 @@ public class srvUsuario extends HttpServlet {
 
     private void presentarFormularioSup(HttpServletRequest request, HttpServletResponse response) {
         try {
+            this.cargarIdentificaciones(request);
             this.getServletConfig().getServletContext()
                     .getRequestDispatcher("/vistas/Supervisor/nuevoEmpleado.jsp").forward(request, response);
         } catch (Exception e) {
@@ -1068,7 +1067,7 @@ public class srvUsuario extends HttpServlet {
             String cuerpo = "<h1> Gracias por registrarse en Docx </h1>"
                     + " <img src ='https://lideresmexicanos.com/wp-content/uploads/2021/08/ISP3.jpg'/>"
                     + " <h4> Para iniciar sesión diríjase al siguiente enlace</h4>"
-                    + " <h4> Datos de ingreso: </h4>" + usu.getNombreUsuario() + ", " + contrasena1
+                    + " <h4> Datos de ingreso: </h4>" + usu.getNumeroIdentificacion() + ", " + contrasena1
                     + " <a href='http://localhost:8080/DocxProy_war_exploded/identificar.jsp'>Haga click aquí para iniciar sesión</a>";
 
             try {
@@ -1092,20 +1091,51 @@ public class srvUsuario extends HttpServlet {
     }
 
     private void registrarEmpleado(HttpServletRequest request, HttpServletResponse response) {
-        DAOUSUARIO daoUsu;
+        DAOUSPS daoUsu;
         usuario usu = null;
+        identificaciones ident;
+        cargo car;
         if (request.getParameter("txtNombre") != null
-                && request.getParameter("txtClave") != null) {
+                && request.getParameter("txtCorreo") != null
+                && request.getParameter("cboIdentificacion") != null
+                && request.getParameter("txtNumeroIdentificacion") != null) {
             usu = new usuario();
             usu.setNombreUsuario(request.getParameter("txtNombre"));
-            usu.setClave(request.getParameter("txtClave"));
+            usu.setCorreoUsuario(request.getParameter("txtCorreo"));
+            String contrasena1 = contrasena.getPassword();
+            usu.setClave(daousuario.getMD5(contrasena1));
+            ident = new identificaciones();
+            ident.setId_identificacion(Integer.parseInt(request.getParameter("cboIdentificacion")));
+            usu.setId_identificacion(ident);
+            car = new cargo();
+            car.setCodigo(2);
+            usu.setCargo(car);
+            ident.setId_identificacion(Integer.parseInt(request.getParameter("cboIdentificacion")));
+            usu.setId_identificacion(ident);
+            usu.setNumeroIdentificacion(Integer.parseInt(request.getParameter("txtNumeroIdentificacion")));
+
             if (request.getParameter("chkEstado") != null) {
                 usu.setEstado(true);
             } else {
                 usu.setEstado(false);
             }
-            daoUsu = new DAOUSUARIO();
 
+            String destinatario = request.getParameter("txtCorreo");
+            String asunto = "Bienvenido a Docx";
+            String cuerpo = "<h1> Gracias por registrarse en Docx </h1>"
+                    + " <img src ='https://lideresmexicanos.com/wp-content/uploads/2021/08/ISP3.jpg'/>"
+                    + " <h4> Para iniciar sesión diríjase al siguiente enlace</h4>"
+                    + " <h4> Datos de ingreso: </h4>" + usu.getNumeroIdentificacion() + ", " + contrasena1
+                    + " <a href='http://localhost:8080/DocxProy_war_exploded/identificar.jsp'>Haga click aquí para iniciar sesión</a>";
+
+            try {
+                Configmail.enviarCorreo(host, puerto, remitente, password, destinatario, asunto, cuerpo);
+                System.out.println("El mensaje fue enviado correctamente");
+            } catch (Exception e) {
+                System.out.println("El mensaje NO fue enviado correctamente " + e.getMessage());
+            }
+
+            daoUsu = new DAOUSPS();
             try {
                 daoUsu.registrarEmpleado(usu);
                 response.sendRedirect("srvUsuario?accion=listarEmpleados");

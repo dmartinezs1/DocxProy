@@ -115,6 +115,35 @@ public class DAOUSPS {
         return row;//Retorna cantidad de filas afectadas
     }
 
+    public int registrarEmpleado(usuario u) throws SQLException {
+
+        sql = "INSERT INTO usuario (NOMBREUSUARIO, CORREOUS, CLAVE, ESTADO, IDCARGO, TIPOIDENTIFICACION, " +
+                " NUMEROIDENTIFICACION) "
+                + "VALUES (?,?,?,?,?,?,?)";
+        try {
+            con = c.conectar1();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, u.getNombreUsuario());
+            ps.setString(2, u.getCorreoUsuario());
+            ps.setString(3, u.getClave());
+            ps.setBoolean(4, u.isEstado());
+            ps.setInt(5, u.getCargo().getCodigo());
+            ps.setInt(6, u.getId_identificacion().getId_identificacion());
+            ps.setInt(7,u.getNumeroIdentificacion());
+
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se registró un usuario");
+
+        } catch (Exception e) {
+            System.out.println("Error al registrar el usuario" + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return row;//Retorna cantidad de filas afectadas
+    }
+
     public usuario CertificadoLaboral(int idusuario) throws SQLException {
         usuario u = new usuario();
         sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, C.NOMBRECARGO FROM usuario U " +
