@@ -186,7 +186,7 @@
                     <input type="hidden" name="hCodigo" value="${usuario.id_usuario}">
                     <div class="box-body">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Nombre Empleado</label>
+                            <label class="col-sm-2 control-label">Nombre Usuario</label>
                             <div class="col-sm-4 input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
                                 <input id="nombre" type="text" class="form-control" placeholder="Ejem: Alexander"
@@ -195,12 +195,38 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Clave</label>
+                            <label class="col-sm-2 control-label">Correo Usuario</label>
                             <div class="col-sm-4 input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input id="clave" type="password" class="form-control" placeholder="Ejem: $%Ale!**"
-                                       name="txtClave" maxlength="10"
-                                       value="${usuario.clave}">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input id="correo" type="text" class="form-control" placeholder="Ejem: correo@correo.com"
+                                       name="txtCorreo" maxlength="40"
+                                       value="${usuario.correoUsuario}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tipo de documento</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                                <select class="form-control" name="cboIdentificacion" autofocus="" required="">
+                                    <option value="0">Seleccione su tipo de identificación</option>
+                                    <c:forEach items="${identificaciones}" var="ide">
+                                        <option value="${ide.id_identificacion}"
+                                                <c:if test="${ide.id_identificacion ==
+                                                                      usuario.id_identificacion.id_identificacion}">
+                                                    selected
+                                                </c:if>
+                                        >${ide.tipoIdentificacion}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Número de documento</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="number" class="form-control" placeholder="Ejem: 1234567890"
+                                       name="txtNumeroIdentificacion" maxlength="40"
+                                       value="${usuario.numeroIdentificacion}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -220,7 +246,7 @@
                     <div class="box-footer">
                         <button type="reset" class="btn btn-danger"><i class="fa fa-close red"></i> Cancelar</button>
                         <button type="submit" id="" name="btnRegistrar" value="Registrar" class="btn btn-success"><i
-                                class="fa fa-refresh"></i> Actualizar Empleado
+                                class="fa fa-refresh"></i> Actualizar Usuario
                         </button>
 
                     </div>

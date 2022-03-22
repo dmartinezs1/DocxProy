@@ -234,7 +234,7 @@ public class DAOUSUARIO extends Conexion {
     public usuario leerEmpleado(usuario usu) throws Exception {
         usuario usus = null;
         ResultSet rs = null;
-        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CLAVE, U.ESTADO "
+        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.CORREOUS, U.CLAVE, U.ESTADO, U.IDCARGO, U.NUMEROIDENTIFICACION, U.TIPOIDENTIFICACION "
                 + "FROM usuario U WHERE U.IDUSUARIO = " + usu.getId_usuario();
 
         try {
@@ -244,8 +244,14 @@ public class DAOUSUARIO extends Conexion {
                 usus = new usuario();
                 usus.setId_usuario(rs.getInt("IDUSUARIO"));
                 usus.setNombreUsuario(rs.getString("NOMBREUSUARIO"));
+                usus.setCorreoUsuario(rs.getString("CORREOUS"));
                 usus.setClave(rs.getString("CLAVE"));
                 usus.setEstado(rs.getBoolean("ESTADO"));
+                usus.setNumeroIdentificacion(rs.getInt("NUMEROIDENTIFICACION"));
+                usus.setCargo(new cargo());
+                usus.getCargo().setCodigo(rs.getInt("IDCARGO"));
+                usus.setId_identificacion(new identificaciones());
+                usus.getId_identificacion().setId_identificacion(rs.getInt("TIPOIDENTIFICACION"));
             }
             this.cerrar(true);
         } catch (Exception e) {
@@ -280,9 +286,13 @@ public class DAOUSUARIO extends Conexion {
 
     public void actualizarEmpleados(usuario usu) throws Exception {
         String sql = "UPDATE usuario SET NOMBREUSUARIO = '"
-                + usu.getNombreUsuario() + "', CLAVE = '"
-                + usu.getClave() + "', ESTADO = "
+                + usu.getNombreUsuario() + "', CORREOUS = '"+ usu.getCorreoUsuario() +"'," +
+                " ESTADO = "
                 + (usu.isEstado() == true ? "1" : "0")
+                + ", TIPOIDENTIFICACION = "
+                + usu.getId_identificacion().getId_identificacion()
+                + ", NUMEROIDENTIFICACION = "
+                + usu.getNumeroIdentificacion()
                 + " WHERE IDUSUARIO = " + usu.getId_usuario();
         try {
             this.conectar(false);

@@ -1390,7 +1390,7 @@ public class srvUsuario extends HttpServlet {
                 if (usus != null) {
                     request.setAttribute("usuario", usus);
                 } else {
-                    request.setAttribute("msje", "No se encontró el empleado");
+                    request.setAttribute("msje", "No se encontró el usuario");
                 }
             } catch (Exception e) {
                 request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
@@ -1399,6 +1399,7 @@ public class srvUsuario extends HttpServlet {
             request.setAttribute("msje", "No se tiene el parámetro necesario");
         }
         try {
+            this.cargarIdentificaciones(request);
             this.getServletConfig().getServletContext().
                     getRequestDispatcher("/vistas/Supervisor/actualizarEmpleado.jsp"
                     ).forward(request, response);
@@ -1652,16 +1653,21 @@ public class srvUsuario extends HttpServlet {
     private void actualizarEmpleado(HttpServletRequest request, HttpServletResponse response) {
         DAOUSUARIO daoUsu;
         usuario usus = null;
-        cargo car;
-
+        identificaciones ide;
         if (request.getParameter("hCodigo") != null
                 && request.getParameter("txtNombre") != null
-                && request.getParameter("txtClave") != null) {
+                && request.getParameter("txtCorreo") != null
+                && request.getParameter("txtNumeroIdentificacion") != null
+                && request.getParameter("cboIdentificacion") != null) {
 
             usus = new usuario();
             usus.setId_usuario(Integer.parseInt(request.getParameter("hCodigo")));
             usus.setNombreUsuario(request.getParameter("txtNombre"));
-            usus.setClave(request.getParameter("txtClave"));
+            usus.setCorreoUsuario(request.getParameter("txtCorreo"));
+            usus.setNumeroIdentificacion(Integer.parseInt(request.getParameter("txtNumeroIdentificacion")));
+            ide = new identificaciones();
+            ide.setId_identificacion(Integer.parseInt(request.getParameter("cboIdentificacion")));
+            usus.setId_identificacion(ide);
             if (request.getParameter("chkEstado") != null) {
                 usus.setEstado(true);
             } else {
@@ -1675,13 +1681,16 @@ public class srvUsuario extends HttpServlet {
                 request.setAttribute("msje",
                         "No se pudo actualizar el usuario" + e.getMessage());
                 request.setAttribute("usuario", usus);
+                System.out.println(e);
             }
             try {
+                this.cargarIdentificaciones(request);
                 this.getServletConfig().getServletContext().
                         getRequestDispatcher("/vistas/Supervisor/actualizarEmpleado.jsp"
                         ).forward(request, response);
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
+                System.out.println(ex);
             }
         }
     }
