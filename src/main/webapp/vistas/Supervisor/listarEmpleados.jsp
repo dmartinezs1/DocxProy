@@ -192,8 +192,8 @@
                                class="display">
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Empleado</th>
+                                <th>Tipo y número de documento</th>
+                                <th>Nombre empleado</th>
                                 <th>Estado</th>
                                 <th>Cargo</th>
                                 <th>Acciones</th>
@@ -201,7 +201,7 @@
                             </thead>
                             <c:forEach var="empleado" items="${empleados}" varStatus="iteracion">
                                 <tr>
-                                    <td>${iteracion.index + 1}</td>
+                                    <td>${empleado.id_identificacion.tipoIdentificacion} - ${empleado.numeroIdentificacion}</td>
                                     <td>${empleado.nombreUsuario}</td>
                                     <c:if test="${empleado.estado == true}">
                                         <td><span class="badge bg-green active">Empleado Activo</span></td>

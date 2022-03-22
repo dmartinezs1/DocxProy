@@ -100,9 +100,12 @@ public class DAOUSUARIO extends Conexion {
         List<usuario> empleados;
         usuario usu;
         ResultSet rs = null;
-        String sql = "SELECT U.IDUSUARIO, U.NOMBREUSUARIO, U.ESTADO, C.NOMBRECARGO "
+        String sql = "SELECT U.NUMEROIDENTIFICACION, U.IDUSUARIO, U.NOMBREUSUARIO, U.CLAVE, U.ESTADO, "
+                + "C.NOMBRECARGO, I.tipo_identificacion "
                 + "FROM usuario U INNER JOIN cargo C "
                 + "ON C.IDCARGO = U.IDCARGO "
+                + "INNER JOIN identificacion I "
+                + "ON I.id_identificacion = U.TIPOIDENTIFICACION "
                 + "WHERE C.IDCARGO = 2 "
                 + "ORDER BY U.IDUSUARIO";
 
@@ -114,9 +117,12 @@ public class DAOUSUARIO extends Conexion {
                 usu = new usuario();
                 usu.setId_usuario(rs.getInt("IDUSUARIO"));
                 usu.setNombreUsuario(rs.getString("NOMBREUSUARIO"));
+                usu.setNumeroIdentificacion(Integer.parseInt(rs.getString("NUMEROIDENTIFICACION")));
                 usu.setEstado(rs.getBoolean("ESTADO"));
                 usu.setCargo(new cargo());
                 usu.getCargo().setNombreCargo(rs.getString("NOMBRECARGO"));
+                usu.setId_identificacion(new identificaciones());
+                usu.getId_identificacion().setTipoIdentificacion(rs.getString("tipo_identificacion"));
                 empleados.add(usu);
             }
             this.cerrar(true);
