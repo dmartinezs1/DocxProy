@@ -115,6 +115,9 @@ public class srvUsuario extends HttpServlet {
                     case "listarHorariosAdm":
                         listarHorariosAdm(request, response);
                         break;
+                    case "listarNovedadesAdmin":
+                        listarNovedadesAdmin(request, response);
+                        break;
                     case "listarProgramacionesEmpleado":
                         listarProgramacionesEmpleado(request, response);
                         break;
@@ -815,6 +818,40 @@ public class srvUsuario extends HttpServlet {
             }
         }
     }
+    private void listarNovedadesAdmin(HttpServletRequest request, HttpServletResponse response) {
+        DAONOVEDADES dao = new DAONOVEDADES();
+        List<novedades> novedades = null;
+        empresa emp;
+        usuario usu;
+        tipoNovedad tipoNovedad;
+
+        if (request.getParameter("cod") != null) {
+            usu = new usuario();
+            usu.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+            //se.setEmpresa(emp);
+
+            try {
+                novedades = dao.listar(usu);
+                System.out.println(novedades.size());
+                request.setAttribute("novedades", novedades);
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudieron listar las novedades" + e.getMessage());
+                System.out.println("no se pudieron listar las novedades" + e.getMessage());
+            } finally {
+                dao = null;
+            }
+            try {
+                this.getServletConfig().getServletContext()
+                        .getRequestDispatcher("/vistas/Administrador/listarNovedadesAdministrador.jsp").forward(request, response);
+            } catch (Exception ex) {
+                request.setAttribute("msje", "No se puedo realizar la petición" + ex.getMessage());
+                System.out.println("No se puedo realizar la petición" + ex.getMessage());
+            }
+        }
+    }
+
+
+
     private void listarProgramacionesEmpleado(HttpServletRequest request, HttpServletResponse response) {
         DAOPROG dao = new DAOPROG();
         List<programacion> pr = null;

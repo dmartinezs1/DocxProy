@@ -194,7 +194,7 @@
         <section class="content">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Listado de Sedes</h3>
+                    <h3 class="box-title">Listado de programaciones</h3>
                 </div>
                 <div class="box-body">
                     <div class="table-responsive">
@@ -210,7 +210,6 @@
                                 <th>Empresa</th>
                                 <th>Sede</th>
                                 <th>Empleado</th>
-                                <th>Acciones</th>
                             </tr>
                             </thead>
                             <c:forEach var="user" items="${programaciones}" varStatus="iteracion">
@@ -223,21 +222,6 @@
                                     <td>${user.empresa.nombreEmpresa}</td>
                                     <td>${user.sede.direccion}</td>
                                     <td>${user.usuario.nombreUsuario}</td>
-                                    <td><a href="#">
-                                        <button type="button" class="btn btn-warning" data-toggle="tooltip"
-                                                title="Editar" data-original-title="Editar">
-                                            <i class="fa fa-pencil"></i></button>
-                                    </a>
-                                        <!-- DESACTIVAR / ACTIVAR USUARIOS -->
-                                        <!-- AGREGAR HORARIOS -->
-                                        <!-- ELIMINAR SEDE -->
-                                        <input type="hidden" id="codigo">
-                                        <a id="deleteUser">
-                                            <button type="button" class="btn btn-danger" data-toggle="tooltip"
-                                                    title="Eliminar" data-original-title="Eliminar">
-                                                <i class="fa fa-trash"></i></button>
-                                        </a>
-                                    </td>
                                 </tr>
                             </c:forEach>
                         </table>
