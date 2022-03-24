@@ -208,6 +208,9 @@ public class srvUsuario extends HttpServlet {
                     case "eliminarProgramacion":
                         eliminarProgramacion(request, response);
                         break;
+                    case "eliminarNovedades":
+                        eliminarNovedades(request, response);
+                        break;
                     case "validarCorreo":
                         validarCorreo(request, response);
                         break;
@@ -1988,6 +1991,25 @@ public class srvUsuario extends HttpServlet {
             }
         } else {
             request.setAttribute("msje", "No se encontro el usuario");
+        }
+    }
+
+    private void eliminarNovedades(HttpServletRequest request, HttpServletResponse response) {
+        DAONOVEDADES dao = new DAONOVEDADES();
+        novedades nov = new novedades();
+        if (request.getParameter("cod") != null) {
+            nov.setIdNovedades(Integer.parseInt(request.getParameter("cod")));
+            try {
+                dao.eliminar(nov);
+                int empleadoNovedades = nov.getEmpleado().getId_usuario();
+                response.sendRedirect("srvUsuario?accion=listarNovedadesAdmin&cod=" + empleadoNovedades);
+            } catch (Exception e) {
+                System.out.println("No se pudo acceder a la base de datos" + e.getMessage());
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se pudo encontrar la novedad");
+            System.out.println("No se pudo encontrar la novedad");
         }
     }
 
