@@ -92,4 +92,99 @@ public class DAONOVEDADES extends conexion1 {
         return row;//Retorna cantidad de filas afectadas
     }
 
+    public novedades leerNovedades(novedades nov) throws Exception {
+
+        novedades novedades = new novedades();
+        String sql = "SELECT N.idNovedades, N.fechaNovedad, N.detallesNovedad, " +
+                "N.tipoNovedad_id, N.empleado_id, N.empresa_id, " +
+                "TN.descripcion, U.NOMBREUSUARIO, E.nombreEmpresa " +
+                "FROM novedades N " +
+                "INNER JOIN empresa E ON " +
+                "N.empresa_id = E.id_empresa " +
+                "INNER JOIN usuario U ON " +
+                "N.empleado_id = U.IDUSUARIO " +
+                "INNER JOIN tipo_novedad TN ON " +
+                "N.tipoNovedad_id = TN.idTipoNovedad " +
+                "WHERE N.idNovedades ="+ nov.getIdNovedades();
+
+        try {
+            con = c.conectar1(); //Abriendo la conexión a la BD
+            ps = con.prepareStatement(sql); //preparar sentencia
+            rs = ps.executeQuery();//Ejecución de la sentencia guardar resultado en el resultset
+
+            while (rs.next()) {
+                novedades.setIdNovedades(rs.getInt(1));
+                novedades.setFechaNovedad(rs.getString(2));
+                novedades.setDetallesNovedad(rs.getString(3));
+                novedades.setTipoNovedad(new tipoNovedad());
+                novedades.getTipoNovedad().setIdTipoNovedad(rs.getInt(4));
+                novedades.setEmpleado(new usuario());
+                novedades.getEmpleado().setId_usuario(rs.getInt(5));
+                novedades.setEmpresa(new empresa());
+                novedades.getEmpresa().setId_empresa(rs.getInt(6));
+                novedades.getTipoNovedad().setDescripcionNovedad(rs.getString(7));
+                novedades.getEmpleado().setNombreUsuario(rs.getString(8));
+                novedades.getEmpresa().setNombreEmpresa(rs.getString(9));
+
+                System.out.println("Consulta exitosa" + ps);
+
+            }
+
+            ps.close();
+
+
+        } catch (Exception e) {
+            System.out.println("Consulta no exitosa" + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return novedades;
+    }
+
+    public int actualizarNovedad(novedades nov) throws SQLException{
+        System.out.println("entró a actualizar programacion");
+        sql =   "UPDATE novedades SET fechaNovedad=?, detallesNovedad=?, tipoNovedad_id=?, " +
+                "empleado_id=?, empresa_id=?, " +
+                "WHERE idNovedades ="+ nov.getIdNovedades();
+        try{
+            con= c.conectar1();
+            ps=con.prepareStatement(sql);
+            ps.setString(1,nov.getFechaNovedad());
+            ps.setString(2,nov.getDetallesNovedad());
+            ps.setInt(3,nov.getTipoNovedad().getIdTipoNovedad());
+            ps.setInt(4,nov.getEmpleado().getId_usuario());
+            ps.setInt(5,nov.getEmpresa().getId_empresa());
+
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se cambió la novedad");
+
+        }catch (Exception e){
+            System.out.println("no se pudo actualizar la novedad "+e.getMessage());
+        }finally {
+            con.close();
+        }
+        return row;
+    }
+
+    public int eliminar(novedades nov) throws SQLException {
+        sql = "DELETE FROM novedades WHERE idNovedades=" + nov.getIdNovedades();
+        try {
+            con = c.conectar1(); //Abriendo la conexión a la BD
+            ps = con.prepareStatement(sql); //preparar sentencia
+
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se eliminó la novedad");
+
+        } catch (Exception e) {
+            System.out.println("Error al eliminar la novedad " + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return row;
+    }
+
 }

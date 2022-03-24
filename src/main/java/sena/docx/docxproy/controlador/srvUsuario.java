@@ -166,6 +166,9 @@ public class srvUsuario extends HttpServlet {
                     case "leerEmpresa":
                         presentarEmpresa(request, response);
                         break;
+                    case "leerNovedadesAdmin":
+                        presentarNovedadesAdmin(request, response);
+                        break;
                     case "actualizarUsuario":
                         actualizarUsuario(request, response);
                         break;
@@ -1479,6 +1482,39 @@ public class srvUsuario extends HttpServlet {
             this.cargarEmpleados(request);
             this.getServletConfig().getServletContext().
                     getRequestDispatcher("/vistas/Administrador/EditarProgramacionAdmin.jsp"
+                    ).forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
+        }
+    }
+
+    private void presentarNovedadesAdmin(HttpServletRequest request, HttpServletResponse response) {
+        DAONOVEDADES daonovedades;
+        novedades novedades;
+        if (request.getParameter("cod") != null) {
+            novedades = new novedades();
+            novedades.setIdNovedades(Integer.parseInt(request.getParameter("cod")));
+
+            daonovedades = new DAONOVEDADES();
+            try {
+                novedades = daonovedades.leerNovedades(novedades);
+                if (novedades != null) {
+                    request.setAttribute("novedades", novedades);
+                } else {
+                    System.out.println("no se encontró la novedad srvusuario linea1501");
+                    request.setAttribute("msje", "No se encontró la novedad");
+                }
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se tiene el parámetro necesario");
+        }
+        try {
+            this.cargarEmpresas(request);
+            this.cargarTiposNovedades(request);
+            this.getServletConfig().getServletContext().
+                    getRequestDispatcher("/vistas/Administrador/EditarNovedadesAdmin.jsp"
                     ).forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msje", "No se pudo realizar la operacion" + e.getMessage());
