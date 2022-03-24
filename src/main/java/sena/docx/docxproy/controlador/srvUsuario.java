@@ -184,6 +184,9 @@ public class srvUsuario extends HttpServlet {
                     case "actualizarEmpleado":
                         actualizarEmpleado(request, response);
                         break;
+                    case "actualizarNovedadAdmin":
+                        actualizarNovedadAdmin(request, response);
+                        break;
                     case "actualizarEmpresa":
                         actualizarEmpresa(request, response);
                         break;
@@ -1766,6 +1769,52 @@ public class srvUsuario extends HttpServlet {
             } catch (Exception ex) {
                 request.setAttribute("msje", "No se pudo realizar la operacion" + ex.getMessage());
                 System.out.println(ex);
+            }
+        }
+    }
+
+
+    private void actualizarNovedadAdmin(HttpServletRequest request, HttpServletResponse response) {
+        DAONOVEDADES daonovedades;
+        novedades novedades = null;
+        sede sede;
+        empresa emp;
+        usuario usuario;
+        tipoNovedad tipoNovedad;
+        if (request.getParameter("txtFechaNovedad") != null
+                && request.getParameter("txtDetallesNovedad") != null
+                && request.getParameter("cboEmpresa") != null
+                && request.getParameter("txtIdEmpleado") != null
+                && request.getParameter("txtIdNovedades") != null
+                && request.getParameter("cboTipoNovedad") != null) {
+
+            novedades = new novedades();
+            novedades.setIdNovedades(Integer.parseInt(request.getParameter("txtIdNovedades")));
+            novedades.setFechaNovedad(request.getParameter("txtFechaNovedad"));
+            novedades.setDetallesNovedad(request.getParameter("txtDetallesNovedad"));
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("cboEmpresa")));
+            novedades.setEmpresa(emp);
+            usuario = new usuario();
+            usuario.setId_usuario(Integer.parseInt(request.getParameter("txtIdEmpleado")));
+            novedades.setEmpleado(usuario);
+            tipoNovedad = new tipoNovedad();
+            tipoNovedad.setIdTipoNovedad(Integer.parseInt(request.getParameter("cboTipoNovedad")));
+            novedades.setTipoNovedad(tipoNovedad);
+
+            int codEmpleado = Integer.parseInt(request.getParameter("txtIdEmpleado"));
+
+            daonovedades = new DAONOVEDADES();
+            try {
+                daonovedades.actualizarNovedad(novedades);
+                System.out.println("actualizó la novedad");
+                response.sendRedirect("srvUsuario?accion=listarNovedadesAdmin&cod="+codEmpleado);
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo registrar la novedad" + e.getMessage());
+                System.out.println("No se pudo actualizar la novedad" + e.getMessage());
+                request.setAttribute("novedades", novedades);
+                this.presentarFormularioProgramacion(request, response);
             }
         }
     }

@@ -144,7 +144,7 @@ public class DAONOVEDADES extends conexion1 {
     public int actualizarNovedad(novedades nov) throws SQLException{
         System.out.println("entró a actualizar programacion");
         sql =   "UPDATE novedades SET fechaNovedad=?, detallesNovedad=?, tipoNovedad_id=?, " +
-                "empleado_id=?, empresa_id=?, " +
+                "empleado_id=?, empresa_id=? " +
                 "WHERE idNovedades ="+ nov.getIdNovedades();
         try{
             con= c.conectar1();

@@ -200,7 +200,8 @@
                     <i class="fa fa-edit"></i>
                     <h3 class="box-title">Actualizar novedad ${novedades.empleado.nombreUsuario}</h3>
                 </div>
-                <form class="form-horizontal" action="srvUsuario?accion=ActualizarNovedadAdmin" method="post">
+                <form class="form-horizontal" action="srvUsuario?accion=actualizarNovedadAdmin" method="post">
+                    <input type="hidden" value="${novedades.idNovedades}" name="txtIdNovedades">
                     <div class="box-body">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Fecha novedad</label>
