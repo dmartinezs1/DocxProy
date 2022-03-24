@@ -97,6 +97,9 @@ public class srvUsuario extends HttpServlet {
                     case "registrarProgramacion":
                         presentarFormularioProgramacion(request, response);
                         break;
+                    case "presentarFormularioNovedadAdmin":
+                        presentarFormularioNovedadAdmin(request, response);
+                        break;
                     case "registrarProgramacionSupervisor":
                         presentarFormularioProgramacionSupervisor(request, response);
                         break;
@@ -141,6 +144,9 @@ public class srvUsuario extends HttpServlet {
                         break;
                     case "registrarHorarioSupervisor":
                         registrarHorarioSupervisor(request, response);
+                        break;
+                    case "registrarNovedadAdmin":
+                        registrarNovedadAdmin(request, response);
                         break;
                     case "leerUsuario":
                         presentarUsuario(request, response);
@@ -271,6 +277,48 @@ public class srvUsuario extends HttpServlet {
                 request.setAttribute("msje",
                         "No se pudo registrar la programación" + e.getMessage());
                 request.setAttribute("programacion", programacion);
+                this.presentarFormularioProgramacion(request, response);
+            }
+        }
+    }
+    private void registrarNovedadAdmin(HttpServletRequest request, HttpServletResponse response) {
+        DAONOVEDADES daonovedades;
+        novedades novedades = null;
+        sede sede;
+        empresa emp;
+        usuario usuario;
+        tipoNovedad tipoNovedad;
+        if (request.getParameter("txtFechaNovedad") != null
+                && request.getParameter("txtDetallesNovedad") != null
+                && request.getParameter("cboEmpresa") != null
+                && request.getParameter("txtIdEmpleado") != null
+                && request.getParameter("cboTipoNovedad") != null) {
+
+            novedades = new novedades();
+            novedades.setFechaNovedad(request.getParameter("txtFechaNovedad"));
+            novedades.setDetallesNovedad(request.getParameter("txtDetallesNovedad"));
+            emp = new empresa();
+            emp.setId_empresa(Integer.parseInt(request.getParameter("cboEmpresa")));
+            novedades.setEmpresa(emp);
+            usuario = new usuario();
+            usuario.setId_usuario(Integer.parseInt(request.getParameter("txtIdEmpleado")));
+            novedades.setEmpleado(usuario);
+            tipoNovedad = new tipoNovedad();
+            tipoNovedad.setIdTipoNovedad(Integer.parseInt(request.getParameter("cboTipoNovedad")));
+            novedades.setTipoNovedad(tipoNovedad);
+
+            int codEmpleado = Integer.parseInt(request.getParameter("txtIdEmpleado"));
+
+            daonovedades = new DAONOVEDADES();
+            try {
+                daonovedades.registrar(novedades);
+                System.out.println("registró programación");
+                response.sendRedirect("srvUsuario?accion=listarNovedadesAdmin&cod="+codEmpleado);
+            } catch (Exception e) {
+                request.setAttribute("msje",
+                        "No se pudo registrar la novedad" + e.getMessage());
+                System.out.println("No se pudo registrar la novedad" + e.getMessage());
+                request.setAttribute("novedades", novedades);
                 this.presentarFormularioProgramacion(request, response);
             }
         }
@@ -820,6 +868,7 @@ public class srvUsuario extends HttpServlet {
     }
     private void listarNovedadesAdmin(HttpServletRequest request, HttpServletResponse response) {
         DAONOVEDADES dao = new DAONOVEDADES();
+        DAOUSUARIO daousu = new DAOUSUARIO();
         List<novedades> novedades = null;
         empresa emp;
         usuario usu;
@@ -830,6 +879,14 @@ public class srvUsuario extends HttpServlet {
             usu.setId_usuario(Integer.parseInt(request.getParameter("cod")));
             //se.setEmpresa(emp);
 
+            try{
+                usu = daousu.leerUsuario(usu);
+                request.setAttribute("empleado", usu);
+            }catch (Exception e){
+                request.setAttribute("msje", "No se pudo obtener el empleado " + e.getMessage());
+            }finally{
+                daousu = null;
+            }
             try {
                 novedades = dao.listar(usu);
                 System.out.println(novedades.size());
@@ -945,6 +1002,38 @@ public class srvUsuario extends HttpServlet {
         }
     }
 
+    private void presentarFormularioNovedadAdmin(HttpServletRequest request, HttpServletResponse response) {
+        usuario usus;
+        DAOUSUARIO dao;
+
+        if (request.getParameter("cod") != null) {
+            usus = new usuario();
+            usus.setId_usuario(Integer.parseInt(request.getParameter("cod")));
+
+            dao = new DAOUSUARIO();
+            try {
+                usus = dao.leerUsuario(usus);
+                if (usus != null) {
+                    request.setAttribute("empleado", usus);
+                } else {
+                    request.setAttribute("msje", "No se encontró el usuario");
+                }
+            } catch (Exception e) {
+                request.setAttribute("msje", "No se pudo acceder a la base de datos" + e.getMessage());
+            }
+        } else {
+            request.setAttribute("msje", "No se tiene el parámetro necesario");
+        }
+        try {
+            this.cargarEmpresas(request);
+            this.cargarTiposNovedades(request);
+            this.getServletConfig().getServletContext()
+                    .getRequestDispatcher("/vistas/Administrador/agregarNovedadAdmin.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar la vista");
+        }
+    }
+
     private void presentarFormularioProgramacionSupervisor(HttpServletRequest request, HttpServletResponse response) {
         sede sedes;
         DAOSEDE dao;
@@ -1037,6 +1126,21 @@ public class srvUsuario extends HttpServlet {
             request.setAttribute("msje", "No se pudo cargar las identificaciones :( " + e.getMessage());
         } finally {
             ide = null;
+            dao = null;
+        }
+    }
+
+    private void cargarTiposNovedades(HttpServletRequest request) {
+        DAOTIPOSNOVEDADES dao = new DAOTIPOSNOVEDADES();
+        List<tipoNovedad> tNovedades = null;
+        try {
+            tNovedades = dao.listarTiposNovedades();
+            request.setAttribute("tipoNovedades", tNovedades);
+        } catch (Exception e) {
+            request.setAttribute("msje", "No se pudo cargar los tipos de novedades:( " + e.getMessage());
+            System.out.println("No se pudo cargar los tipos de novedades:( " + e.getMessage());
+        } finally {
+            tNovedades = null;
             dao = null;
         }
     }

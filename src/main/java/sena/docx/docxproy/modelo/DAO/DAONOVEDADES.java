@@ -66,4 +66,30 @@ public class DAONOVEDADES extends conexion1 {
         return novedades;
     }
 
+    public int registrar(novedades nov) throws SQLException {
+
+        sql = "INSERT INTO novedades (fechaNovedad, " +
+                "detallesNovedad, tipoNovedad_id, empleado_id, empresa_id)" +
+                "VALUES (?,?,?,?,?)";
+        try {
+            con = c.conectar1();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, nov.getFechaNovedad());
+            ps.setString(2, nov.getDetallesNovedad());
+            ps.setInt(3, nov.getTipoNovedad().getIdTipoNovedad());
+            ps.setInt(4, nov.getEmpleado().getId_usuario());
+            ps.setInt(5, nov.getEmpresa().getId_empresa());
+            System.out.println(ps);
+            ps.executeUpdate();
+            ps.close();
+            System.out.println("Se registró una novedad");
+
+        } catch (Exception e) {
+            System.out.println("Error al registrar la novedad" + e.getMessage());
+        } finally {
+            con.close();
+        }
+        return row;//Retorna cantidad de filas afectadas
+    }
+
 }

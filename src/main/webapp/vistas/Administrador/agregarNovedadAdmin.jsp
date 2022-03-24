@@ -17,8 +17,7 @@
     <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style -->
     <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
-    <link href="bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="swetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
+
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
@@ -179,79 +178,90 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Página novedades de ${empleado.nombreUsuario}</h1>
-
-
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                </div>
+                <div class="col-md-3 hidden-xs"></div>
+                <div class="col-xs-2 col-md-1">
+                </div>
+                <div class="col-xs-10 col-md-5 ">
+                    <div class="btn-group pull-right">
+                        <a href="srvUsuario?accion=listarNovedadesAdmin&cod=${empleado.id_usuario}" class="btn btn-default">
+                            <i class="fa fa-align-justify"></i> Ver listado</a>
+                    </div>
+                </div>
+            </div>
         </section>
-        <section class="content-header">
-            <a href="srvUsuario?accion=presentarFormularioNovedadAdmin&cod=${empleado.id_usuario}" class="btn btn-success">
-                <i class="fa fa-plus"></i> Agregar novedad </a>
-
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                <li class="active">Usuarios</li>
-                <li class="active">Programaciones</li>
-            </ol>
-        </section>
-        <!-- Content Header (Page header) -->
-
         <section class="content">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Listado de novedades ${empleado.nombreUsuario}</h3>
+                    <i class="fa fa-edit"></i>
+                    <h3 class="box-title">Registrar novedad ${empleado.nombreUsuario}</h3>
                 </div>
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped dataTable table-hover" id="tablaUsuarios"
-                               class="display">
-                            <thead>
-                            <tr>
-                                <th>Id novedad</th>
-                                <th>Fecha novedad</th>
-                                <th>Tipo novedad</th>
-                                <th>Empleado</th>
-                                <th>Empresa</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <c:forEach var="user" items="${novedades}" varStatus="iteracion">
-                                <tr>
-                                    <td>${user.idNovedades}</td>
-                                    <td>${user.fechaNovedad}</td>
-                                    <td>${user.tipoNovedad.descripcionNovedad}</td>
-                                    <td>${user.empleado.nombreUsuario}</td>
-                                    <td>${user.empresa.nombreEmpresa}</td>
-                                    <td><a href="#">
-                                        <button type="button" class="btn btn-warning" data-toggle="tooltip"
-                                                title="Editar" data-original-title="Editar">
-                                            <i class="fa fa-pencil"></i></button>
-                                    </a>
-                                        <!-- DESACTIVAR / ACTIVAR USUARIOS -->
-                                        <!-- AGREGAR HORARIOS -->
-                                        <!-- ELIMINAR SEDE -->
-                                        <input type="hidden" id="codigo">
-                                        <a id="deleteUser">
-                                            <button type="button" class="btn btn-danger" data-toggle="tooltip"
-                                                    title="Eliminar" data-original-title="Eliminar">
-                                                <i class="fa fa-trash"></i></button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
+                <form class="form-horizontal" action="srvUsuario?accion=registrarNovedadAdmin" method="post">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Fecha novedad</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="date" class="form-control"
+                                       name="txtFechaNovedad"
+                                       value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Detalles Novedad</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <textarea type="text" id="inputField" class="form-control"
+                                       name="txtDetallesNovedad"
+                                       value="" rows="5" cols="80"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tipo de novedad</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                                <select class="form-control" name="cboTipoNovedad" autofocus="" required="">
+                                    <option value="0">Seleccione el tipo de novedad</option>
+                                    <c:forEach items="${tipoNovedades}" var="tNovedad">
+                                        <option value="${tNovedad.idTipoNovedad}">
+                                                ${tNovedad.descripcionNovedad}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" value="${empleado.id_usuario}" name="txtIdEmpleado">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Empresa</label>
+                            <div class="col-sm-4 input-group">
+                                <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                                <select class="form-control" name="cboEmpresa" autofocus="" required="">
+                                    <option value="0">Seleccione la empresa</option>
+                                    <c:forEach items="${empresas}" var="empresa">
+                                        <option value="${empresa.id_empresa}">
+                                                ${empresa.nombreEmpresa}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <!--Pie de página-->
-                </div>
-                <!-- /.box-footer-->
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="reset" class="btn btn-danger"><i class="fa fa-close red"></i> Cancelar</button>
+                        <button type="submit" id="" name="btnRegistrar" value="Registrar" class="btn btn-success"><i
+                                class="fa fa-floppy-o"></i> Registrar
+                        </button>
+
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
             </div>
         </section>
-        <!-- /.content -->
+
     </div>
     <!-- /.content-wrapper -->
 
@@ -275,18 +285,31 @@
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
-<script src="bower_components/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-<script src="swetalert/sweetalert.js" type="text/javascript"></script>
-<script src="js/funcionesUsuario.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    $(document).ready(function () {
-        $('#tablaUsuarios').DataTable();
-    });
+    function verifyCorreo(){
+        const nombreUsuario=document.getElementById("nombre").value;
+        $.ajax({
+            url:"srvUsuario?accion=validarCorreo",
+            data:{
+                nombreUsuario:nombreUsuario
+            },
+            success: function(result){
+                $("#validarC").html(result);
+                //alert(result)
+            }
+        })
+    }
 </script>
+
+<style>
+    #inputField {
+        height: 10rem;
+    }
+</style>
+
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
@@ -297,4 +320,5 @@
         response.sendRedirect("identificar.jsp");
     }
 %>
+
 
